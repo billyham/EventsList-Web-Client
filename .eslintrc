@@ -1,0 +1,42 @@
+{
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "settings": {
+    "ecmascript": 6
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "experimentalObjectRestSpread": true,
+    "impliedStrict": true
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "rules": {
+    "no-unused-vars": 1,
+    "semi": 1,
+    "strict": 0,
+    # "indent": [2, 2],
+    "indent": ["error", "tab"],
+    "quotes": [1, "single"],
+    "no-multi-spaces": [1, {
+      "exceptions": {
+        "VariableDeclarator": true,
+        "FunctionExpression": true
+      }
+    }],
+    "key-spacing": [0, {"align": "value"}],
+    "no-underscore-dangle": 0
+  },
+  "globals": {
+    "describe": false,
+    "it": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "before": false,
+    "after": false
+  }
+}
