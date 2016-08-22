@@ -1,4 +1,8 @@
+
+const EnvironmentPlugin = require('webpack').EnvironmentPlugin;
+const DotenvPlugin = require('webpack-dotenv-plugin');
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+const dotenvFile = './.env';
 
 module.exports = {
   entry: './src/main.js',
@@ -7,9 +11,11 @@ module.exports = {
     filename: 'bundle.js'
   },
   devtool: 'source-map',
-  plugins: [new HtmlWebpackPlugin({
-    template: './src/index.html'
-  })],
+  plugins: [
+    new DotenvPlugin({sample: dotenvFile, path: dotenvFile}),
+    new EnvironmentPlugin(['API_TOKEN', 'CLOUD_ID']),
+    new HtmlWebpackPlugin({template: './src/index.html'})
+  ],
   module: {
     preLoaders: [{
       test: /\.js$/,

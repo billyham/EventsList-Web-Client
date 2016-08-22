@@ -1,4 +1,10 @@
 <div>
-	<h3>Event Component</h3>
-	here!
+	<div>The List of Events</div>
+	<div ng-repeat="record in $ctrl.ckqueryResult.records">
+		<span><b>{{record.fields.title.value}}</b>, {{record.fields.imageRef.value.recordName}} {{record.fields.video.value}}</span>
+	</div>
+	<div ng-show="$ctrl.ckqueryResult.continuationMarker">
+		<br>
+		<button ng-click="$ctrl.loadMore()">Load More</button>
+	</div>
 </div>
