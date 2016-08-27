@@ -8,23 +8,20 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
     resolve: {
       ckqueryResult: ['ckconfigure', 'ckquery', (ckconfigure, ckquery) => {
         ckconfigure.configure();
-        return ckquery.demoPerformQuery('PUBLIC','_defaultZone',null,'Program',
-          ['title', 'imageRef', 'video'],null,null,null,null,
+        return ckquery.query('PUBLIC','_defaultZone',null,'Program',
+          ['title', 'imageRef', 'video'],'title',null,null,null,
           [], null)
           .then(result => {
-            let array = result.records.map( element => {
-              return {fields: element.fields};
-            });
-            return {records: array, continuationMarker: result.continuationMarker};
+            return {records: result.records, continuationMarker: result.continuationMarker};
           });
       }]
     },
     views: {
       header: {
-        template: '<h1>Events EventsList, an iOS App</h1>'
+        template: '<h1>EventsList, an iOS App</h1>'
       },
       main: {
-        component: 'event'
+        component: 'eventList'
       }
     }
   });

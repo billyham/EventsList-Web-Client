@@ -1,29 +1,21 @@
 import template from './event.html';
+import styles from './event.scss';
 
 export default {
   template,
   bindings: {
-    ckqueryResult: '<',
-    // arrayOfRecords: '<',
-    arrayOfImages: '<'
+    imageRef: '<',
+    video: '<',
+    title: '<'
   },
-  controller: ['ckquery', controller]
+  controller: [controller]
 };
 
-function controller(ckquery){
-
-  this.loadMore = function(){
-    console.log('loadMore fires');
-    ckquery.demoPerformQuery('PUBLIC','_defaultZone',null,'Program',
-      ['title', 'imageRef', 'video'],null,null,null,null,
-      [], this.ckqueryResult.continuationMarker)
-      .then(result => {
-        let array = result.records.map( element => {
-          return {fields: element.fields};
-        });
-        this.ckqueryResult.records = this.ckqueryResult.records.concat(array);
-        this.ckqueryResult.continuationMarker = result.continuationMarker;
-      });
+function controller(){
+  this.styles = styles;
+  this.isSelected = false;
+  this.toggleSelected = function toggleSelected(){
+    this.isSelected = !this.isSelected;
   };
 
 }

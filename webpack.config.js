@@ -1,4 +1,3 @@
-
 const EnvironmentPlugin = require('webpack').EnvironmentPlugin;
 const DotenvPlugin = require('webpack-dotenv-plugin');
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
@@ -33,12 +32,19 @@ module.exports = {
       }
     },
     {
+      test: /\.scss$/,
+      loader: 'style!css?sourceMap!sass?sourceMap'
+    },
+    {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style!css?sourceMap'
     },
     {
       test: /\.html$/,
       loader: 'html'
     }]
+  },
+  sassLoader: {
+    includePaths: [ './src/scss/includes' ]
   }
 };

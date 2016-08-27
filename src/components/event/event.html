@@ -1,10 +1,6 @@
-<div>
-	<div>The List of Events</div>
-	<div ng-repeat="record in $ctrl.ckqueryResult.records">
-		<span><b>{{record.fields.title.value}}</b>, {{record.fields.imageRef.value.recordName}} {{record.fields.video.value}}</span>
-	</div>
-	<div ng-show="$ctrl.ckqueryResult.continuationMarker">
-		<br>
-		<button ng-click="$ctrl.loadMore()">Load More</button>
+<div class="{{$ctrl.styles.event}}">
+	<div ng-click="$ctrl.toggleSelected()"
+		ng-class="{'selected': $ctrl.isSelected}">
+		<b>{{$ctrl.title.value}}</b>, {{$ctrl.imageRef.value.recordName}} {{$ctrl.video.value}}
 	</div>
 </div>

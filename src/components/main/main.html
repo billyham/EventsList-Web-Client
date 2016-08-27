@@ -1,4 +1,8 @@
-<div>
-  <div ui-view="header"></div>
-  <div ui-view="main"></div>
+<div class="{{$ctrl.styles.main}}">
+  <div>
+    <div class="centered">
+      <div ui-view="header"></div>
+      <div ui-view="main"><p>Downloading event information...</p></div>
+    </div>
+  </div>
 </div>
