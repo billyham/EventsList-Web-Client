@@ -1,6 +1,9 @@
 <div class="{{$ctrl.styles.event}}">
-	<div ng-click="$ctrl.toggleSelected()"
-		ng-class="{'selected': $ctrl.isSelected}">
+	<div ng-click="$ctrl.makeSelected($event)"
+		ng-class="{'selected': $ctrl.isSelected, 'clickable': $ctrl.isSelected == false}">
 		<b>{{$ctrl.title.value}}</b>, {{$ctrl.imageRef.value.recordName}} {{$ctrl.video.value}}
+		<div ng-show="$ctrl.isSelected">
+			<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
+		</div>
 	</div>
 </div>

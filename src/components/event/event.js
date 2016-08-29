@@ -14,8 +14,15 @@ export default {
 function controller(){
   this.styles = styles;
   this.isSelected = false;
-  this.toggleSelected = function toggleSelected(){
-    this.isSelected = !this.isSelected;
+
+  this.makeSelected = function toggleSelected(){
+    this.isSelected = true;
+  };
+
+  this.removeSelected = function removeSelected(clickEvent){
+    // Prevent the action on the parent div
+    clickEvent.cancelBubble = true;
+    this.isSelected = false;
   };
 
 }
