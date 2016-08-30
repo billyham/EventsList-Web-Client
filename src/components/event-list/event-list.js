@@ -3,6 +3,7 @@ import template from './event-list.html';
 export default {
   template,
   bindings: {
+    userIdentity: '<',
     ckqueryResult: '<',
     arrayOfImages: '<'
   },

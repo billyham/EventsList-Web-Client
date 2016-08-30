@@ -3,6 +3,9 @@
 		ng-class="{'selected': $ctrl.isSelected, 'clickable': $ctrl.isSelected == false}">
 		<b>{{$ctrl.title.value}}</b>, {{$ctrl.imageRef.value.recordName}} {{$ctrl.video.value}}
 		<div ng-show="$ctrl.isSelected">
+			<input ng-model="$ctrl.formtitle"></input>
+			<button ng-click="$ctrl.editTitle()">Save Changes</button>
+			<br>
 			<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
 		</div>
 	</div>
