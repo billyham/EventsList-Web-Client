@@ -1,15 +1,16 @@
 <div>
-	<div><p>The List of Events</p></div>
 	<div ng-repeat="record in $ctrl.ckqueryResult.records track by record.recordName">
     <event
 		title=record.fields.title
 		image-ref=record.fields.imageRef
 		video=record.fields.video
 		record=record>
-	</event>
+		</event>
 	</div>
 	<div ng-show="$ctrl.ckqueryResult.continuationMarker">
 		<br>
 		<button ng-click="$ctrl.loadMore()">Load More</button>
 	</div>
+	<hr>
+	<event-add></event-add>
 </div>

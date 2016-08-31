@@ -1,12 +1,21 @@
 <div class="{{$ctrl.styles.event}}">
 	<div ng-click="$ctrl.makeSelected($event)"
 		ng-class="{'selected': $ctrl.isSelected, 'clickable': $ctrl.isSelected == false}">
-		<b>{{$ctrl.title.value}}</b>, {{$ctrl.imageRef.value.recordName}} {{$ctrl.video.value}}
+		<b>{{$ctrl.record.fields.title.value}}</b>,
+		<a ng-click="$ctrl.showimage($event)" ng-show="$ctrl.record.fields.imageRef" class="clickable">
+			<span>{{$ctrl.showtext}}</span>
+		</a>
+		<!-- {{$ctrl.record.fields.imageRef.value.recordName}} -->
+		{{$ctrl.record.fields.video.value}}
+		<div ng-show="$ctrl.imageVisible">
+			<img ng-src="{{$ctrl.imagesrc}}" class="thumbnail"></img>
+		</div>
 		<div ng-show="$ctrl.isSelected">
-			<input ng-model="$ctrl.formtitle"></input>
+			<input ng-model="$ctrl.formtitle" size=60 placeholder"Title (required)"></input><br>
+			<input ng-model="$ctrl.formvideo" size=60 placeholder="URL for Trailer Video"></input><br>
+			<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
 			<button ng-click="$ctrl.editTitle()">Save Changes</button>
 			<br>
-			<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
 		</div>
 	</div>
 </div>

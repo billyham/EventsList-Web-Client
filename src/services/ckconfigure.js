@@ -20,12 +20,12 @@ export default function ckconfigure(){
 
             signInButton: {
               id: 'apple-sign-in-button',
-              theme: 'black' // Other options: 'white', 'white-with-outline'.
+              theme: 'white-with-outline' // Other options: 'white', 'white-with-outline'.
             },
 
             signOutButton: {
               id: 'apple-sign-out-button',
-              theme: 'black'
+              theme: 'white-with-outline'
             }
           },
           environment: 'development'

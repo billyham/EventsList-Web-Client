@@ -1,7 +1,8 @@
 :local(.main){
 
   .centered{
-    width: 800px;
+    max-width: 800px;
+    min-width: 320px;
     margin-left: auto;
     margin-right: auto;
     background-color: hsla(200, 20%, 90%, 1);
@@ -9,6 +10,10 @@
     padding-left: 20px;
     padding-bottom: 20px;
     padding-top: 10px;
+  }
+
+  .auth{
+    // float: right;
   }
 
 }

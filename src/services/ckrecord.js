@@ -35,7 +35,8 @@ export default function ckrecord(){
             var record = response.records[0];
 
             // Render the fetched record.
-            return renderRecord(record,zoneID,databaseScope);
+            // return renderRecord(record,zoneID,databaseScope);
+            return record;
           }
         });
     },

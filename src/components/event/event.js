@@ -4,19 +4,52 @@ import styles from './event.scss';
 export default {
   template,
   bindings: {
-    imageRef: '<',
-    video: '<',
-    title: '=',
     record: '<'
   },
   controller: ['ckrecord', '$scope', controller]
 };
 
 function controller(ckrecord, $scope){
-  this.formtitle = this.title.value;
-  this.oldTitle = '';
   this.styles = styles;
+
+  // State
   this.isSelected = false;
+  this.imageVisible = false;
+
+  // Set values for UI elements
+  this.formtitle = this.record.fields.title.value;
+  if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
+  this.showtext = 'Show Image';
+  this.imagesrc = '';
+
+  // Values to revert to if editing fails
+  this.oldTitle = '';
+  this.oldVideo = '';
+
+  // console.log(this.record);
+
+  this.showimage = function(clickEvent){
+
+    // fetch image from the server only if necessary
+    if (!this.imagesrc) {
+      ckrecord.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
+      .then( obj => {
+        this.imagesrc = obj.fields.image.value.downloadURL;
+        $scope.$apply();
+      })
+      .catch( error => {
+        console.log(error);
+      });
+    }
+
+    if (!this.imageVisible){
+      this.showtext = 'Hide Image';
+    }else{
+      this.showtext = 'Show Image';
+    }
+    this.imageVisible = !this.imageVisible;
+    clickEvent.cancelBubble = true;
+  };
 
   this.makeSelected = function toggleSelected(){
     this.isSelected = true;
@@ -30,6 +63,7 @@ function controller(ckrecord, $scope){
 
   this.editTitle = function editTitle(){
     this.oldTitle = this.record.fields.title.value;
+
     this.record.fields.title.value = this.formtitle;
     ckrecord.save(
       'PUBLIC', //databaseScope
@@ -46,8 +80,7 @@ function controller(ckrecord, $scope){
       this.record.fields
     ).then((obj) => {
       // Save new value
-      this.title.value = obj.fields.title.value;
-      this.record.fields.title.value = obj.fields.title.value;
+      this.record = obj;
     }).catch(() => {
       // Revert to previous value
       this.formtitle = this.oldTitle;

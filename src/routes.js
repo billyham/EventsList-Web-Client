@@ -21,7 +21,7 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
     },
     views: {
       header: {
-        template: '<h1>EventsList, an iOS App</h1>'
+        template: '<h2>EventsList Manager</h2><hr>'
       },
       main: {
         component: 'eventList'

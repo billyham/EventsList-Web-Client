@@ -14,5 +14,12 @@
   a.clickable{
     font-weight: bold;
     color: hsla(1, 100%, 35%, 1);
+    float: right;
   }
+
+  .thumbnail{
+    background-color: hsla(200, 20%, 80%, 1);
+    max-width: 100px;
+  }
+
 }
