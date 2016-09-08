@@ -16,20 +16,27 @@ function controller(ckrecord, $scope){
   this.isSelected = false;
   this.imageVisible = false;
 
+  // Methods
+  this.showimage = showImage;
+  this.delete = deleteEvent;
+  this.editTitle = editTitle;
+
   // Set values for UI elements
   this.formtitle = this.record.fields.title.value;
   if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
   this.showtext = 'Show Image';
   this.imagesrc = '';
 
-  // Values to revert to if editing fails
+  // Save initial values in case editing fails
   this.oldTitle = '';
   this.oldVideo = '';
 
-  // console.log(this.record);
+  // Load images on launch
+  if (this.record.fields.imageRef){
+    showImage.call(this);
+  }
 
-  this.showimage = function(clickEvent){
-
+  function showImage(clickEvent){
     // fetch image from the server only if necessary
     if (!this.imagesrc) {
       ckrecord.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
@@ -48,7 +55,8 @@ function controller(ckrecord, $scope){
       this.showtext = 'Show Image';
     }
     this.imageVisible = !this.imageVisible;
-    clickEvent.cancelBubble = true;
+
+    if (clickEvent) clickEvent.cancelBubble = true;
   };
 
   this.makeSelected = function toggleSelected(){
@@ -61,7 +69,7 @@ function controller(ckrecord, $scope){
     this.isSelected = false;
   };
 
-  this.editTitle = function editTitle(){
+  function editTitle(){
     this.oldTitle = this.record.fields.title.value;
 
     this.record.fields.title.value = this.formtitle;
@@ -78,16 +86,30 @@ function controller(ckrecord, $scope){
       null, //participants,
       null, //parentRecordName,
       this.record.fields
-    ).then((obj) => {
+    ).then( obj => {
       // Save new value
       this.record = obj;
-    }).catch(() => {
+    }).catch( () => {
       // Revert to previous value
       this.formtitle = this.oldTitle;
       this.record.fields.title.value = this.oldTitle;
+      // TODO: Alert user that saving failed
       $scope.$apply();
     });
-
   };
+
+  function deleteEvent(){
+    ckrecord.delete(
+      'PUBLIC',  // databaseScope
+      this.record.recordName,  // recordName
+      null,  // zoneName
+      null  //ownerRecordName
+    ).then( () => {
+      // Successfully deleted
+      // TODO: update UI by removing event from list
+    }).catch( () => {
+      // TODO: Alert user that delete failed
+    });
+  }
 
 }

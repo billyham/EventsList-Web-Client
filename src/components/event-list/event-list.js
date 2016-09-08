@@ -13,7 +13,7 @@ export default {
 function controller(ckquery, ckconfigure, $scope){
 
   this.loadMore = function loadMore(){
-
+    
     ckquery.query(
       'PUBLIC','_defaultZone',null,'Program',
       ['title', 'imageRef', 'video'],'title',null,null,null,
@@ -21,7 +21,7 @@ function controller(ckquery, ckconfigure, $scope){
     ).then(result => {
       this.ckqueryResult.records = this.ckqueryResult.records.concat(result.records);
       this.ckqueryResult.continuationMarker = result.continuationMarker;
-      $scope.$apply();  // Forces any Angular to evalute any $watchers
+      $scope.$apply();  // Forces Angular to evalute any $watchers
     }).catch(error => {
       console.log('loadMore error ' + error);
     });

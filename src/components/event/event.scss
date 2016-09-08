@@ -22,4 +22,31 @@
     max-width: 100px;
   }
 
+  .cell-container{
+    // height: 100px;
+    // line-height: 100px;
+  }
+
+  .cell-text{
+    // display: inline-block;
+    // vertical-align: middle;
+    // line-height: normal;
+  }
+
+  .cell-image{
+    display: inline-block;
+    vertical-align: middle;;
+    // line-height: normal;
+
+    height: 60px;
+    width: 100px;
+    background-color: hsla(200, 30%, 80%, 1);
+
+  }
+
+  img {
+    position: absolute;
+    clip: rect(0px,100px,60px,0px);
+  }
+
 }

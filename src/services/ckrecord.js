@@ -40,8 +40,42 @@ export default function ckrecord(){
           }
         });
     },
-    delete(){
+    delete(
+      databaseScope, // PUBLIC
+      recordName,
+      zoneName,  // _defaultZone
+      ownerRecordName
+    ){
+      var container = CloudKit.getDefaultContainer();
+      var database = container.getDatabaseWithDatabaseScope(
+        CloudKit.DatabaseScope[databaseScope]
+      );
 
+      var zoneID,options;
+
+      if(zoneName) {
+        zoneID = { zoneName: zoneName };
+        if(ownerRecordName) {
+          zoneID.ownerRecordName = ownerRecordName;
+        }
+        options = { zoneID: zoneID };
+      }
+
+      return database.deleteRecords(recordName,options)
+      .then(function(response) {
+        if(response.hasErrors) {
+
+          // Handle the errors in your app.
+          throw response.errors[0];
+
+        } else {
+          var deletedRecord = response.records[0];
+
+          // Render the deleted record.
+          // return renderDeletedRecord(deletedRecord);
+          return deletedRecord;
+        }
+      });
     },
     save(
       databaseScope,  // PUBLIC
