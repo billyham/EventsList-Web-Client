@@ -3,7 +3,7 @@ import template from './event-add.html';
 export default {
   template,
   bindings:{
-
+    add: '&'
   },
   controller: ['ckrecord', '$scope', controller]
 };
@@ -41,11 +41,12 @@ function controller(ckrecord, $scope){
       null, //participants,
       null, //parentRecordName,
       obj.fields //fields
-    ).then( () => {
+    ).then( record => {
       // Save new value
       this.formtitle = '';
       this.formvideo = '';
       $scope.$apply();
+      this.add( {rec: record} );
     }).catch((error) => {
       // Revert to previous value
       console.log('addition ERROR');

@@ -4,7 +4,8 @@ import styles from './event.scss';
 export default {
   template,
   bindings: {
-    record: '<'
+    record: '<',
+    remove: '&'
   },
   controller: ['ckrecord', '$scope', controller]
 };
@@ -105,8 +106,8 @@ function controller(ckrecord, $scope){
       null,  // zoneName
       null  //ownerRecordName
     ).then( () => {
-      // Successfully deleted
-      // TODO: update UI by removing event from list
+      let record = this.record;
+      this.remove({ rec: record });
     }).catch( () => {
       // TODO: Alert user that delete failed
     });

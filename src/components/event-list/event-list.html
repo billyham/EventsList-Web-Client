@@ -4,7 +4,8 @@
 		title=record.fields.title
 		image-ref=record.fields.imageRef
 		video=record.fields.video
-		record=record>
+		record=record
+		remove="$ctrl.remove(rec)">
 		</event>
 	</div>
 	<div ng-show="$ctrl.ckqueryResult.continuationMarker">
@@ -12,5 +13,5 @@
 		<button ng-click="$ctrl.loadMore()">Load More</button>
 	</div>
 	<hr>
-	<event-add></event-add>
+	<event-add add="$ctrl.add(rec)"></event-add>
 </div>
