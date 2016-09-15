@@ -1,9 +1,9 @@
+@import "../../styles/site-settings";
 :local(.event) {
-  // background-color: hsla(100, 100%, 50%, 1);
   margin-bottom: 10px;
 
   .selected {
-    background-color: hsla(200, 10%, 70%, 1);
+    background-color: $background--selected;
     padding: 10px;
   }
 
@@ -13,12 +13,12 @@
 
   a.clickable{
     font-weight: bold;
-    color: hsla(1, 100%, 35%, 1);
+    color: $anchor;
     float: right;
   }
 
   .thumbnail{
-    background-color: hsla(200, 20%, 80%, 1);
+    background-color: $background--imagebox;
     max-width: 100px;
   }
 
@@ -40,7 +40,7 @@
 
     height: 60px;
     width: 100px;
-    background-color: hsla(200, 30%, 80%, 1);
+    background-color: $background--imagebox;
 
   }
 

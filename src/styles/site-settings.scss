@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+// ----------------------
+// == Site settings
+// ----------------------
+
+// Fonts
+$font1: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font2: Georgia, serif;
+
+// = Colors
+// -----------------------------
+
+// Hues
+$grayblue: 200;
+$red: 1;
+
+// Color Desciptions
+$grayishbluelight: hsla($grayblue, 20%, 90%, 1);
+$grayishbluedark: hsla($grayblue, 10%, 70%, 1);
+$grayishblue: hsla($grayblue, 30%, 80%, 1);
+
+$darkred: hsla($red, 100%, 35%, 1);
+
+$facebook: #3b5998;
+$twitter: #43bfe1;
+
+// Color Contexts
+$background1: $grayishbluelight;
+$background--selected: $grayishbluedark;
+$background--imagebox: $grayishblue;
+
+$anchor: $darkred;

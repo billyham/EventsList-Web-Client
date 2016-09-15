@@ -82,7 +82,7 @@ export default function ckrecord(){
       recordName,
       recordChangeTag,  // leave black for new record, provide one when changing a record
       recordType,  // Program
-      zoneName, //_defaultZone
+      zoneName, // _defaultZone
       forRecordName,
       forRecordChangeTag,
       publicPermission,
