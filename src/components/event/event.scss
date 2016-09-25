@@ -11,14 +11,27 @@
     cursor: pointer;
   }
 
+  .clickable:hover{
+    background-color: $background--hover;
+  }
+
   a.clickable{
     font-weight: bold;
     color: $anchor;
     float: right;
+    padding-right: 1em;
+    padding-left: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    border-radius: 5px;
+  }
+
+  a.clickable:hover{
+    background-color: $anchor--hover;
   }
 
   .thumbnail{
-    background-color: $background--imagebox;
+    background-color: $background__imagebox;
     max-width: 100px;
   }
 
@@ -40,13 +53,18 @@
 
     height: 60px;
     width: 100px;
-    background-color: $background--imagebox;
+    background-color: $background__imagebox;
 
   }
 
   img {
     position: absolute;
     clip: rect(0px,100px,60px,0px);
+  }
+
+  .clearfix{
+    overflow: auto;
+    zoom: 1;
   }
 
 }

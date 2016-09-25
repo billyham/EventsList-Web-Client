@@ -18,13 +18,17 @@ $red: 1;
 // Color Derivations
 $grayishblue: hsla($grayblue, 30%, 80%, 1);
 $grayishbluelight: hsla($grayblue, 20%, 90%, 1);
+$grayishbluetint: hsla($grayblue, 20%, 85%, 1);
 $grayishbluedark: hsla($grayblue, 10%, 70%, 1);
 
-$darkred: hsla($red, 100%, 35%, 1);
+$red-dark: hsla($red, 100%, 35%, 1);
+$red-transparent: hsla($red, 100%, 35%, 0.2);
 
 // Color Contexts
 $background1: $grayishbluelight;
+$background__imagebox: $grayishblue;
 $background--selected: $grayishbluedark;
-$background--imagebox: $grayishblue;
+$background--hover: $grayishbluetint;
 
-$anchor: $darkred;
+$anchor: $red-dark;
+$anchor--hover: $red-transparent;
