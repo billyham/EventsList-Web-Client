@@ -1,13 +1,13 @@
 @import "../../styles/site-settings";
-:local(.event) {
+:local(.event){
   margin-bottom: 10px;
 
-  .selected {
+  .selected{
     background-color: $background--selected;
     padding: 10px;
   }
 
-  .clickable {
+  .clickable{
     cursor: pointer;
   }
 
@@ -54,12 +54,19 @@
     height: 60px;
     width: 100px;
     background-color: $background__imagebox;
-
   }
 
-  img {
+  .selected .cell-image{
+    height: 100px;
+  }
+
+  img{
     position: absolute;
     clip: rect(0px,100px,60px,0px);
+  }
+
+  .selected img{
+    clip: auto;
   }
 
   .clearfix{
