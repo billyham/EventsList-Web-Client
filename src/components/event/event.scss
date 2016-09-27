@@ -1,6 +1,7 @@
 @import "../../styles/site-settings";
 :local(.event){
   margin-bottom: 10px;
+  border: 1px dotted hsla(20, 0, 100%, 0.3);
 
   .selected{
     background-color: $background--selected;

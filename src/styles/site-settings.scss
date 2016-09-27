@@ -5,17 +5,24 @@
 // ----------------------
 
 // Fonts
-$font1: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font1: "Helvetica", Helvetica, Arial, sans-serif;
 $font2: Georgia, serif;
 
 // = Colors
 // -----------------------------
 
 // Hues
+$navy: 192;
 $grayblue: 200;
 $red: 1;
+$orange: 20;
 
 // Color Derivations
+$navyDark: hsla($navy, 21%, 16%, 1);
+$navyPowderBlue: hsla($navy, 42%, 78%, 1);
+$navyLessDark: hsla($navy, 25%, 22%, 1);
+$navyMoreDark: hsla($navy, 20%, 10%, 1);
+
 $grayishblue: hsla($grayblue, 30%, 80%, 1);
 $grayishbluelight: hsla($grayblue, 20%, 90%, 1);
 $grayishbluetint: hsla($grayblue, 20%, 85%, 1);
@@ -24,11 +31,16 @@ $grayishbluedark: hsla($grayblue, 10%, 70%, 1);
 $red-dark: hsla($red, 100%, 35%, 1);
 $red-transparent: hsla($red, 100%, 35%, 0.2);
 
-// Color Contexts
-$background1: $grayishbluelight;
-$background__imagebox: $grayishblue;
-$background--selected: $grayishbluedark;
-$background--hover: $grayishbluetint;
+$orangeFull: hsla($orange, 83%, 35%, 1);
+$orangeTransparent: hsla($orange, 83%, 35%, 0.2);
 
-$anchor: $red-dark;
-$anchor--hover: $red-transparent;
+// Color Contexts
+$canvas: $navyDark;
+$highlightText: $navyPowderBlue;
+
+$background__imagebox: $navyLessDark;
+$background--selected: $navyMoreDark;
+$background--hover: $navyLessDark;
+
+$anchor: $orangeFull;
+$anchor--hover: $orangeTransparent;
