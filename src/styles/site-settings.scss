@@ -5,7 +5,7 @@
 // ----------------------
 
 // Fonts
-$font1: "Helvetica", Helvetica, Arial, sans-serif;
+$font1: "Arial", Helvetica, Arial, sans-serif;
 $font2: Georgia, serif;
 
 // = Colors
@@ -18,10 +18,10 @@ $red: 1;
 $orange: 20;
 
 // Color Derivations
-$navyDark: hsla($navy, 21%, 16%, 1);
+$navyDark: hsla($navy, 19%, 16%, 1);
 $navyPowderBlue: hsla($navy, 42%, 78%, 1);
 $navyLessDark: hsla($navy, 25%, 22%, 1);
-$navyMoreDark: hsla($navy, 20%, 10%, 1);
+$navyMoreDark: hsla($navy, 18%, 10%, 1);
 
 $grayishblue: hsla($grayblue, 30%, 80%, 1);
 $grayishbluelight: hsla($grayblue, 20%, 90%, 1);
