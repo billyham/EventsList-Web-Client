@@ -4,12 +4,14 @@ import ckquery from './ckquery';
 import ckrecord from './ckrecord';
 import ckauthenticate from './ckauthenticate';
 import loadImage from './loadimage';
+import ckasset from './ckasset';
 
 const services = angular.module('services', [])
 .factory('ckconfigure', ckconfigure)
 .factory('ckquery', ckquery)
 .factory('ckrecord', ckrecord)
 .factory('ckauthenticate', ckauthenticate)
-.factory('loadImage', loadImage);
+.factory('loadImage', loadImage)
+.factory('ckasset', ckasset);
 
 export default services.name;

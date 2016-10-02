@@ -8,10 +8,15 @@
     "start": "webpack-dev-server --inline",
     "build": "webpack"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billyham/EventsList-Web-Client"
+  },
   "author": "Dave Hanagan",
   "license": "ISC",
   "dependencies": {
     "angular": "^1.5.7",
+    "angular-cookies": "^1.5.7",
     "angular-ui-router": "^1.0.0-alpha.5"
   },
   "devDependencies": {
