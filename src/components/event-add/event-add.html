@@ -1,8 +1,9 @@
-<div>
+<div class={{$ctrl.styles.eventAdd}}>
   <p><b>Add new event:</b><br>
   Title: <input size="60" ng-model="$ctrl.formtitle"></input><br>
   Video: <input size="60" ng-model="$ctrl.formvideo"></input><br>
   <!-- <button>Add image</button> -->
   </p>
   <button ng-click="$ctrl.submit()">Submit</button>
+  <button ng-click="$ctrl.close()">Close</button>
 </div>

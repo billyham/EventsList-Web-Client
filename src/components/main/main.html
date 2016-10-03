@@ -1,15 +1,11 @@
 <div class="{{$ctrl.styles.main}}">
   <div>
-    <div class="centered">
-      <section ui-view="header"><header></header></section>
-    </div>
+    <section ui-view="header" class="centered"><header></header></section>
     <hr class="l-section-divider">
-    <div class="centered">
-      <section ui-view="main"><p>Downloading event information...</p></section>
-      <div class="auth">
-        <div id="apple-sign-in-button"></div>
-        <div id="apple-sign-out-button"></div>
-      </div>
+    <section ui-view="main" class="centered"><p>Downloading event information...</p></section>
+    <div class="auth centered">
+      <div id="apple-sign-in-button"></div>
+      <div id="apple-sign-out-button"></div>
     </div>
   </div>
 </div>

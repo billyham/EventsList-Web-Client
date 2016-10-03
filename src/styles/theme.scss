@@ -13,10 +13,14 @@
   border-radius: 5px          !important;
   border-color: black         !important;
   background-color: inherit   !important;
-  display: block              !important;
-  opacity: 1                  !important;
+  // display: inline-block       !important;
+  // opacity: 1                  !important;
 }
 
 .apple-auth-button:hover{
   background-color: $background--hover !important;
+}
+
+#apple-sign-in-button, #apple-sign-out-button{
+  display: inline-block;
 }

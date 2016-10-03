@@ -1,14 +1,17 @@
 import template from './event-add.html';
+import styles from './event-add.scss';
 
 export default {
   template,
   bindings:{
-    add: '&'
+    add: '&',
+    close: '&'
   },
   controller: ['ckrecord', '$scope', controller]
 };
 
 function controller(ckrecord, $scope){
+  this.styles = styles;
   this.formtitle = '';
   this.formvideo = '';
 

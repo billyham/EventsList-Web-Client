@@ -1,4 +1,5 @@
 import template from './event-list.html';
+import styles from './event-list.scss';
 
 export default {
   template,
@@ -7,13 +8,13 @@ export default {
     ckqueryResult: '<',
     arrayOfImages: '<'
   },
-  controller: ['ckquery', 'ckconfigure', '$scope', controller]
+  controller: ['ckquery', 'ckconfigure', '$scope', 'ngDialog', controller]
 };
 
-function controller(ckquery, ckconfigure, $scope){
+function controller(ckquery, ckconfigure, $scope, ngDialog){
+  this.styles = styles;
 
   this.loadMore = function loadMore(){
-
     ckquery.query(
       'PUBLIC','_defaultZone',null,'Program',
       ['title', 'imageRef', 'video'],'title',null,null,null,
@@ -33,6 +34,18 @@ function controller(ckquery, ckconfigure, $scope){
       this.ckqueryResult.records.splice(index, 1);
       $scope.$apply();
     }
+  };
+
+  this.showadd = function showadd(){
+    const dialog = ngDialog.open({
+      template:'<event-add close="close()">Enter</event-add>',
+      plain: true,
+      controller: ['$scope', function($scope){
+        $scope.close = function close(){
+          dialog.close();
+        };
+      }]
+    });
   };
 
   this.add = function add(rec){
