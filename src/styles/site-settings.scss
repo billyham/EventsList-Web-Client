@@ -1,25 +1,25 @@
+/* ==========================================================================
+   Site Settings
+   ========================================================================== */
+
 @charset "UTF-8";
 
-// ----------------------
-// == Site settings
-// ----------------------
-
-// Fonts
+/* Fonts
+   ========================================================================== */
 $font1: "Arial", Helvetica, Arial, sans-serif;
 $font2: Georgia, serif;
 
-// = Colors
-// -----------------------------
-
-// Hues
+/* Hues
+   ========================================================================== */
 $navy: 192;
 $grayblue: 200;
 $red: 1;
 $orange: 20;
 
-// Color Derivations
+/* Color Derivations
+   ========================================================================== */
 $navyDark: hsla($navy, 19%, 16%, 1);
-$navyPowderBlue: hsla($navy, 42%, 78%, 1);
+$navyPowderBlue: hsla($navy, 42%, 68%, 1);
 $navyLessDark: hsla($navy, 25%, 22%, 1);
 $navyMoreDark: hsla($navy, 18%, 10%, 1);
 
@@ -31,10 +31,11 @@ $grayishbluedark: hsla($grayblue, 10%, 70%, 1);
 $red-dark: hsla($red, 100%, 35%, 1);
 $red-transparent: hsla($red, 100%, 35%, 0.2);
 
-$orangeFull: hsla($orange, 83%, 35%, 1);
-$orangeTransparent: hsla($orange, 83%, 35%, 0.2);
+$orangeFull: hsla($orange, 83%, 45%, 1);
+$orangeTransparent: hsla($orange, 83%, 45%, 0.2);
 
-// Color Contexts
+/* Color Contexts
+   ========================================================================== */
 $canvas: $navyDark;
 $highlightText: $navyPowderBlue;
 

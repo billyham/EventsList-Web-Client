@@ -16,12 +16,12 @@
 		</span>
 
 		<div ng-show="$ctrl.isSelected">
-			<div class="clearfix">
+			<div class="l-clearfix">
 				<input ng-model="$ctrl.formtitle" size=60 placeholder"Title (required)"></input><br>
 				<input ng-model="$ctrl.formvideo" size=60 placeholder="URL for Trailer Video"></input><br>
 				<button ng-click="$ctrl.editTitle()">Save Changes</button>
 				<button ng-click="$ctrl.delete()">Delete Event</button>
-				<image-upload></image-upload>
+				<image-upload record="$ctrl.record.recordName"></image-upload>
 				<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
 			</div>
 

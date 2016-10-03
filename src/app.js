@@ -8,7 +8,6 @@ import 'angular-ui-router/release/stateEvents';
 const app = angular.module('app', [
   router,
   ngCookies,
-  // angular.module('angular-cookies').name,
   angular.module( 'ui.router.state.events' ).name,
   components,
   services

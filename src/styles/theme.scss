@@ -1,0 +1,22 @@
+/* ==========================================================================
+   Site Settings
+   ========================================================================== */
+
+/* Override Apple default styles
+   ========================================================================== */
+.apple-auth-button{
+  height: 40px                !important;
+  width: 218px                !important;
+  cursor: pointer             !important;
+  border-style: none          !important;
+  border-width: 0             !important;
+  border-radius: 5px          !important;
+  border-color: black         !important;
+  background-color: inherit   !important;
+  display: block              !important;
+  opacity: 1                  !important;
+}
+
+.apple-auth-button:hover{
+  background-color: $background--hover !important;
+}

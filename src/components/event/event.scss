@@ -19,29 +19,6 @@
     border-radius: 5px;
   }
 
-  .clickable{
-    cursor: pointer;
-  }
-
-  .clickable:hover{
-    background-color: $background--hover;
-  }
-
-  a.clickable{
-    font-weight: bold;
-    color: $anchor;
-    float: right;
-    padding-right: 1em;
-    padding-left: 1em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    border-radius: 5px;
-  }
-
-  a.clickable:hover{
-    background-color: $anchor--hover;
-  }
-
   .thumbnail{
     background-color: $background__imagebox;
     max-width: 100px;
@@ -53,6 +30,7 @@
   }
 
   .cell-text{
+    color: $highlightText;
     // display: inline-block;
     // vertical-align: middle;
     // line-height: normal;
@@ -85,11 +63,6 @@
   .selected img{
     clip: auto;
     border-radius: 0 0 0 0;
-  }
-
-  .clearfix{
-    overflow: auto;
-    zoom: 1;
   }
 
 }

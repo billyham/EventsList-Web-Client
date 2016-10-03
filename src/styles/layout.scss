@@ -1,3 +1,17 @@
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
 body{
   background-color: $canvas;
+}
+
+.l-section-divider {
+  height: 5px;
+  background-color: white;
+}
+
+.l-clearfix{
+  overflow: auto;
+  zoom: 1;
 }
