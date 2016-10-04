@@ -18,8 +18,7 @@
     "angular": "^1.5.7",
     "angular-cookies": "^1.5.7",
     "angular-ui-router": "^1.0.0-alpha.5",
-    "ng-dialog": "^0.6.4",
-    "ngUpload": "^0.5.20"
+    "ng-dialog": "^0.6.4"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",

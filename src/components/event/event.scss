@@ -1,6 +1,7 @@
 @import "../../styles/site-settings";
 :local(.event){
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
 
   // HTML Dotted line
   // border: 1px dotted hsla(20, 0, 100%, 0.3);
@@ -58,6 +59,17 @@
     position: absolute;
     clip: rect(0px,100px,60px,0px);
     border-radius: 5px 0px 0px 5px;
+  }
+
+  .vidicon{
+    margin-left: 1em;
+    position: relative;
+    top: 8px;
+    cursor: pointer;    
+    svg{
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .selected img{

@@ -9,11 +9,14 @@
 
 		<span class="cell-text">
 			{{$ctrl.record.fields.title.value}}
-			<!-- <a ng-click="$ctrl.showimage($event)" ng-show="$ctrl.record.fields.imageRef" class="clickable">
-				<span>{{$ctrl.showtext}}</span>
-			</a> -->
-			{{$ctrl.record.fields.video.value}}
 		</span>
+
+		<span ng-include="'/src/styles/icons/tv.svg'"
+			ng-show="!!$ctrl.record.fields.video"
+			class="vidicon"
+			ng-click="$ctrl.play($event)">
+		</span>
+
 
 		<div ng-show="$ctrl.isSelected">
 			<div class="l-clearfix">

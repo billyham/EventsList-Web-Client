@@ -7,10 +7,10 @@ export default {
     record: '<',
     remove: '&'
   },
-  controller: ['ckrecord', '$scope', controller]
+  controller: ['ckrecord', '$scope', '$window', controller]
 };
 
-function controller(ckrecord, $scope){
+function controller(ckrecord, $scope, $window){
   this.styles = styles;
 
   // State
@@ -36,6 +36,11 @@ function controller(ckrecord, $scope){
   if (this.record.fields.imageRef){
     showImage.call(this);
   }
+
+  this.play = function play(clickEvent){
+    if (clickEvent) clickEvent.cancelBubble = true;
+    $window.location.href=this.record.fields.video.value;
+  };
 
   function showImage(clickEvent){
     // fetch image from the server only if necessary
