@@ -3,7 +3,8 @@ import template from './image-upload.html';
 export default {
   template,
   bindings: {
-    record: '<'
+    record: '<',
+    edit: '&'
   },
   controller: ['ckasset', controller]
 };
@@ -17,24 +18,25 @@ function controller(ckasset){
 
     var fileReader = new FileReader();
 
-    fileReader.onloadend = function(element){
+    fileReader.onloadend = element => {
 
-      ckasset.request( tokenResponseDictionary => {
-        // console.log(tokenResponseDictionary);
-        // console.log(element.target.result);
+      ckasset.request()
+      .then( tokenResponseDictionary => {
+
         var data = new Uint8Array(element.target.result);
 
-        ckasset.upload(tokenResponseDictionary.data.tokens[0].url, data, function(assetDictionary){
-          // console.log(assetDictionary);
-          // console.log(assetDictionary.data.singleFile);
+        ckasset.upload(tokenResponseDictionary.data.tokens[0].url, data, assetDictionary => {
           const recordName = tokenResponseDictionary.data.tokens[0].recordName;
           const fileName = filePath.files[0].name;
           const { singleFile } = assetDictionary.data;
-          ckasset.modify(fileName, recordName, singleFile);
+          ckasset.modify(fileName, recordName, singleFile, finalObj => {
+            console.log(finalObj);
+            this.edit({ image: { field: 'imageRef', recordname: recordName } });
+          });
         });
       });
     };
-    
+
     fileReader.readAsArrayBuffer(file);
   };
 

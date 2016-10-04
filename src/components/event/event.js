@@ -15,12 +15,16 @@ function controller(ckrecord, $scope, $window){
 
   // State
   this.isSelected = false;
-  this.imageVisible = false;
+  this.imageVisible = true;
 
   // Methods
   this.showimage = showImage;
   this.delete = deleteEvent;
-  this.editTitle = editTitle;
+  this.edit = edit;
+  this.play = play;
+  this.makeSelected = makeSelected;
+  this.removeSelected = removeSelected;
+  this.pic = pic;
 
   // Set values for UI elements
   this.formtitle = this.record.fields.title.value;
@@ -29,7 +33,7 @@ function controller(ckrecord, $scope, $window){
   this.imagesrc = '';
 
   // Save initial values in case editing fails
-  this.oldTitle = '';
+  this.oldValue = '';
   this.oldVideo = '';
 
   // Load images on launch
@@ -37,13 +41,14 @@ function controller(ckrecord, $scope, $window){
     showImage.call(this);
   }
 
-  this.play = function play(clickEvent){
+  // Load new URL for video
+  function play(clickEvent){
     if (clickEvent) clickEvent.cancelBubble = true;
     $window.location.href=this.record.fields.video.value;
   };
 
-  function showImage(clickEvent){
-    // fetch image from the server only if necessary
+  // Fetch image from the server only if necessary
+  function showImage(){
     if (!this.imagesrc) {
       ckrecord.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
       .then( obj => {
@@ -54,31 +59,37 @@ function controller(ckrecord, $scope, $window){
         console.log(error);
       });
     }
-
-    if (!this.imageVisible){
-      this.showtext = 'Hide Image';
-    }else{
-      this.showtext = 'Show Image';
-    }
-    this.imageVisible = !this.imageVisible;
-
-    if (clickEvent) clickEvent.cancelBubble = true;
   };
 
-  this.makeSelected = function toggleSelected(){
+  // Toggle selection
+  function makeSelected(){
     this.isSelected = true;
   };
 
-  this.removeSelected = function removeSelected(clickEvent){
-    // Prevent the action on the parent div
+  // Prevent the action on the parent div
+  function removeSelected(clickEvent){
     clickEvent.cancelBubble = true;
     this.isSelected = false;
   };
 
-  function editTitle(){
-    this.oldTitle = this.record.fields.title.value;
+  function pic(image){
+    this.edit(image.field, image.recordname);
+  };
 
-    this.record.fields.title.value = this.formtitle;
+  // Edit event
+  function edit(field, recordname){
+
+    if (!this.record.fields[field]) this.record.fields[field] = { value: { recordName: recordname, action: 'NONE' }, type: 'REFERENCE' };
+
+    this.oldValue = this.record.fields[field].value;
+
+    if (field === 'title'){
+      this.record.fields[field].value = recordname;
+    }else if(field === 'imageRef'){
+      this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
+      this.imagesrc = null;
+    }
+
     ckrecord.save(
       'PUBLIC', //databaseScope
       this.record.recordName, // recordName,
@@ -95,10 +106,12 @@ function controller(ckrecord, $scope, $window){
     ).then( obj => {
       // Save new value
       this.record = obj;
+      // Load image in view if necessary
+      if (field === 'imageRef') this.showimage();
     }).catch( () => {
       // Revert to previous value
-      this.formtitle = this.oldTitle;
-      this.record.fields.title.value = this.oldTitle;
+      if (field === 'title') this.formtitle = this.oldValue;
+      this.record.fields[field].value = this.oldValue;
       // TODO: Alert user that saving failed
       $scope.$apply();
     });

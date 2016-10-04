@@ -38,25 +38,29 @@ function controller(ckquery, ckconfigure, $scope, ngDialog){
 
   this.showadd = function showadd(){
     const dialog = ngDialog.open({
-      template:'<event-add close="close()">Enter</event-add>',
+      template:'<event-add close="close()" add="add(rec)">Enter</event-add>',
       plain: true,
+      data: this.ckqueryResult,
       controller: ['$scope', function($scope){
+
+        // Close the dialog
         $scope.close = function close(){
           dialog.close();
         };
+
+        // Update the list view with the new Event
+        $scope.add = rec => {
+          if (!rec) return;
+          $scope.ngDialogData.records.push(rec);
+          $scope.ngDialogData.records.sort( (a,b) => {
+            if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
+            if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
+            return 0;
+          });
+          $scope.$apply();
+        };
       }]
     });
-  };
-
-  this.add = function add(rec){
-    if (!rec) return;
-    this.ckqueryResult.records.push(rec);
-    this.ckqueryResult.records.sort( (a,b) => {
-      if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
-      if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
-      return 0;
-    });
-    $scope.$apply();
   };
 
 }

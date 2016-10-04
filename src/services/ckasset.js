@@ -8,7 +8,7 @@ export default function ckasset($http, $cookies){
 
   return {
 
-    request: function request(callback){
+    request: function request(){
       const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/assets/upload?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         tokens:[{
@@ -16,13 +16,13 @@ export default function ckasset($http, $cookies){
           fieldName:'image'
         }]
       });
-      $http.post(reqUrl, reqBody)
-      .then( obj => {
-        callback(obj);
-      })
-      .catch( () => {
-        console.log('ckasset request error');
-      });
+      return $http.post(reqUrl, reqBody);
+      // .then( obj => {
+      //   callback(obj);
+      // })
+      // .catch( () => {
+      //   console.log('ckasset request error');
+      // });
     },
 
     upload: function upload(url, file, callback){
@@ -39,7 +39,7 @@ export default function ckasset($http, $cookies){
       });
     },
 
-    modify: function modify(fileName, recordName, image){
+    modify: function modify(fileName, recordName, image, callback){
       const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/records/modify?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         operations: [{
@@ -67,7 +67,7 @@ export default function ckasset($http, $cookies){
       });
       $http.post(reqUrl, reqBody)
       .then( obj => {
-        console.log(obj);
+        callback(obj);
       })
       .catch( () => {
         console.log('ckasset modify error');

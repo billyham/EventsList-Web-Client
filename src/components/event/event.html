@@ -11,7 +11,7 @@
 			{{$ctrl.record.fields.title.value}}
 		</span>
 
-		<span ng-include="'/src/styles/icons/tv.svg'"
+		<span ng-include="'/icons/tv.svg'"
 			ng-show="!!$ctrl.record.fields.video"
 			class="vidicon"
 			ng-click="$ctrl.play($event)">
@@ -22,9 +22,9 @@
 			<div class="l-clearfix">
 				<input ng-model="$ctrl.formtitle" size=60 placeholder"Title (required)"></input><br>
 				<input ng-model="$ctrl.formvideo" size=60 placeholder="URL for Trailer Video"></input><br>
-				<button ng-click="$ctrl.editTitle()">Save Changes</button>
+				<button ng-click="$ctrl.edit('title', $ctrl.formtitle)">Save Changes</button>
 				<button ng-click="$ctrl.delete()">Delete Event</button>
-				<image-upload record="$ctrl.record.recordName"></image-upload>
+				<image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload>
 				<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
 			</div>
 

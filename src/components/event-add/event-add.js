@@ -50,6 +50,7 @@ function controller(ckrecord, $scope){
       this.formvideo = '';
       $scope.$apply();
       this.add( {rec: record} );
+      this.close();
     }).catch((error) => {
       // Revert to previous value
       console.log('addition ERROR');
