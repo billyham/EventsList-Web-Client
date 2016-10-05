@@ -11,12 +11,10 @@
 			{{$ctrl.record.fields.title.value}}
 		</span>
 
-		<span ng-include="'/icons/tv.svg'"
+		<span class="vidicon"
 			ng-show="!!$ctrl.record.fields.video"
-			class="vidicon"
 			ng-click="$ctrl.play($event)">
 		</span>
-
 
 		<div ng-show="$ctrl.isSelected">
 			<div class="l-clearfix">
@@ -26,8 +24,8 @@
 				<button ng-click="$ctrl.delete()">Delete Event</button>
 				<image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload>
 				<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
+				<div class="icon"></div>
 			</div>
-
 		</div>
 	</div>
 </div>

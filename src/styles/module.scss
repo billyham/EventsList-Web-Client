@@ -2,6 +2,8 @@
    Module
    ========================================================================== */
 
+/* Clickables
+   ========================================================================== */
 .clickable{
   cursor: pointer;
 }
@@ -23,4 +25,22 @@ a.clickable{
 
 a.clickable:hover{
   background-color: $anchor--hover;
+}
+
+/* Icons
+   ========================================================================== */
+.vidicon{
+  margin-left: 1em;
+  position: relative;
+  top: 8px;
+  cursor: pointer;
+  // svg{
+  //   width: 30px;
+  //   height: 30px;
+  // }
+  background: url('icons/tv.svg');
+  background-size: contain;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
 }

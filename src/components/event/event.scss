@@ -61,17 +61,6 @@
     border-radius: 5px 0px 0px 5px;
   }
 
-  .vidicon{
-    margin-left: 1em;
-    position: relative;
-    top: 8px;
-    cursor: pointer;    
-    svg{
-      width: 30px;
-      height: 30px;
-    }
-  }
-
   .selected img{
     clip: auto;
     border-radius: 0 0 0 0;
