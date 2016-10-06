@@ -1,4 +1,5 @@
 import template from './image-upload.html';
+import styles from './image-upload.scss';
 
 export default {
   template,
@@ -10,7 +11,7 @@ export default {
 };
 
 function controller(ckasset){
-
+  this.styles = styles;
   this.sendRequest = function sendRequest(){
 
     let filePath = document.getElementById(this.record);
