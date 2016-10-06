@@ -2,23 +2,47 @@
    Site Settings
    ========================================================================== */
 
+/* Colors
+  ========================================================================== */
+body{
+  background-color: $canvas;
+}
+
 /* Override Apple default styles
    ========================================================================== */
 .apple-auth-button{
-  height: 40px                !important;
-  width: 218px                !important;
+  height: auto                !important;
+  width: auto                !important;
   cursor: pointer             !important;
-  border-style: none          !important;
   border-width: 0             !important;
   border-radius: 5px          !important;
-  border-color: black         !important;
   background-color: inherit   !important;
-  // display: inline-block       !important;
-  // opacity: 1                  !important;
+
+  // Inherit a.clickable styles
+  font-weight: bold  !important;
+  color: $anchor  !important;
+  float: right  !important;
+  padding-right: 1em  !important;
+  padding-left: 1em !important;
+  padding-top: 0.5em  !important;
+  padding-bottom: 0.5em !important;
+  border-radius: 5px  !important;
+}
+
+.apple-auth-button :nth-child(1){
+  display: none;
+}
+
+#apple-sign-out-button div::before{
+  content: "Logout";
+}
+
+#apple-sign-in-button div::before{
+  content: "Sign In";
 }
 
 .apple-auth-button:hover{
-  background-color: $background--hover !important;
+  background-color: $anchor--hover !important;
 }
 
 #apple-sign-in-button, #apple-sign-out-button{

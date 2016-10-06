@@ -50,20 +50,22 @@ button{
   margin-top: .5em;
   margin-bottom: .5em;
   padding: .5em;
-}
-
-button:active{
-  background-color: $anchor--hover;
-}
-
-button[type="submit"]{
-  background-color: green;
-}
-
-button[type="submit"]:active{
-  background-color: hsla(125, 90%, 50%, 1);
+  cursor: pointer;
 }
 
 button:focus{
   outline-width: 0;
+}
+
+button:active{
+  background-color: $anchor--hover;
+  color: $anchor;
+}
+
+button[type="submit"]{
+  background-color: $submit-button;
+}
+
+button[type="submit"]:active{
+  background-color: $submit-button__active;
 }

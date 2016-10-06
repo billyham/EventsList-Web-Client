@@ -27,9 +27,10 @@ a.clickable:hover{
   background-color: $anchor--hover;
 }
 
-// button.submit{
-//   background-color: green;
-// }
+a.clickable:active{
+  background-color: $anchor;
+  color: black;
+}
 
 /* Clickable Icons
    ========================================================================== */
@@ -38,13 +39,10 @@ a.clickable:hover{
   position: relative;
   top: 8px;
   cursor: pointer;
-  // svg{
-  //   width: 30px;
-  //   height: 30px;
-  // }
   background: url('icons/tv.svg');
   background-size: contain;
   height: 30px;
   width: 30px;
   display: inline-block;
+  fill: yellow;
 }
