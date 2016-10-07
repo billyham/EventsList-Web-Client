@@ -31,7 +31,6 @@ export default function ckconfigure(){
           environment: 'development'
         }]
       });
-
       // console.log(CloudKit);
     }
   };

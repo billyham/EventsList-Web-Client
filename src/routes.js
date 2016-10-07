@@ -20,9 +20,9 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
       }]
     },
     views: {
-      // header: {
-      //   component: 'header'
-      // },
+      header: {
+        component: 'header'
+      },
       main: {
         component: 'eventList'
       }
