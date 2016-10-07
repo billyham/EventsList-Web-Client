@@ -14,5 +14,4 @@ function controller($document){
   var targetobj = $document.find('article');
   targetobj.detach();
   $document.find('footer').append(targetobj);
-
 }

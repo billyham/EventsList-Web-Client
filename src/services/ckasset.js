@@ -1,3 +1,9 @@
+// =============================================================================
+// A wrapper for the CloudKit JS Library object --ckasset--
+// Use this for saving, deleting or modifying images or other 
+// blob assets.
+// =============================================================================
+
 ckasset.$inject = ['$http', '$cookies'];
 
 export default function ckasset($http, $cookies){
