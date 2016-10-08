@@ -1,15 +1,35 @@
 <div class="{{$ctrl.styles.main}}">
   <div>
-    <section ui-view="header" class="l-centered"><header></header></section>
+
+    <!-- ============================== Header ============================= -->
+    <header ui-view="header" class="l-centered">
+      <!-- Placeholder content  -->
+      <h1 class="l-title">EventsList Dashboard</h1>
+    </header>
+
+
+    <!-- ============================= Divider ============================= -->
     <hr class="l-section-divider">
-    <section ui-view="main" class="l-centered"><p>Downloading event information...</p></section>
-    <div class="auth l-centered" ng-hide="true">
+
+
+    <!-- =============================== Main ============================== -->
+    <section ui-view="main" class="l-centered">
+      <!-- Placeholder content  -->
+      <p>Downloading event information...</p>
+    </section>
+
+
+    <!-- ===================== Apple Sign In/Out Button ==================== -->
+    <section class="auth l-centered" ng-hide="true">
       <article>
         <div id="apple-sign-in-button"></div>
         <div id="apple-sign-out-button"></div>
       </article>
-    </div>
-    <footer>
-    </footer>
+    </section>
+
+
+    <!-- ============================== Footer ============================= -->
+    <footer></footer>
+
   </div>
 </div>

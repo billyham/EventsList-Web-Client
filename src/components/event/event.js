@@ -13,7 +13,7 @@ export default {
 function controller(ckrecord, $scope, $window){
   this.styles = styles;
 
-  // State
+  // State properties
   this.isSelected = false;
   this.imageVisible = true;
 
@@ -90,6 +90,7 @@ function controller(ckrecord, $scope, $window){
       this.imagesrc = null;
     }
 
+    // Save event
     ckrecord.save(
       'PUBLIC', //databaseScope
       this.record.recordName, // recordName,
@@ -117,6 +118,7 @@ function controller(ckrecord, $scope, $window){
     });
   };
 
+  // Delete event
   function deleteEvent(){
     ckrecord.delete(
       'PUBLIC',  // databaseScope

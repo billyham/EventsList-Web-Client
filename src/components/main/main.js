@@ -5,13 +5,9 @@ export default {
   template,
   bindings: {
   },
-  controller: ['$document', controller]
+  controller: [controller]
 };
 
-function controller($document){
+function controller(){
   this.styles = styles;
-
-  var targetobj = $document.find('article');
-  targetobj.detach();
-  $document.find('footer').append(targetobj);
 }

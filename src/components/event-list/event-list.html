@@ -1,10 +1,15 @@
 <div class="{{$ctrl.styles.eventList}}">
+
+	<!-- =============================== Header ============================== -->
 	<section class="l-clearfix">
 		<h2 class="highlight">Events Manager</h2>
 		<button class="l-float-right" ng-click="$ctrl.showadd()">+Add Event</button>
 	</section>
+
+
+	<!-- =========================== List of events ========================== -->
 	<section>
-		<div ng-repeat="record in $ctrl.ckqueryResult.records track by record.recordName">
+		<article ng-repeat="record in $ctrl.ckqueryResult.records track by record.recordName">
 	    <event
 			title=record.fields.title
 			image-ref=record.fields.imageRef
@@ -12,10 +17,16 @@
 			record=record
 			remove="$ctrl.remove(rec)">
 			</event>
-		</div>
+		</article>
+	</section>
+
+
+	<!-- ========================== Load more button ========================= -->
+	<section>
 		<div ng-show="$ctrl.ckqueryResult.continuationMarker">
 			<br>
 			<button ng-click="$ctrl.loadMore()">Load More</button>
 		</div>
 	</section>
+
 </div>

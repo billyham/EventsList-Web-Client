@@ -21,7 +21,7 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
     },
     views: {
       header: {
-        component: 'header'
+        component: 'mainHeader'
       },
       main: {
         component: 'eventList'
