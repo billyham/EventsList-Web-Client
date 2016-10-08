@@ -9,7 +9,7 @@ auth.$inject = ['$cookies'];
 export default function auth($cookies){
 
   return {
-    authenticate(){
+    isSignedIn(){
       return !!$cookies.get(process.env.CLOUD_ID);
     }
 

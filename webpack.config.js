@@ -1,5 +1,6 @@
 const EnvironmentPlugin = require('webpack').EnvironmentPlugin;
 const DotenvPlugin = require('webpack-dotenv-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const dotenvFile = './.env';
 
@@ -7,12 +8,13 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: '../server/public',
-    filename: 'bundle.js'
+    filename: '/scripts/bundle.js'
   },
   devtool: 'source-map',
   plugins: [
     new DotenvPlugin({sample: dotenvFile, path: dotenvFile}),
     new EnvironmentPlugin(['API_TOKEN', 'CLOUD_ID']),
+    new ExtractTextPlugin('/styles/bundle.css'),
     new HtmlWebpackPlugin({template: './src/index.html'})
   ],
   module: {
@@ -33,8 +35,12 @@ module.exports = {
     },
     {
       test: /\.scss$/,
-      loader: 'style!css?sourceMap!sass?sourceMap'
+      loader: ExtractTextPlugin.extract('style!', 'css?sourceMap!sass?sourceMap'),
     },
+    // {
+    //   test: /\.scss$/,
+    //   loader: 'style!css?sourceMap!sass?sourceMap'
+    // },
     {
       test: /\.css$/,
       loader: 'style!css?sourceMap'
