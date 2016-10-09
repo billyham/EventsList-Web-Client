@@ -39,6 +39,7 @@ function controller(ckquery, ckconfigure, $scope, ngDialog){
   this.showadd = function showadd(){
     const dialog = ngDialog.open({
       template:'<event-add close="close()" add="add(rec)">Enter</event-add>',
+      className: 'ngdialog-theme-default',
       plain: true,
       data: this.ckqueryResult,
       controller: ['$scope', function($scope){

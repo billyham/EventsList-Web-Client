@@ -1,10 +1,4 @@
-import template from './apple-destination';
-
 export default {
-  template,
-  bindings: {
-
-  },
   controller: ['$document', controller]
 };
 

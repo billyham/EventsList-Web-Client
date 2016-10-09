@@ -8,13 +8,13 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: '../server/public',
-    filename: '/scripts/bundle.js'
+    filename: './bundle.js'
   },
   devtool: 'source-map',
   plugins: [
     new DotenvPlugin({sample: dotenvFile, path: dotenvFile}),
     new EnvironmentPlugin(['API_TOKEN', 'CLOUD_ID']),
-    new ExtractTextPlugin('/styles/bundle.css'),
+    new ExtractTextPlugin('./bundle.css'),
     new HtmlWebpackPlugin({template: './src/index.html'})
   ],
   module: {

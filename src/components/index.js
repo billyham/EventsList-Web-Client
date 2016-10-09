@@ -5,8 +5,8 @@ import eventAdd from './event-add/event-add';
 import main from './main/main';
 import imageUpload from './image-upload/image-upload';
 import mainHeader from './main-header/main-header';
-import nav from './main-header/nav/nav';
-import appleDestination from './main-header/nav/apple-destination/apple-destination';
+import mainNav from './main-header/main-nav/main-nav';
+import appleDestination from './main-header/main-nav/apple-destination/apple-destination';
 
 const components = angular.module('components', [])
 .component('event', event)
@@ -15,7 +15,7 @@ const components = angular.module('components', [])
 .component('eventAdd', eventAdd)
 .component('imageUpload', imageUpload)
 .component('mainHeader', mainHeader)
-.component('nav', nav)
+.component('mainNav', mainNav)
 .component('appleDestination', appleDestination);
 
 export default components.name;
