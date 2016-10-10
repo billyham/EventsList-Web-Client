@@ -1,9 +1,11 @@
 ## EventsList Web Client
 
-_**This project is in-progress, at an early stage**_  
-To see a current implementation, visit this [mock site](http://kitschplayer.com/events/)
+_**This project is in-progress**_  
+To see a current implementation, visit the [mock site](http://kitschplayer.com/events/)
 
-This is an angular web app client for managing the iCloud content of an iOS app. EventsList is an iOS app that displays event listings for a theater. This web client would be used by a staff person at the theater for loading new event information or editing existing events.
+This is an angular web app client for managing the iCloud content of an iOS app. EventsList is an iOS app that displays event listings for a theater. This web client would be used by a staff person at the theater for loading new event information or editing existing events.  
+
+This front-end web app uses Apple's CloudKit.js library. CloudKit is implemented as the persistent data store. CloudKit is available for use in web apps when a developer has enabled it for an iOS or macOS project.
 
 See the corresponding [GitHub Repo](https://github.com/billyham/EventsList-iOS-Client) for the iOS app.
 
@@ -16,5 +18,3 @@ To run in a browser for development (on port 8080):
 
 To build static files for deployment:
 `npm run build`
-
-This web app does not require a web server, all of its persistent data is saved to iCloud.
