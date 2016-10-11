@@ -1,29 +1,29 @@
 <div class="{{$ctrl.styles.event}}">
 
-	<!-- ============================== Outer Box ============================ -->
+	<!-- |============================= Outer Box ============================ -->
 	<div ng-click="$ctrl.makeSelected($event)"
 		ng-class="{'selected': $ctrl.isSelected,
 			'clickable': $ctrl.isSelected == false,
 			'cell__container': true}">
+		
+		<a ng-click="$ctrl.removeSelected($event)"
+			ng-class="{'clickable': true, 'closebutton': true}"
+			ng-show="$ctrl.isSelected">Close</a>
 
-
-		<!-- ======================= Image and Title Box ======================= -->
+		<!-- ==|==================== Image and Title Box ======================= -->
 		<div class="cell">
 
-
-			<!-- ============================= Image ============================= -->
+			<!-- ====|======================== Image ============================= -->
 			<span class="cell__image">
 				<img ng-src="{{$ctrl.imagesrc}}" class="thumbnail" ng-show="$ctrl.imageVisible"></img>
 			</span>
 
-
-			<!-- =========================== Title text ========================== -->
+			<!-- ====|====================== Title text ========================== -->
 			<span class="cell__text">
 				{{$ctrl.record.fields.title.value}}
 			</span>
 
-
-			<!-- =========================== Video icon ========================== -->
+			<!-- ====|====================== Video icon ========================== -->
 			<span class="vidicon"
 				ng-show="!!$ctrl.record.fields.video"
 				ng-click="$ctrl.play($event)">
@@ -31,18 +31,49 @@
 
 		</div>
 
-
-		<!-- ============================= Edit Box ============================ -->
+		<!-- ==|======================= Edit Container ========================= -->
 		<div ng-show="$ctrl.isSelected">
+
+			<!-- ====|==================== Input Boxes =========================== -->
 			<div class="l-clearfix">
-				<input ng-model="$ctrl.formtitle" placeholder"Title (required)"></input><br>
-				<input ng-model="$ctrl.formvideo" placeholder="URL for Trailer Video"></input><br>
-				<button type="submit" ng-click="$ctrl.edit('title', $ctrl.formtitle)">Save Changes</button>
-				<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>
-				<image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload>
-				<a ng-click="$ctrl.removeSelected($event)" ng-class="{'clickable': true}">Close</a>
-				<div class="icon"></div>
+
+				<!-- ======|================= Add Image ============================ -->
+				<div class="addimage l-float-right">
+					<image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload>
+				</div>
+
+				<!-- ======|================ Title Input =========================== -->
+				<div class="edit-title flex-container">
+					<p class="label">Title: </p>
+					<div class="userinput">
+						<input ng-model="$ctrl.formtitle" placeholder"Title (required)"></input><br>
+					</div>
+				</div>
+
+				<!-- ======|================ Video Input =========================== -->
+				<div class="edit-url flex-container">
+					<p class="label">Video URL: </p>
+					<div class="userinput">
+						<input ng-model="$ctrl.formvideo" placeholder="URL for Trailer Video"></input><br>
+					</div>
+				</div>
+
+				<!-- ======|================ Description Input =========================== -->
+				<div class="edit-description flex-container">
+					<p class="label">Description: </p>
+					<div class="userinput">
+						<textarea ng-model="$ctrl.formdescription"
+							placeholder="Description"
+							rows=3></textarea><br>
+					</div>
+				</div>
+
 			</div>
+
+			<!-- ====|============= Save and Delete Buttons ====================== -->
+			<button type="submit" ng-click="$ctrl.edit('title', $ctrl.formtitle)">Save Changes</button>
+			<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>
+
 		</div>
 
 	</div>

@@ -31,6 +31,7 @@ function controller(ckrecordService, $scope, $window){
   if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
   this.showtext = 'Show Image';
   this.imagesrc = '';
+  this.formdescription = '';
 
   // Save initial values in case editing fails
   this.oldValue = '';
