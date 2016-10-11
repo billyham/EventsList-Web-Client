@@ -1,12 +1,12 @@
 // =============================================================================
 // A wrapper for the CloudKit JS Library object --ckasset--
-// Use this for saving, deleting or modifying images or other 
+// Use this for saving, deleting or modifying images or other
 // blob assets.
 // =============================================================================
 
-ckasset.$inject = ['$http', '$cookies'];
+ckassetService.$inject = ['$http', '$cookies'];
 
-export default function ckasset($http, $cookies){
+export default function ckassetService($http, $cookies){
 
   const cloudID = process.env.CLOUD_ID;
   const apiToken = 'ckAPIToken=' + process.env.API_TOKEN;
@@ -15,7 +15,8 @@ export default function ckasset($http, $cookies){
   return {
 
     request: function request(){
-      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/assets/upload?' + apiToken + sessionToken;
+      const reqUrl = 'https://api.apple-cloudkit.com/';
+      // const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/assets/upload?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         tokens:[{
           recordType:'Image440',
@@ -27,16 +28,12 @@ export default function ckasset($http, $cookies){
       //   callback(obj);
       // })
       // .catch( () => {
-      //   console.log('ckasset request error');
       // });
     },
 
     upload: function upload(url, file, callback){
-      // console.log(url + ', ' + file);
       $http.post(url, file, { headers: { 'Content-Type': 'image/png' }, transformRequest: [] })
       .then( returnObj => {
-        // console.log('success');
-        // console.log(returnObj);
         callback(returnObj);
       })
       .catch( error => {
@@ -76,7 +73,7 @@ export default function ckasset($http, $cookies){
         callback(obj);
       })
       .catch( () => {
-        console.log('ckasset modify error');
+        console.log('ckassetService modify error');
       });
 
 

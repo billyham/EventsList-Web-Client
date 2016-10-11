@@ -4,9 +4,9 @@
 // Cloud ID cookie.
 // =============================================================================
 
-auth.$inject = ['$cookies'];
+authService.$inject = ['$cookies'];
 
-export default function auth($cookies){
+export default function authService($cookies){
 
   return {
     isSignedIn(){

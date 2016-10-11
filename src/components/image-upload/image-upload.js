@@ -7,10 +7,10 @@ export default {
     record: '<',
     edit: '&'
   },
-  controller: ['ckasset', controller]
+  controller: ['ckassetService', controller]
 };
 
-function controller(ckasset){
+function controller(ckassetService){
   this.styles = styles;
   this.sendRequest = function sendRequest(){
 
@@ -21,16 +21,16 @@ function controller(ckasset){
 
     fileReader.onloadend = element => {
 
-      ckasset.request()
+      ckassetService.request()
       .then( tokenResponseDictionary => {
 
         var data = new Uint8Array(element.target.result);
 
-        ckasset.upload(tokenResponseDictionary.data.tokens[0].url, data, assetDictionary => {
+        ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, assetDictionary => {
           const recordName = tokenResponseDictionary.data.tokens[0].recordName;
           const fileName = filePath.files[0].name;
           const { singleFile } = assetDictionary.data;
-          ckasset.modify(fileName, recordName, singleFile, finalObj => {
+          ckassetService.modify(fileName, recordName, singleFile, finalObj => {
             console.log(finalObj);
             this.edit({ image: { field: 'imageRef', recordname: recordName } });
           });

@@ -1,6 +1,6 @@
-ckquery.$inject = [];
+ckqueryService.$inject = [];
 
-export default function ckquery(){
+export default function ckqueryService(){
 
   return {
     query(

@@ -7,10 +7,10 @@ export default {
     record: '<',
     remove: '&'
   },
-  controller: ['ckrecord', '$scope', '$window', controller]
+  controller: ['ckrecordService', '$scope', '$window', controller]
 };
 
-function controller(ckrecord, $scope, $window){
+function controller(ckrecordService, $scope, $window){
   this.styles = styles;
 
   // State properties
@@ -50,7 +50,7 @@ function controller(ckrecord, $scope, $window){
   // Fetch image from the server only if necessary
   function showImage(){
     if (!this.imagesrc) {
-      ckrecord.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
+      ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
       .then( obj => {
         this.imagesrc = obj.fields.image.value.downloadURL;
         $scope.$apply();
@@ -91,7 +91,7 @@ function controller(ckrecord, $scope, $window){
     }
 
     // Save event
-    ckrecord.save(
+    ckrecordService.save(
       'PUBLIC', //databaseScope
       this.record.recordName, // recordName,
       this.record.recordChangeTag, // recordChangeTag
@@ -120,7 +120,7 @@ function controller(ckrecord, $scope, $window){
 
   // Delete event
   function deleteEvent(){
-    ckrecord.delete(
+    ckrecordService.delete(
       'PUBLIC',  // databaseScope
       this.record.recordName,  // recordName
       null,  // zoneName

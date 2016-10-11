@@ -8,14 +8,14 @@ export default {
     ckqueryResult: '<',
     arrayOfImages: '<'
   },
-  controller: ['ckquery', 'ckconfigure', '$scope', 'ngDialog', controller]
+  controller: ['ckqueryService', 'ckconfigureService', '$scope', 'ngDialog', controller]
 };
 
-function controller(ckquery, ckconfigure, $scope, ngDialog){
+function controller(ckqueryService, ckconfigureService, $scope, ngDialog){
   this.styles = styles;
 
   this.loadMore = function loadMore(){
-    ckquery.query(
+    ckqueryService.query(
       'PUBLIC','_defaultZone',null,'Program',
       ['title', 'imageRef', 'video'],'title',null,null,null,
       [], this.ckqueryResult.continuationMarker

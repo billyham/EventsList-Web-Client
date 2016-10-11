@@ -1,6 +1,6 @@
-ckauthenticate.$inject = [];
+ckauthenticateService.$inject = [];
 
-export default function ckauthenticate(){
+export default function ckauthenticateService(){
 
   return {
     authenticate(){

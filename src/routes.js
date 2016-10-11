@@ -6,12 +6,12 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
   .state('home', {
     url: '/',
     resolve: {
-      userIdentity: ['ckconfigure', 'ckauthenticate', (ckconfigure, ckauthenticate) => {
-        ckconfigure.configure();
-        return ckauthenticate.authenticate();
+      userIdentity: ['ckconfigureService', 'ckauthenticateService', (ckconfigureService, ckauthenticateService) => {
+        ckconfigureService.configure();
+        return ckauthenticateService.authenticate();
       }],
-      ckqueryResult: ['ckconfigure', 'ckquery', (ckconfigure, ckquery) => {
-        return ckquery.query('PUBLIC','_defaultZone',null,'Program',
+      ckqueryResult: ['ckconfigureService', 'ckqueryService', (ckconfigureService, ckqueryService) => {
+        return ckqueryService.query('PUBLIC','_defaultZone',null,'Program',
           ['title', 'imageRef', 'video'],'title',null,null,null,
           [], null)
           .then(result => {

@@ -1,6 +1,6 @@
-loadImage.$inject = ['$http'];
+loadImageService.$inject = ['$http'];
 
-export default function loadImage($http){
+export default function loadImageService($http){
 
   return {
     load(url){

@@ -1,6 +1,6 @@
-ckconfigure.$inject = [];
+ckconfigureService.$inject = [];
 
-export default function ckconfigure(){
+export default function ckconfigureService(){
 
   return {
     configure(){

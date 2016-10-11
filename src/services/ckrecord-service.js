@@ -1,6 +1,6 @@
-ckrecord.$inject = [];
+ckrecordService.$inject = [];
 
-export default function ckrecord(){
+export default function ckrecordService(){
 
   return {
     fetch(

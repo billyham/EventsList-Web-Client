@@ -1,19 +1,19 @@
 import angular from 'angular';
-import ckconfigure from './ckconfigure';
-import ckquery from './ckquery';
-import ckrecord from './ckrecord';
-import ckauthenticate from './ckauthenticate';
-import loadImage from './loadimage';
-import ckasset from './ckasset';
-import auth from './auth';
+import ckconfigureService from './ckconfigure-service';
+import ckqueryService from './ckquery-service';
+import ckrecordService from './ckrecord-service';
+import ckauthenticateService from './ckauthenticate-service';
+import loadImageService from './loadimage-service';
+import ckassetService from './ckasset-service';
+import authService from './auth-service';
 
 const services = angular.module('services', [])
-.factory('ckconfigure', ckconfigure)
-.factory('ckquery', ckquery)
-.factory('ckrecord', ckrecord)
-.factory('ckauthenticate', ckauthenticate)
-.factory('loadImage', loadImage)
-.factory('ckasset', ckasset)
-.factory('auth', auth);
+.factory('ckconfigureService', ckconfigureService)
+.factory('ckqueryService', ckqueryService)
+.factory('ckrecordService', ckrecordService)
+.factory('ckauthenticateService', ckauthenticateService)
+.factory('loadImageService', loadImageService)
+.factory('ckassetService', ckassetService)
+.factory('authService', authService);
 
 export default services.name;

@@ -7,10 +7,10 @@ export default {
     add: '&',
     close: '&'
   },
-  controller: ['ckrecord', '$scope', controller]
+  controller: ['ckrecordService', '$scope', controller]
 };
 
-function controller(ckrecord, $scope){
+function controller(ckrecordService, $scope){
   this.styles = styles;
   this.formtitle = '';
   this.formvideo = '';
@@ -31,7 +31,7 @@ function controller(ckrecord, $scope){
       obj.fields.video = {value: this.formvideo, type: 'STRING'};
     }
 
-    ckrecord.save(
+    ckrecordService.save(
       'PUBLIC', //databaseScope
       null, // recordName,
       null, // recordChangeTag
