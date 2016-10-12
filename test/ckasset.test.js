@@ -15,7 +15,7 @@ describe('ckassetService', () => {
   };
 
   beforeEach(
-    angular.mock.module('services', {apiUrl: 'http://api.apple-cloudkit.com/'}, providerFunction)
+    angular.mock.module('services', {apiUrl: 'https://api.apple-cloudkit.com/'}, providerFunction)
   );
 
   beforeEach(angular.mock.inject( (_$httpBackend_, _ckassetService_, _$cookies_) => {
@@ -33,13 +33,13 @@ describe('ckassetService', () => {
     const returnObject = {token: 'mocktoken', url: 'mockurl'};
 
     $httpBackend
-      .expectPOST('https://api.apple-cloudkit.com/', JSON.stringify({
+      .expectPOST(/\/api.apple-cloudkit.com\/(.+)/, undefined, undefined, ['development', 'public', 'assests', 'upload', 'ckAPIToken', 'ckWebAuthToken'],
+      JSON.stringify({
         tokens:[{
           recordType:'Image440',
           fieldName:'image'
         }]})
       )
-      // .expectPOST('https://api.apple-cloudkit.com/data1/iCloud.David-Vincent-Hanagan.EventsList/development/public/assets/upload=2393cbb08e0ba1208e4d3ca3800095b60c38907425562e3d3463fc71b9b14d14&ckWebAuthToken=ididididi')
       .respond(returnObject);
 
     ckassetService.request()

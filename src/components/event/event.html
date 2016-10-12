@@ -10,20 +10,21 @@
 			ng-class="{'clickable': true, 'closebutton': true}"
 			ng-show="$ctrl.isSelected">Close</a>
 
-		<!-- ==|==================== Image and Title Box ======================= -->
+
+		<!-- ==|======================= Above the Fold ========================= -->
 		<div class="cell">
 
-			<!-- ====|======================== Image ============================= -->
+			<!-- ====|======================= Image ============================== -->
 			<span class="cell__image">
 				<img ng-src="{{$ctrl.imagesrc}}" class="thumbnail" ng-show="$ctrl.imageVisible"></img>
 			</span>
 
-			<!-- ====|====================== Title text ========================== -->
+			<!-- ====|======================= Title ============================== -->
 			<span class="cell__text">
 				{{$ctrl.record.fields.title.value}}
 			</span>
 
-			<!-- ====|====================== Video icon ========================== -->
+			<!-- ====|====================== Video Icon ========================== -->
 			<span class="vidicon"
 				ng-show="!!$ctrl.record.fields.video"
 				ng-click="$ctrl.play($event)">
@@ -31,7 +32,8 @@
 
 		</div>
 
-		<!-- ==|======================= Edit Container ========================= -->
+
+		<!-- ==|======================= Below the Fold ========================= -->
 		<div ng-show="$ctrl.isSelected">
 
 			<!-- ====|================ Image and Text Inputs ===================== -->
@@ -39,14 +41,13 @@
 
 				<!-- ======|================ Image Input =========================== -->
 				<div class="imageinput l-float-right l-clearfix-left">
-					<!-- <image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload> -->
 					<button ng-click="$ctrl.showAddImage()" class="addimage">Add/Change Image</button>
 				</div>
 
-				<!-- ======|================== Text Input ========================== -->
+				<!-- ======|================= Text Input =========================== -->
 				<div class="textinput">
 
-					<!-- ========|============= Title Input ========================== -->
+					<!-- ========|=========== Text-Title Input ======================= -->
 					<div class="edit-title flex-container">
 						<p class="label">Title: </p>
 						<div class="userinput">
@@ -54,7 +55,7 @@
 						</div>
 					</div>
 
-					<!-- ========|============= Video Input ========================== -->
+					<!-- ========|=========== Text-Video Input ======================= -->
 					<div class="edit-url flex-container">
 						<p class="label">Video URL: </p>
 						<div class="userinput">
@@ -62,7 +63,7 @@
 						</div>
 					</div>
 
-					<!-- ========|========= Description Input ======================== -->
+					<!-- ========|======= Text-Description Input ===================== -->
 					<div class="edit-description flex-container">
 						<p class="label">Description: </p>
 						<div class="userinput">
