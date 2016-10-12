@@ -82,43 +82,42 @@
   /* Text and Image Inputs
      ======================================================================== */
   .edit-container{
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-flow: column;
     flex-flow: column;
   }
 
   .textinput{
+    -webkit-flex: 1 0 auto;
     flex: 1 0 auto;
+    -webkit-order: 2;
     order: 2;
   }
 
   .imageinput{
     width: 150px;
     height: 100%;
-    // flex: 1 0 150px;
+    flex: 0 0 150px;
+    -webkit-order: 1;
     order: 1;
+    padding-left: 20px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 1em;
   }
 
   /* Text Input
      ======================================================================== */
   .flex-container{
-    display: flex;
-    flex-flow: column;
     min-width: 200px;
-    align-items: center;
-
+    display: block;
+    align-content: center;
   }
 
   .label{
-    flex: 0 1 30%;
-    text-align: right;
+    text-align: center;
     padding-right: 1em;
-  }
-
-  .userinput{
-    flex: 0 1 70%;
-    width: 100%;
   }
 
   // Prevent labels from pushing input fields on constrained sizes.
@@ -130,25 +129,42 @@
   @media only screen and (min-width: 500px){
 
     .flex-container{
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-flow: row;
       flex-flow: row;
-      // align-items: center;
+      align-items: center;
+    }
+
+    .label{
+      -webkit-flex: 0 1 30%;
+      flex: 1 0 30%;
+      text-align: right;
+    }
+
+    .userinput{
+      -webkit-flex: 0 1 70%;
+      flex: 1 0 70%;
+      width: 100%;
     }
   }
 
   @media only screen and (min-width: 600px){
 
     .edit-container{
+      -webkit-flex-flow: row;
       flex-flow: row;
     }
 
     .textinput{
+      -webkit-order: 1;
       order: 1;
     }
 
     .imageinput{
+      -webkit-order: 2;
       order: 2;
     }
-
   }
 
 }
