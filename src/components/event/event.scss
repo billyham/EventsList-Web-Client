@@ -71,25 +71,6 @@
     z-index: 1;
   }
 
-  /* Text and Image Inputs
-     ======================================================================== */
-  .edit-container{
-    display: flex;
-    flex-flow: row;
-  }
-
-  .imageinput{
-    width: 150px;
-    height: 100%;
-    // flex: 1 0 150px;
-    order: 2
-  }
-
-  .textinput{
-    flex: 1 0 auto;
-    order: 1;
-  }
-
   .addimage{
     width: 130px;
     height: 130px;
@@ -98,11 +79,32 @@
     color: white;
   }
 
+  /* Text and Image Inputs
+     ======================================================================== */
+  .edit-container{
+    display: flex;
+    flex-flow: column;
+  }
+
+  .textinput{
+    flex: 1 0 auto;
+    order: 2;
+  }
+
+  .imageinput{
+    width: 150px;
+    height: 100%;
+    // flex: 1 0 150px;
+    order: 1;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   /* Text Input
      ======================================================================== */
   .flex-container{
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     min-width: 200px;
     align-items: center;
 
@@ -116,12 +118,37 @@
 
   .userinput{
     flex: 0 1 70%;
+    width: 100%;
   }
 
   // Prevent labels from pushing input fields on constrained sizes.
   p {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  @media only screen and (min-width: 500px){
+
+    .flex-container{
+      flex-flow: row;
+      // align-items: center;
+    }
+  }
+
+  @media only screen and (min-width: 600px){
+
+    .edit-container{
+      flex-flow: row;
+    }
+
+    .textinput{
+      order: 1;
+    }
+
+    .imageinput{
+      order: 2;
+    }
+
   }
 
 }

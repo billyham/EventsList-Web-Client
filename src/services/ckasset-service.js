@@ -15,7 +15,7 @@ export default function ckassetService($http, $cookies){
   return {
 
     request: function request(){
-      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/assets/upload/?' + apiToken + sessionToken;
+      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/assets/upload?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         tokens:[{
           recordType:'Image440',
