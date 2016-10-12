@@ -5,7 +5,7 @@
 		ng-class="{'selected': $ctrl.isSelected,
 			'clickable': $ctrl.isSelected == false,
 			'cell__container': true}">
-		
+
 		<a ng-click="$ctrl.removeSelected($event)"
 			ng-class="{'clickable': true, 'closebutton': true}"
 			ng-show="$ctrl.isSelected">Close</a>
@@ -34,38 +34,44 @@
 		<!-- ==|======================= Edit Container ========================= -->
 		<div ng-show="$ctrl.isSelected">
 
-			<!-- ====|==================== Input Boxes =========================== -->
-			<div class="l-clearfix">
+			<!-- ====|================ Image and Text Inputs ===================== -->
+			<div class="edit-container">
 
-				<!-- ======|================= Add Image ============================ -->
-				<div class="addimage l-float-right">
-					<image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload>
+				<!-- ======|================ Image Input =========================== -->
+				<div class="imageinput l-float-right l-clearfix-left">
+					<!-- <image-upload record="$ctrl.record.recordName" edit="$ctrl.pic(image)"></image-upload> -->
+					<button ng-click="$ctrl.showAddImage()" class="addimage">Add/Change Image</button>
 				</div>
 
-				<!-- ======|================ Title Input =========================== -->
-				<div class="edit-title flex-container">
-					<p class="label">Title: </p>
-					<div class="userinput">
-						<input ng-model="$ctrl.formtitle" placeholder"Title (required)"></input><br>
-					</div>
-				</div>
+				<!-- ======|================== Text Input ========================== -->
+				<div class="textinput">
 
-				<!-- ======|================ Video Input =========================== -->
-				<div class="edit-url flex-container">
-					<p class="label">Video URL: </p>
-					<div class="userinput">
-						<input ng-model="$ctrl.formvideo" placeholder="URL for Trailer Video"></input><br>
+					<!-- ========|============= Title Input ========================== -->
+					<div class="edit-title flex-container">
+						<p class="label">Title: </p>
+						<div class="userinput">
+							<input ng-model="$ctrl.formtitle" placeholder"Title (required)"></input><br>
+						</div>
 					</div>
-				</div>
 
-				<!-- ======|================ Description Input =========================== -->
-				<div class="edit-description flex-container">
-					<p class="label">Description: </p>
-					<div class="userinput">
-						<textarea ng-model="$ctrl.formdescription"
-							placeholder="Description"
-							rows=3></textarea><br>
+					<!-- ========|============= Video Input ========================== -->
+					<div class="edit-url flex-container">
+						<p class="label">Video URL: </p>
+						<div class="userinput">
+							<input ng-model="$ctrl.formvideo" placeholder="URL for Trailer Video"></input><br>
+						</div>
 					</div>
+
+					<!-- ========|========= Description Input ======================== -->
+					<div class="edit-description flex-container">
+						<p class="label">Description: </p>
+						<div class="userinput">
+							<textarea ng-model="$ctrl.formdescription"
+								placeholder="Description"
+								rows=5></textarea><br>
+						</div>
+					</div>
+
 				</div>
 
 			</div>

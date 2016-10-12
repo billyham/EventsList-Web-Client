@@ -71,7 +71,34 @@
     z-index: 1;
   }
 
-  /* Flexbox and Flex content
+  /* Text and Image Inputs
+     ======================================================================== */
+  .edit-container{
+    display: flex;
+    flex-flow: row;
+  }
+
+  .imageinput{
+    width: 150px;
+    height: 100%;
+    // flex: 1 0 150px;
+    order: 2
+  }
+
+  .textinput{
+    flex: 1 0 auto;
+    order: 1;
+  }
+
+  .addimage{
+    width: 130px;
+    height: 130px;
+    background-color: $background__imagebox;
+    border: 2px dashed $highlightText;
+    color: white;
+  }
+
+  /* Text Input
      ======================================================================== */
   .flex-container{
     display: flex;

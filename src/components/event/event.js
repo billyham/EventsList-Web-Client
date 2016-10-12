@@ -7,10 +7,10 @@ export default {
     record: '<',
     remove: '&'
   },
-  controller: ['ckrecordService', '$scope', '$window', controller]
+  controller: ['ckrecordService', '$scope', '$window', 'ngDialog', controller]
 };
 
-function controller(ckrecordService, $scope, $window){
+function controller(ckrecordService, $scope, $window, ngDialog){
   this.styles = styles;
 
   // State properties
@@ -24,7 +24,8 @@ function controller(ckrecordService, $scope, $window){
   this.play = play;
   this.makeSelected = makeSelected;
   this.removeSelected = removeSelected;
-  this.pic = pic;
+  // this.pic = pic;
+  this.showAddImage = showAddImage;
 
   // Set values for UI elements
   this.formtitle = this.record.fields.title.value;
@@ -73,8 +74,27 @@ function controller(ckrecordService, $scope, $window){
     this.isSelected = false;
   };
 
-  function pic(image){
+  // Displays ngDialog for adding a new image
+  function showAddImage(){
+    const dialog = ngDialog.open({
+      template: '<image-upload record="ngDialogData.recordName" edit="pic(image)" close="close()"></image-upload>',
+      className: 'ngdialog-theme-default',
+      plain: true,
+      data: this.record,
+      scope: $scope,    // Note how $scope is passed to the ngDialog
+      controller: [ () => {
+
+        $scope.close = function close(){
+          dialog.close();
+        };
+      }]
+    });
+  }
+
+  // A method used by ndDialog, but needs access to 'This'. Note the fat arrow function.
+  $scope.pic = (image) => {
     this.edit(image.field, image.recordname);
+    $scope.close();
   };
 
   // Edit event

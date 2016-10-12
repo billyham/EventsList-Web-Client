@@ -7,7 +7,17 @@
   background-color: white;
 }
 
-.l-clearfix{
+.l-clearfix-right{
+  clear: right;
+  zoom: 1;
+}
+
+.l-clearfix-left{
+  clear: left;
+  zoom: 1;
+}
+
+.l-overflow-auto{
   overflow: auto;
   zoom: 1;
 }
