@@ -12,7 +12,7 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
       }],
       ckqueryResult: ['ckconfigureService', 'ckqueryService', (ckconfigureService, ckqueryService) => {
         return ckqueryService.query('PUBLIC','_defaultZone',null,'Program',
-          ['title', 'imageRef', 'video'],'title',null,null,null,
+          ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
           [], null)
           .then(result => {
             return {records: result.records, continuationMarker: result.continuationMarker};

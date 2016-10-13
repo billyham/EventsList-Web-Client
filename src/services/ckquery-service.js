@@ -80,6 +80,7 @@ export default function ckqueryService(){
             // Save the continuation marker so we can fetch more results.
             var {continuationMarker} = response;
             // return renderRecords(records);
+            console.log(records);
             return {records, continuationMarker};
           }
         });

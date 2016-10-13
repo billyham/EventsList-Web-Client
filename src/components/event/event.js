@@ -18,29 +18,29 @@ function controller(ckrecordService, $scope, $window, ngDialog){
   this.imageVisible = true;
 
   // Methods
-  this.showimage = showImage;
+  this.renderImage = renderImage;
   this.delete = deleteEvent;
   this.edit = edit;
   this.play = play;
   this.makeSelected = makeSelected;
   this.removeSelected = removeSelected;
-  // this.pic = pic;
   this.showAddImage = showAddImage;
 
   // Set values for UI elements
   this.formtitle = this.record.fields.title.value;
   if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
-  this.showtext = 'Show Image';
+  if (this.record.fields.fulldescription) this.formfulldescription = this.record.fields.fulldescription.value;
   this.imagesrc = '';
-  this.formdescription = '';
+
 
   // Save initial values in case editing fails
   this.oldValue = '';
   this.oldVideo = '';
+  this.oldRecord = {};
 
   // Load images on launch
   if (this.record.fields.imageRef){
-    showImage.call(this);
+    renderImage.call(this);
   }
 
   // Load new URL for video
@@ -50,7 +50,7 @@ function controller(ckrecordService, $scope, $window, ngDialog){
   };
 
   // Fetch image from the server only if necessary
-  function showImage(){
+  function renderImage(){
     if (!this.imagesrc) {
       ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
       .then( obj => {
@@ -100,14 +100,28 @@ function controller(ckrecordService, $scope, $window, ngDialog){
   // Edit event
   function edit(field, recordname){
 
-    if (!this.record.fields[field]) this.record.fields[field] = { value: { recordName: recordname, action: 'NONE' }, type: 'REFERENCE' };
+    // Clone the original record
+    this.oldRecord = JSON.parse(JSON.stringify(this.record));
 
-    this.oldValue = this.record.fields[field].value;
+    if (field === 'text'){
+      // It assured that the title field exists
+      this.record.fields['title'].value = this.formtitle;
 
-    if (field === 'title'){
-      this.record.fields[field].value = recordname;
+      // All other fields are optional
+      if (this.formfulldescription){
+        if (!this.record.fields['fulldescription']) this.record.fields['fulldescription'] = {type: 'STRING'};
+        this.record.fields['fulldescription'].value = this.formfulldescription;
+      }
+
+      if (this.formvideo){
+        if (!this.record.fields['video']) this.record.fields['video'] = {type: 'STRING'};
+        this.record.fields['video'].value = this.formvideo;
+      }
+
     }else if(field === 'imageRef'){
-      this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
+
+      if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
+      this.record.fields[field].value = { recordName: recordname, action: 'DELETE_SELF' };
       this.imagesrc = null;
     }
 
@@ -126,14 +140,26 @@ function controller(ckrecordService, $scope, $window, ngDialog){
       null, //parentRecordName,
       this.record.fields
     ).then( obj => {
+
       // Save new value
       this.record = obj;
       // Load image in view if necessary
-      if (field === 'imageRef') this.showimage();
+      if (field === 'imageRef') this.renderImage();
+
+      // TODO: Show confirmation that a change has been made
+
     }).catch( () => {
-      // Revert to previous value
-      if (field === 'title') this.formtitle = this.oldValue;
-      this.record.fields[field].value = this.oldValue;
+
+      // Update UI fields
+      if (field === 'text') {
+        this.formtitle = this.oldRecord.fields['title'].value;
+        this.formvideo = this.oldRecord.fields['video'] ? this.oldRecord.fields['video'].value : '';
+        this.formfulldescription = this.oldRecord.fields['fulldescription'] ? this.oldRecord.fields['fulldescription'].value : '';
+      }
+
+      // Revert record
+      this.record = this.oldRecord;
+
       // TODO: Alert user that saving failed
       $scope.$apply();
     });

@@ -67,7 +67,7 @@
 					<div class="edit-description flex-container">
 						<p class="label">Description: </p>
 						<div class="userinput">
-							<textarea ng-model="$ctrl.formdescription"
+							<textarea ng-model="$ctrl.formfulldescription"
 								placeholder="Description"
 								rows=5></textarea><br>
 						</div>
@@ -78,7 +78,7 @@
 			</div>
 
 			<!-- ====|============= Save and Delete Buttons ====================== -->
-			<button type="submit" ng-click="$ctrl.edit('title', $ctrl.formtitle)">Save Changes</button>
+			<button type="submit" ng-click="$ctrl.edit('text')">Save Changes</button>
 			<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>
 
 		</div>
