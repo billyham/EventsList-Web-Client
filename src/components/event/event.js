@@ -39,9 +39,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   this.oldRecord = {};
 
   // Load images on launch
-  if (this.record.fields.imageRef){
-    renderImage.call(this);
-  }
+  renderImage.call(this);
 
   // Load new URL for video
   function play(clickEvent){
@@ -52,7 +50,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // Fetch image from the server only if necessary
   function renderImage(){
     if (!this.imagesrc) {
-
       const refFilter = {
         comparator: 'EQUALS',
         fieldName: 'programRef',
@@ -73,8 +70,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         null)
         .then( result => {
           if (result.records.length > 0){
-            this.imagesrc = result.records[0].fields.image.value.downloadURL;
+            this.imagesrc = result.records[result.records.length - 1].fields.image.value.downloadURL;
             $scope.$apply();
+
+            // TODO: Need to delete any prior images associated with the program. 
           };
         })
         .catch( error => {
