@@ -30,8 +30,8 @@ function controller(ckassetService){
           const recordName = tokenResponseDictionary.data.tokens[0].recordName;
           const fileName = filePath.files[0].name;
           const { singleFile } = assetDictionary.data;
-          ckassetService.modify(fileName, recordName, singleFile, finalObj => {
-            console.log(finalObj);
+          const referenceObj = { type: 'REFERENCE', value: { recordName: this.record, action: 'DELETE_SELF' } };
+          ckassetService.modify(fileName, referenceObj, recordName, singleFile, finalObj => {  //eslint-disable-line
             this.edit({ image: { field: 'imageRef', recordname: recordName } });
           });
         });

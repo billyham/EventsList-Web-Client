@@ -8,12 +8,12 @@ export default function ckqueryService(){
       zoneName,
       ownerRecordName,
       recordType,
-      desiredKeys,
+      desiredKeys,  //The default is null, which fetches all record fields.
       sortByField,
       ascending,
       latitude,
       longitude,
-      filters,
+      filters,  //https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloutKitWebServicesReference/Types/Types.html#//apple_ref/doc/uid/TP40015240-CH3-SW16
       continuationMarker
     ) {
       var container = CloudKit.getDefaultContainer();
@@ -80,7 +80,6 @@ export default function ckqueryService(){
             // Save the continuation marker so we can fetch more results.
             var {continuationMarker} = response;
             // return renderRecords(records);
-            console.log(records);
             return {records, continuationMarker};
           }
         });

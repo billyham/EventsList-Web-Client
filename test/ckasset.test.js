@@ -29,7 +29,7 @@ describe('ckassetService', () => {
     // $httpBackend.verifyNoOutstandingReqeust();
   });
 
-  it('performas request', done => {
+  it('performs request', done => {
     const returnObject = {token: 'mocktoken', url: 'mockurl'};
 
     $httpBackend
@@ -56,7 +56,7 @@ describe('ckassetService', () => {
   //
   // });
   //
-  // it.hide('peforms modify', done => {
+  // it.hide('performs modify', done => {
   //
   // });
 

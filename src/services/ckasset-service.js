@@ -36,12 +36,11 @@ export default function ckassetService($http, $cookies){
         callback(returnObj);
       })
       .catch( error => {
-        console.log('fail');
-        console.log(error);
+        console.log('fail with error: ', error);
       });
     },
 
-    modify: function modify(fileName, recordName, image, callback){
+    modify: function modify(fileName, referenceObj, recordName, image, callback){
       const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/records/modify?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         operations: [{
@@ -52,6 +51,7 @@ export default function ckassetService($http, $cookies){
               fileName: {
                 value: fileName
               },
+              programRef: referenceObj,
               image: {
                 value: {
                   // wrappingKey: image.wrappingKey,

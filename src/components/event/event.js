@@ -7,10 +7,10 @@ export default {
     record: '<',
     remove: '&'
   },
-  controller: ['ckrecordService', '$scope', '$window', 'ngDialog', controller]
+  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', '$timeout', controller]
 };
 
-function controller(ckrecordService, $scope, $window, ngDialog){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout){
   this.styles = styles;
 
   // State properties
@@ -52,14 +52,35 @@ function controller(ckrecordService, $scope, $window, ngDialog){
   // Fetch image from the server only if necessary
   function renderImage(){
     if (!this.imagesrc) {
-      ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
-      .then( obj => {
-        this.imagesrc = obj.fields.image.value.downloadURL;
-        $scope.$apply();
-      })
-      .catch( error => {
-        console.log(error);
-      });
+
+      const refFilter = {
+        comparator: 'EQUALS',
+        fieldName: 'programRef',
+        fieldValue: { recordName: this.record.recordName }
+      };
+
+      ckqueryService.query(
+        'PUBLIC',
+        '_defaultZone',
+        null,
+        'Image440',
+        ['image', 'programRef', 'fileName'],
+        'fileName',
+        null,
+        null,
+        null,
+        [refFilter],
+        null)
+        .then( result => {
+          if (result.records.length > 0){
+            this.imagesrc = result.records[0].fields.image.value.downloadURL;
+            $scope.$apply();
+          };
+        })
+        .catch( error => {
+          console.log(error);
+        });
+
     }
   };
 
@@ -92,13 +113,21 @@ function controller(ckrecordService, $scope, $window, ngDialog){
   }
 
   // A method used by ndDialog, but needs access to 'This'. Note the fat arrow function.
-  $scope.pic = (image) => {
-    this.edit(image.field, image.recordname);
+  $scope.pic = () => {
+    this.imagesrc = null;
+
+    // New CloudKit objects are not available to the query function for at least a
+    // second. CloudKit needs time to index the new records. Image rendering is delayed
+    // to allow for that indexing time. Calling renderImage needs explicit context because
+    // $timeout overrides implicit context.
+    var renderImageWithContext = this.renderImage.bind(this);
+    $timeout(renderImageWithContext, 1000);
+
     $scope.close();
   };
 
   // Edit event
-  function edit(field, recordname){
+  function edit(field){
 
     // Clone the original record
     this.oldRecord = JSON.parse(JSON.stringify(this.record));
@@ -117,12 +146,6 @@ function controller(ckrecordService, $scope, $window, ngDialog){
         if (!this.record.fields['video']) this.record.fields['video'] = {type: 'STRING'};
         this.record.fields['video'].value = this.formvideo;
       }
-
-    }else if(field === 'imageRef'){
-
-      if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
-      this.record.fields[field].value = { recordName: recordname, action: 'DELETE_SELF' };
-      this.imagesrc = null;
     }
 
     // Save event
@@ -140,14 +163,9 @@ function controller(ckrecordService, $scope, $window, ngDialog){
       null, //parentRecordName,
       this.record.fields
     ).then( obj => {
-
       // Save new value
       this.record = obj;
-      // Load image in view if necessary
-      if (field === 'imageRef') this.renderImage();
-
       // TODO: Show confirmation that a change has been made
-
     }).catch( () => {
 
       // Update UI fields
