@@ -7,10 +7,10 @@ export default {
     record: '<',
     remove: '&'
   },
-  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', '$timeout', controller]
+  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', controller]
 };
 
-function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.styles = styles;
 
   // State properties
@@ -39,7 +39,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   this.oldRecord = {};
 
   // Load images on launch
-  renderImage.call(this);
+  if (this.record.fields.imageRef){
+    renderImage.call(this);
+  }
 
   // Load new URL for video
   function play(clickEvent){
@@ -50,35 +52,39 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // Fetch image from the server only if necessary
   function renderImage(){
     if (!this.imagesrc) {
-      const refFilter = {
-        comparator: 'EQUALS',
-        fieldName: 'programRef',
-        fieldValue: { recordName: this.record.recordName }
-      };
+      // const refFilter = {
+      //   comparator: 'EQUALS',
+      //   fieldName: 'programRef',
+      //   fieldValue: { recordName: this.record.recordName }
+      // };
+      //
+      // ckqueryService.query(
+      //   'PUBLIC',
+      //   '_defaultZone',
+      //   null,
+      //   'Image440',
+      //   ['image', 'programRef', 'fileName'],
+      //   'fileName',
+      //   null,
+      //   null,
+      //   null,
+      //   [refFilter],
+      //   null
 
-      ckqueryService.query(
-        'PUBLIC',
-        '_defaultZone',
-        null,
-        'Image440',
-        ['image', 'programRef', 'fileName'],
-        'fileName',
-        null,
-        null,
-        null,
-        [refFilter],
-        null)
-        .then( result => {
-          if (result.records.length > 0){
-            this.imagesrc = result.records[result.records.length - 1].fields.image.value.downloadURL;
-            $scope.$apply();
+      ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone'
+      )
+      .then( result => {
+        // if (result.records.length > 0){
+          // this.imagesrc = result.records[result.records.length - 1].fields.image.value.downloadURL;
+        this.imagesrc = result.fields.image.value.downloadURL;
+        $scope.$apply();
 
-            // TODO: Need to delete any prior images associated with the program. 
-          };
-        })
-        .catch( error => {
-          console.log(error);
-        });
+          // TODO: Need to delete any prior images associated with the program.
+        // };
+      })
+      .catch( error => {
+        console.log(error);
+      });
 
     }
   };
@@ -112,21 +118,22 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   }
 
   // A method used by ndDialog, but needs access to 'This'. Note the fat arrow function.
-  $scope.pic = () => {
+  $scope.pic = image => {
     this.imagesrc = null;
+    this.edit(image.field, image.recordname);
 
     // New CloudKit objects are not available to the query function for at least a
     // second. CloudKit needs time to index the new records. Image rendering is delayed
     // to allow for that indexing time. Calling renderImage needs explicit context because
     // $timeout overrides implicit context.
-    var renderImageWithContext = this.renderImage.bind(this);
-    $timeout(renderImageWithContext, 1000);
+    // var renderImageWithContext = this.renderImage.bind(this);
+    // $timeout(renderImageWithContext, 1000);
 
     $scope.close();
   };
 
   // Edit event
-  function edit(field){
+  function edit(field, recordname){
 
     // Clone the original record
     this.oldRecord = JSON.parse(JSON.stringify(this.record));
@@ -145,6 +152,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         if (!this.record.fields['video']) this.record.fields['video'] = {type: 'STRING'};
         this.record.fields['video'].value = this.formvideo;
       }
+    }else if(field === 'imageRef'){
+
+      if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
+      this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
     }
 
     // Save event
@@ -164,6 +175,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     ).then( obj => {
       // Save new value
       this.record = obj;
+
+      // Load image in view if necessary
+      if (field === 'imageRef') this.renderImage();
+
       // TODO: Show confirmation that a change has been made
     }).catch( () => {
 

@@ -71,8 +71,8 @@ export default function ckassetService($http, $cookies){
       .then( obj => {
         callback(obj);
       })
-      .catch( () => {
-        console.log('ckassetService modify error');
+      .catch( err => {
+        console.log('ckassetService modify error: ', err);
       });
 
 
