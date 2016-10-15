@@ -15,7 +15,7 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
           ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
           [], null)
           .then(result => {
-            return {records: result.records, continuationMarker: result.continuationMarker};
+            return {records: result.records, continuationMarker: result.continuationMarker, error: result.error};
           });
       }]
     },

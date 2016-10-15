@@ -82,6 +82,9 @@ export default function ckqueryService(){
             // return renderRecords(records);
             return {records, continuationMarker};
           }
+        })
+        .catch(function (err){
+          return { error: err, records: [] };
         });
     }
   };

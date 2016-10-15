@@ -10,6 +10,8 @@ export default function ckconfigureService(){
 
         containers: [{
           // Change this to a container identifier you own.
+
+          //TODO: Using .env variables is pointless, the values are sent to the browser
           containerIdentifier: process.env.CLOUD_ID,
 
           apiTokenAuth: {

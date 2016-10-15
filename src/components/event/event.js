@@ -135,6 +135,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   // Edit event
   function edit(field, recordname){
 
+    // Set form inputs back to pristine
+    $scope.textform.$setPristine();
+
     // Clone the original record
     this.oldRecord = JSON.parse(JSON.stringify(this.record));
 

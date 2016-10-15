@@ -53,8 +53,9 @@ function controller(ckrecordService, $scope){
       this.close();
     }).catch((error) => {
       // Revert to previous value
-      console.log('addition ERROR');
-      console.log(error);
+      console.log('addition ERROR', error);
+      //TODO: Show message when current user does not have permission.
+      // error message will be: 'CREATE operation not permitted'
     });
 
   };

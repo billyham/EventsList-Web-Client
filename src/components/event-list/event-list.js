@@ -14,6 +14,15 @@ export default {
 function controller(ckqueryService, ckconfigureService, $scope, ngDialog){
   this.styles = styles;
 
+  if (this.ckqueryResult.error) {
+    if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
+      //TODO: Show message that user needs to be logged in.
+      console.log('Unauthenticated, user not logged in');
+    }else{
+      //TODO: Show generic server error message
+    }
+  }
+
   this.loadMore = function loadMore(){
     ckqueryService.query(
       'PUBLIC','_defaultZone',null,'Program',
