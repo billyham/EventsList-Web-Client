@@ -6,14 +6,14 @@ export default {
   bindings: {
     record: '<',
     remove: '&',
-    dbType: '<'
+    dbType: '<',
+    publish: '&'
   },
   controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', controller]
 };
 
 function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.styles = styles;
-  console.log(this.dbType);
 
   // State properties
   this.isSelected = false;
@@ -44,6 +44,12 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   if (this.record.fields.imageRef){
     renderImage.call(this);
   }
+
+  $scope.$watch('$ctrl.dbType', () => {
+    if (this.record.fields.imageRef){
+      renderImage.call(this);
+    }
+  });
 
   // Load new URL for video
   function play(clickEvent){

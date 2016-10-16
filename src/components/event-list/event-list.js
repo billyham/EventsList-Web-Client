@@ -5,9 +5,9 @@ export default {
   template,
   bindings: {
     // userIdentity: '<',
-    ckqueryResult: '<',
-    arrayOfImages: '<',
-    dbType: '<'
+    ckqueryResult: '=',
+    dbType: '<',
+    publish: '&'
   },
   controller: ['ckqueryService', 'ckconfigureService', '$scope', controller]
 };
@@ -15,17 +15,18 @@ export default {
 function controller(ckqueryService, ckconfigureService, $scope){
   this.styles = styles;
 
-  console.log(this.dbType);
+  if (this.ckqueryResult.error) {
+    if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
+      //TODO: Show message that user needs to be logged in.
+      console.log('Unauthenticated, user not logged in');
+    }else{
+      //TODO: Show generic server error message
+    }
+  }
 
-
-  // if (this.ckqueryResult.error) {
-  //   if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
-  //     //TODO: Show message that user needs to be logged in.
-  //     console.log('Unauthenticated, user not logged in');
-  //   }else{
-  //     //TODO: Show generic server error message
-  //   }
-  // }
+  // $scope.$watch('$ctrl.ckqueryResult', () => {
+  //
+  // });
 
   this.loadMore = function loadMore(){
     ckqueryService.query(
@@ -48,4 +49,5 @@ function controller(ckqueryService, ckconfigureService, $scope){
       $scope.$apply();
     }
   };
+
 }

@@ -61,7 +61,7 @@ export default function ckrecordService(){
         options = { zoneID: zoneID };
       }
 
-      return database.deleteRecords(recordName,options)
+      return database.deleteRecords(recordName, options)
       .then(function(response) {
         if(response.hasErrors) {
 

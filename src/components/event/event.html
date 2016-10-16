@@ -79,6 +79,7 @@
 
 			<!-- ====|============= Save and Delete Buttons ====================== -->
 			<button type="submit" ng-click="$ctrl.edit('text')">Save Changes</button>
+			<button type="button" ng-click="$ctrl.publish({ rec: $ctrl.record })" ng-show="$ctrl.dbType == 'PRIVATE'">Publish</button>
 			<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>
 
 		</div>
