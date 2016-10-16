@@ -1,25 +1,25 @@
 <div class="{{$ctrl.styles.main}}">
   <div>
 
-    <!-- ============================== Header ============================= -->
+    <!-- |============================= Header ============================= -->
     <header ui-view="header" class="l-centered">
       <!-- Placeholder content  -->
       <h1 class="l-title">EventsList Dashboard</h1>
     </header>
 
 
-    <!-- ============================= Divider ============================= -->
+    <!-- |============================ Divider ============================= -->
     <hr class="l-section-divider">
 
 
-    <!-- =============================== Main ============================== -->
-    <section ui-view="main" class="l-centered">
+    <!-- |============================= Lists ============================== -->
+    <section class="l-centered" ui-view="eventPage">
       <!-- Placeholder content  -->
       <p>Downloading event information...</p>
-    </section>
+    <section>
 
 
-    <!-- ===================== Apple Sign In/Out Button ==================== -->
+    <!-- |==================== Apple Sign In/Out Button ==================== -->
     <section ng-hide="true">
       <article>
         <div id="apple-sign-in-button"></div>
@@ -28,8 +28,10 @@
     </section>
 
 
-    <!-- ============================== Footer ============================= -->
-    <footer></footer>
+    <!-- |============================= Footer ============================= -->
+    <footer>
+      <br>
+    </footer>
 
   </div>
 </div>

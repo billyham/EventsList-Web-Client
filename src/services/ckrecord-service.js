@@ -78,9 +78,9 @@ export default function ckrecordService(){
       });
     },
     save(
-      databaseScope,  // PUBLIC
+      databaseScope,  // PUBLIC or PRIVATE
       recordName,
-      recordChangeTag,  // leave black for new record, provide one when changing a record
+      recordChangeTag,  // leave blank for new record, provide one when changing a record
       recordType,  // Program
       zoneName, // _defaultZone
       forRecordName,

@@ -5,13 +5,15 @@ export default {
   template,
   bindings: {
     record: '<',
-    remove: '&'
+    remove: '&',
+    dbType: '<'
   },
   controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', controller]
 };
 
 function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.styles = styles;
+  console.log(this.dbType);
 
   // State properties
   this.isSelected = false;
@@ -163,7 +165,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
 
     // Save event
     ckrecordService.save(
-      'PUBLIC', //databaseScope
+      this.dbType, //databaseScope
       this.record.recordName, // recordName,
       this.record.recordChangeTag, // recordChangeTag
       this.record.recordType, //recordType
@@ -203,7 +205,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   // Delete event
   function deleteEvent(){
     ckrecordService.delete(
-      'PUBLIC',  // databaseScope
+      this.dbType,  // databaseScope
       this.record.recordName,  // recordName
       null,  // zoneName
       null  //ownerRecordName

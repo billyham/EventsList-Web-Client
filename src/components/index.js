@@ -1,4 +1,5 @@
 import angular from 'angular';
+import eventPage from './event-page/event-page';
 import event from './event/event';
 import eventList from './event-list/event-list';
 import eventAdd from './event-add/event-add';
@@ -9,6 +10,7 @@ import mainNav from './main-header/main-nav/main-nav';
 import appleDestination from './main-header/main-nav/apple-destination/apple-destination';
 
 const components = angular.module('components', [])
+.component('eventPage', eventPage)
 .component('event', event)
 .component('main', main)
 .component('eventList', eventList)

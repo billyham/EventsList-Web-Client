@@ -2,8 +2,8 @@
 
 	<!-- =============================== Header ============================== -->
 	<section class="l-overflow-auto">
-		<h2 class="highlight">Events Manager</h2>
-		<button class="l-float-right" ng-click="$ctrl.showadd()">+Add Event</button>
+		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PRIVATE'">Draft</h3>
+		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PUBLIC'">Published</h3>
 	</section>
 
 
@@ -15,7 +15,8 @@
 			image-ref=record.fields.imageRef
 			video=record.fields.video
 			record=record
-			remove="$ctrl.remove(rec)">
+			remove="$ctrl.remove(rec)"
+			db-type="$ctrl.dbType">
 			</event>
 		</article>
 	</section>

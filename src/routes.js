@@ -10,8 +10,16 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
         ckconfigureService.configure();
         return ckauthenticateService.authenticate();
       }],
-      ckqueryResult: ['ckconfigureService', 'ckqueryService', (ckconfigureService, ckqueryService) => {
+      publicEvents: ['ckconfigureService', 'ckqueryService', (ckconfigureService, ckqueryService) => {
         return ckqueryService.query('PUBLIC','_defaultZone',null,'Program',
+          ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
+          [], null)
+          .then(result => {
+            return {records: result.records, continuationMarker: result.continuationMarker, error: result.error};
+          });
+      }],
+      privateEvents: ['ckconfigureService', 'ckqueryService', (ckconfigureService, ckqueryService) => {
+        return ckqueryService.query('PRIVATE','_defaultZone',null,'Program',
           ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
           [], null)
           .then(result => {
@@ -23,8 +31,8 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
       header: {
         component: 'mainHeader'
       },
-      main: {
-        component: 'eventList'
+      eventPage: {
+        component: 'eventPage'
       }
     }
   });

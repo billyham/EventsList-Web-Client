@@ -4,24 +4,28 @@ import styles from './event-list.scss';
 export default {
   template,
   bindings: {
-    userIdentity: '<',
+    // userIdentity: '<',
     ckqueryResult: '<',
-    arrayOfImages: '<'
+    arrayOfImages: '<',
+    dbType: '<'
   },
-  controller: ['ckqueryService', 'ckconfigureService', '$scope', 'ngDialog', controller]
+  controller: ['ckqueryService', 'ckconfigureService', '$scope', controller]
 };
 
-function controller(ckqueryService, ckconfigureService, $scope, ngDialog){
+function controller(ckqueryService, ckconfigureService, $scope){
   this.styles = styles;
 
-  if (this.ckqueryResult.error) {
-    if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
-      //TODO: Show message that user needs to be logged in.
-      console.log('Unauthenticated, user not logged in');
-    }else{
-      //TODO: Show generic server error message
-    }
-  }
+  console.log(this.dbType);
+
+
+  // if (this.ckqueryResult.error) {
+  //   if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
+  //     //TODO: Show message that user needs to be logged in.
+  //     console.log('Unauthenticated, user not logged in');
+  //   }else{
+  //     //TODO: Show generic server error message
+  //   }
+  // }
 
   this.loadMore = function loadMore(){
     ckqueryService.query(
@@ -44,33 +48,4 @@ function controller(ckqueryService, ckconfigureService, $scope, ngDialog){
       $scope.$apply();
     }
   };
-
-  this.showadd = function showadd(){
-    const dialog = ngDialog.open({
-      template:'<event-add close="close()" add="add(rec)">Enter</event-add>',
-      className: 'ngdialog-theme-default',
-      plain: true,
-      data: this.ckqueryResult,
-      controller: ['$scope', function($scope){
-
-        // Close the dialog
-        $scope.close = function close(){
-          dialog.close();
-        };
-
-        // Update the list view with the new Event
-        $scope.add = rec => {
-          if (!rec) return;
-          $scope.ngDialogData.records.push(rec);
-          $scope.ngDialogData.records.sort( (a,b) => {
-            if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
-            if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
-            return 0;
-          });
-          $scope.$apply();
-        };
-      }]
-    });
-  };
-
 }
