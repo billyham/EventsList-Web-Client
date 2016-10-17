@@ -84,7 +84,7 @@ function controller(ngDialog, ckrecordService, $scope) {
               return 0;
             });
 
-            // If a continuationMarker exists, and the published object
+            // If a continuationMarker exists and the published object
             // is at the end of the array, don't add it.
             // Or an error occures when you load more.
             if (this.publicEvents.continuationMarker){
@@ -104,11 +104,11 @@ function controller(ngDialog, ckrecordService, $scope) {
         $scope.$apply();
 
       }).catch( err => {
-        // TODO: Alert user that delete failed
+        // TODO: Revert to previous value and alert user that delete failed
         console.log('publish ERROR trying to delete from PRIVATE', err);
       });
     }).catch( err => {
-      // Revert to previous value
+      // TODO: Revert to previous value and alert the user that save failed
       console.log('publish ERROR trying to save in PUBLIC', err);
     });
   };

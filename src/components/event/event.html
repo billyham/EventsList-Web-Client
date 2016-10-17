@@ -10,7 +10,6 @@
 			ng-class="{'clickable': true, 'closebutton': true}"
 			ng-show="$ctrl.isSelected">Close</a>
 
-
 		<!-- ==|======================= Above the Fold ========================= -->
 		<div class="cell">
 
@@ -24,14 +23,13 @@
 				{{$ctrl.record.fields.title.value}}
 			</span>
 
-			<!-- ====|====================== Video Icon ========================== -->
+			<!-- ====|===================== Video Icon =========================== -->
 			<span class="vidicon"
 				ng-show="!!$ctrl.record.fields.video"
 				ng-click="$ctrl.play($event)">
 			</span>
 
 		</div>
-
 
 		<!-- ==|======================= Below the Fold ========================= -->
 		<div ng-show="$ctrl.isSelected">
@@ -77,7 +75,7 @@
 
 			</div>
 
-			<!-- ====|============= Save and Delete Buttons ====================== -->
+			<!-- ====|========= Save, Publish & Delete Buttons =================== -->
 			<button type="submit" ng-click="$ctrl.edit('text')">Save Changes</button>
 			<button type="button" ng-click="$ctrl.publish({ rec: $ctrl.record })" ng-show="$ctrl.dbType == 'PRIVATE'">Publish</button>
 			<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>

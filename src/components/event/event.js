@@ -45,6 +45,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     renderImage.call(this);
   }
 
+  // Load image when event is published
   $scope.$watch('$ctrl.dbType', () => {
     if (this.record.fields.imageRef){
       renderImage.call(this);
@@ -171,23 +172,23 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
 
     // Save event
     ckrecordService.save(
-      this.dbType, //databaseScope
-      this.record.recordName, // recordName,
-      this.record.recordChangeTag, // recordChangeTag
-      this.record.recordType, //recordType
-      null, //zoneName,
-      null, //forRecordName,
-      null, //forRecordChangeTag,
-      null, //publicPermission,
-      null, //ownerRecordName,
-      null, //participants,
-      null, //parentRecordName,
+      this.dbType,                    // databaseScope
+      this.record.recordName,         // recordName,
+      this.record.recordChangeTag,    // recordChangeTag
+      this.record.recordType,         // recordType
+      null,                           // zoneName,
+      null,                           // forRecordName,
+      null,                           // forRecordChangeTag,
+      null,                           // publicPermission,
+      null,                           // ownerRecordName,
+      null,                           // participants,
+      null,                           // parentRecordName,
       this.record.fields
     ).then( obj => {
       // Save new value
       this.record = obj;
 
-      // Load image in view if necessary
+      // Load image if necessary
       if (field === 'imageRef') this.renderImage();
 
       // TODO: Show confirmation that a change has been made
@@ -211,10 +212,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   // Delete event
   function deleteEvent(){
     ckrecordService.delete(
-      this.dbType,  // databaseScope
-      this.record.recordName,  // recordName
-      null,  // zoneName
-      null  //ownerRecordName
+      this.dbType,                // databaseScope
+      this.record.recordName,     // recordName
+      null,                       // zoneName
+      null                        // ownerRecordName
     ).then( () => {
       let record = this.record;
       this.remove({ rec: record });

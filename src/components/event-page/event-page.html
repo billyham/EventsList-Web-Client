@@ -7,12 +7,16 @@
 	</section>
 
 
-	<!-- =============================== Events ============================== -->
+	<!-- ========================= Draft Events ============================== -->
   <section>
-    <event-list ckquery-result="$ctrl.privateEvents" db-type="$ctrl.typeprivate" publish="$ctrl.publish(rec)">
+    <event-list ckquery-result="$ctrl.privateEvents"
+			db-type="$ctrl.typeprivate"
+			publish="$ctrl.publish(rec)">
     </event-list>
   </section>
 
+
+	<!-- ======================= Published Events ============================ -->
   <section>
     <event-list ckquery-result="$ctrl.publicEvents" db-type="$ctrl.typepublic">
     </event-list>
