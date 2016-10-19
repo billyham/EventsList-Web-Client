@@ -4,7 +4,7 @@
 
 /* Text
    ========================================================================== */
-h1, h2, h3, h4, h5, p, span, div{
+h1, h2, h3, h4, h5, p, span, div, details{
   font-weight: 100;
   font-family: $font1;
   color: white;
@@ -12,7 +12,7 @@ h1, h2, h3, h4, h5, p, span, div{
 
 /* Border, Padding, Margin
    ========================================================================== */
-body, div, section, hr, p{
+body, div, section, hr, p, details{
   margin: 0;
   border: 0;
   padding: 0;
@@ -31,6 +31,8 @@ a{
 }
 
 input, textarea{
+  font-weight: 100;
+  font-family: $font1;
   font-size: 100%;
   width: 90%;
   border-radius: 2px;

@@ -28,11 +28,33 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
       }]
     },
     views: {
-      header: {
-        component: 'mainHeader'
-      },
-      eventPage: {
+      // header: {
+      //   component: 'mainHeader'
+      // },
+      content: {
         component: 'eventPage'
+      }
+    }
+  })
+  .state('notifications', {
+    url: '/notifications',
+    views: {
+      // header: {
+      //   component: 'mainHeader'
+      // },
+      content: {
+        component: 'comingSoon'
+      }
+    }
+  })
+  .state('settings', {
+    url: '/settings',
+    views: {
+      // header: {
+      //   component: 'mainHeader'
+      // },
+      content: {
+        component: 'comingSoon'
       }
     }
   });

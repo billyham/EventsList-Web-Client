@@ -2,10 +2,12 @@
   <div>
 
     <!-- |============================= Header ============================= -->
-    <header ui-view="header" class="l-centered">
+    <!-- <header ui-view="header" class="l-centered"> -->
+    <main-header class="l-centered">
       <!-- Placeholder content  -->
       <h1 class="l-title">EventsList Dashboard</h1>
-    </header>
+    </main-header>
+    <!-- </header> -->
 
 
     <!-- |============================ Divider ============================= -->
@@ -13,7 +15,7 @@
 
 
     <!-- |============================= Lists ============================== -->
-    <section class="l-centered" ui-view="eventPage">
+    <section class="l-centered" ui-view="content">
       <!-- Placeholder content  -->
       <p>Downloading event information...</p>
     <section>
@@ -21,10 +23,10 @@
 
     <!-- |==================== Apple Sign In/Out Button ==================== -->
     <section ng-hide="true">
-      <article>
+      <aside>
         <div id="apple-sign-in-button"></div>
         <div id="apple-sign-out-button"></div>
-      </article>
+      </aside>
     </section>
 
 
