@@ -1,13 +1,13 @@
 <div class="{{$ctrl.styles.eventList}}">
 
-	<!-- =============================== Header ============================== -->
+	<!-- |============================== Header ============================== -->
 	<section class="l-overflow-auto">
 		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PRIVATE'">Draft</h3>
 		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PUBLIC'">Published</h3>
 	</section>
 
 
-	<!-- =========================== List of events ========================== -->
+	<!-- |========================== List of events ========================== -->
 	<section>
 		<article ng-repeat="record in $ctrl.ckqueryResult.records track by record.recordName">
 	    <event
@@ -23,7 +23,7 @@
 	</section>
 
 
-	<!-- ========================== Load more button ========================= -->
+	<!-- |========================= Load more button ========================= -->
 	<section>
 		<div ng-show="$ctrl.ckqueryResult.continuationMarker">
 			<br>

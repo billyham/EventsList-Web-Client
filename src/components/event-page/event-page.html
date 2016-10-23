@@ -1,13 +1,13 @@
 <div class="{{$ctrl.styles.eventPage}}">
 
-	<!-- =============================== Header ============================== -->
+	<!-- |============================ Header ================================ -->
 	<section class="l-overflow-auto">
-		<h2 class="t-highlight">Events Manager</h2>
+		<h2 class="t-highlight">List Manager</h2>
 		<button class="l-float-right" ng-click="$ctrl.showadd()">+Add Event</button>
 	</section>
 
 
-	<!-- ========================= Draft Events ============================== -->
+	<!-- |======================== Draft Events ============================== -->
   <section>
     <event-list ckquery-result="$ctrl.privateEvents"
 			db-type="$ctrl.typeprivate"
@@ -16,7 +16,7 @@
   </section>
 
 
-	<!-- ======================= Published Events ============================ -->
+	<!-- |====================== Published Events ============================ -->
   <section>
     <event-list ckquery-result="$ctrl.publicEvents" db-type="$ctrl.typepublic">
     </event-list>

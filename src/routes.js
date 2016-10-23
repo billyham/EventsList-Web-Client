@@ -35,6 +35,12 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
   })
   .state('notifications', {
     url: '/notifications',
+    resolve: {
+      userIdentity: ['ckconfigureService', 'ckauthenticateService', (ckconfigureService, ckauthenticateService) => {
+        ckconfigureService.configure();
+        return ckauthenticateService.authenticate();
+      }],
+    },
     views: {
       content: {
         component: 'comingSoon'
@@ -43,6 +49,12 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
   })
   .state('settings', {
     url: '/settings',
+    resolve: {
+      userIdentity: ['ckconfigureService', 'ckauthenticateService', (ckconfigureService, ckauthenticateService) => {
+        ckconfigureService.configure();
+        return ckauthenticateService.authenticate();
+      }],
+    },
     views: {
       content: {
         component: 'comingSoon'

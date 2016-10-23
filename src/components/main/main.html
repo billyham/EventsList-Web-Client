@@ -1,37 +1,35 @@
 <div class="{{$ctrl.styles.main}}">
-  <div>
 
-    <!-- |============================= Header ============================= -->
-    <main-header>
-      <!-- Placeholder content  -->
-      <h1 class="l-title">EventsList Dashboard</h1>
-    </main-header>
-
-
-    <!-- |============================ Divider ============================= -->
-    <hr class="l-section-divider">
+  <!-- |============================== Header ============================== -->
+  <main-header>
+    <!-- Placeholder content  -->
+    <h1 class="l-title">EventsList Dashboard</h1>
+  </main-header>
 
 
-    <!-- |========================= Page Content =========================== -->
-    <section class="l-centered" ui-view="content">
-      <!-- Placeholder content  -->
-      <p>Downloading event information...</p>
-    <section>
+  <!-- |============================= Divider ============================== -->
+  <hr class="l-section-divider">
 
 
-    <!-- |==================== Apple Sign In/Out Button ==================== -->
-    <section ng-hide="true">
-      <aside>
-        <div id="apple-sign-in-button"></div>
-        <div id="apple-sign-out-button"></div>
-      </aside>
-    </section>
+  <!-- |========================== Page Content ============================ -->
+  <section class="l-centered" ui-view="content">
+    <!-- Placeholder content  -->
+    <p>Downloading event information...</p>
+  <section>
 
 
-    <!-- |============================= Footer ============================= -->
-    <footer>
-      <br>
-    </footer>
+  <!-- |===================== Apple Sign In/Out Button ===================== -->
+  <section ng-hide="true">
+    <aside>
+      <div id="apple-sign-in-button"></div>
+      <div id="apple-sign-out-button"></div>
+    </aside>
+  </section>
 
-  </div>
+
+  <!-- |============================== Footer ============================== -->
+  <footer>
+    <br>
+  </footer>
+
 </div>
