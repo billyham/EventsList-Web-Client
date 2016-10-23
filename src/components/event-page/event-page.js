@@ -8,21 +8,16 @@ export default {
     privateEvents: '=',
     userIdentity: '<'
   },
-  controller: ['ngDialog', 'ckrecordService', '$scope', '$document', controller]
+  controller: ['ngDialog', 'ckrecordService', '$scope', controller]
 };
 
-function controller(ngDialog, ckrecordService, $scope, $document) {
+function controller(ngDialog, ckrecordService, $scope) {
   this.styles = styles;
   this.typepublic = 'PUBLIC';
   this.typeprivate = 'PRIVATE';
 
   // Methods
   this.showadd = showadd;
-
-  var targetobj = $document.find('aside');
-  console.log(targetobj);
-  targetobj.detach();
-  $document.find('apple-destination').append(targetobj);
 
   // console.log('userIdentity', this.userIdentity);
 

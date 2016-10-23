@@ -4,9 +4,14 @@ export default {
 
 function controller($document) {
 
-  var targetobj = $document.find('aside');
-  // console.log(targetobj);
-  targetobj.detach();
-  $document.find('apple-destination').append(targetobj);
+  // Waits until the window is fully loaded with the CloudKit library before
+  // moving the apple button.
+  window.addEventListener('cloudkitloaded', function() {
+    var targetobj = $document.find('aside');
+    targetobj.detach();
+    $document.find('apple-destination').append(targetobj);
+  });
+
+
 
 }

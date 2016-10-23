@@ -28,9 +28,6 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
       }]
     },
     views: {
-      // header: {
-      //   component: 'mainHeader'
-      // },
       content: {
         component: 'eventPage'
       }
@@ -39,9 +36,6 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
   .state('notifications', {
     url: '/notifications',
     views: {
-      // header: {
-      //   component: 'mainHeader'
-      // },
       content: {
         component: 'comingSoon'
       }
@@ -50,9 +44,6 @@ export default function configRoutes($stateProvider, $urlRouterProvider){
   .state('settings', {
     url: '/settings',
     views: {
-      // header: {
-      //   component: 'mainHeader'
-      // },
       content: {
         component: 'comingSoon'
       }
