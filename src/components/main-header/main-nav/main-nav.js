@@ -31,11 +31,18 @@ function controller($document, ckauthenticateService, $scope) {
   this.signInOut = function signInOut(){
     // Create a new event and give it to the hidden apple button
     const customEvent = new CustomEvent('click');
-    $document.find('aside').children().children()[0].dispatchEvent(customEvent);
 
-    // DEPRECATED METHOD
-    // var clickEvent = document.createEvent('HTMLEvents');
-    // clickEvent.initEvent('click', true, true);
-    // $document.find('aside').children().children()[0].dispatchEvent(clickEvent);
+    // Work around for the fact that the Apple buttons can be layered on each other
+    const colLength = $document.find('aside').children().children().length;
+    let choosenButton = 0;
+    if (colLength > 1){
+      if (this.auth === 'Logout'){
+        choosenButton = 1;
+      }else{
+        choosenButton = 0;
+      }
+    }
+
+    $document.find('aside').children().children()[choosenButton].dispatchEvent(customEvent);
   };
 }

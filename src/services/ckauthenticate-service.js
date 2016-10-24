@@ -11,7 +11,6 @@ export default function ckauthenticateService(){
       var container = CloudKit.getDefaultContainer();
 
       function gotoAuthenticatedState(userIdentity) {
-
         // Send notifcation to observers
         _subscribers.forEach( handler => {
           handler(userIdentity);
@@ -28,7 +27,6 @@ export default function ckauthenticateService(){
         .then(gotoUnauthenticatedState);
       }
       function gotoUnauthenticatedState(error) {
-
         // Send notifcation to observers
         _subscribers.forEach( handler => {
           handler(null);
@@ -66,13 +64,14 @@ export default function ckauthenticateService(){
         if (userIdentity){
           title = 'UserIdentity for ' + userIdentity.userRecordName + ' is ' +
             (userIdentity.nameComponents || 'non-discoverable');
-        } 
+        }
         return title;
       });
 
     },
 
     subscribe(handler){
+      // console.log('adding a handler');
       _subscribers.push(handler);
     }
   };
