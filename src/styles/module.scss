@@ -15,7 +15,7 @@
 a.clickable{
   font-weight: bold;
   color: $anchor;
-  float: right;
+  // float: right;
   padding-right: 1em;
   padding-left: 1em;
   padding-top: 0.5em;
@@ -44,8 +44,38 @@ a.clickable:active{
   height: 30px;
   width: 30px;
   display: inline-block;
-  fill: yellow;
 }
+
+.hamburger{
+  // background-color: hsla(1, 0, 0, 0);
+  cursor: pointer;
+  display: inline-block;
+  padding: .5em;
+}
+
+.hamburger:hover{
+  background-color: $anchor--hover;
+}
+
+.hamburger:active{
+  background-color: $anchor;
+
+  .menuicon{
+    background-color: $canvas;
+  }
+}
+
+.menuicon{
+  background: url('icons/menu.svg');
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+}
+
+
+
+
 
 /* Override ng-modal
    ========================================================================== */
@@ -55,41 +85,41 @@ a.clickable:active{
 
 /* Override Apple default styles
    ========================================================================== */
-.apple-auth-button{
-  height: auto                !important;
-  width: auto                 !important;
-  cursor: pointer             !important;
-  border-width: 0             !important;
-  border-radius: 5px          !important;
-  background-color: inherit   !important;
-
-  // Inherit a.clickable styles
-  font-weight: bold           !important;
-  color: $anchor              !important;
-  float: right                !important;
-  padding-right: 1em          !important;
-  padding-left: 1em           !important;
-  padding-top: 0.5em          !important;
-  padding-bottom: 0.5em       !important;
-  border-radius: 5px          !important;
-}
-
-.apple-auth-button :nth-child(1){
-  display: none;
-}
-
-#apple-sign-out-button div::before{
-  content: "Logout";
-}
-
-#apple-sign-in-button div::before{
-  content: "Sign In";
-}
-
-.apple-auth-button:hover{
-  background-color: $anchor--hover !important;
-}
-
-#apple-sign-in-button, #apple-sign-out-button{
-  display: inline-block;
-}
+// .apple-auth-button{
+//   height: auto                !important;
+//   width: auto                 !important;
+//   cursor: pointer             !important;
+//   border-width: 0             !important;
+//   border-radius: 5px          !important;
+//   background-color: inherit   !important;
+//
+//   // Inherit a.clickable styles
+//   font-weight: bold           !important;
+//   color: $anchor              !important;
+//   // float: right                !important;
+//   padding-right: 1em          !important;
+//   padding-left: 1em           !important;
+//   padding-top: 0.5em          !important;
+//   padding-bottom: 0.5em       !important;
+//   border-radius: 5px          !important;
+// }
+//
+// .apple-auth-button :nth-child(1){
+//   display: none;
+// }
+//
+// #apple-sign-out-button div::before{
+//   content: "Logout";
+// }
+//
+// #apple-sign-in-button div::before{
+//   content: "Sign In";
+// }
+//
+// .apple-auth-button:hover{
+//   background-color: $anchor--hover !important;
+// }
+//
+// #apple-sign-in-button, #apple-sign-out-button{
+//   display: inline-block;
+// }

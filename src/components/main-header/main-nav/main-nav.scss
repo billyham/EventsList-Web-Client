@@ -1,15 +1,20 @@
 @import "../../../styles/site-settings";
 :local(.mainNav){
 
-  ul{
-    margin-bottom: 0;
-    float: right;
+  .nav-menu{
+    margin-bottom: .5em;
     padding-left: 0;
+    display: none;
   }
 
-  li {
-    display: inline-block;
-    min-width: 6em;
+  .nav-menu__is-selected{
+    display: block
+  }
+
+  li.nav-item {
+    display: list-item;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
   }
 
   .selected {
@@ -17,6 +22,31 @@
     background-size: 4px 1px;
     background-repeat: repeat-x;
     background-position: top;
+  }
+
+  .hamburger{
+    float: right;
+    clear: left;
+    display: inline-block;
+    margin-bottom: .5em;
+  }
+
+  @media only screen and (min-width: 500px){
+
+    .hamburger{
+      display: none;
+    }
+
+    .nav-menu{
+      float: right;
+      display: block;
+    }
+
+    li.nav-item{
+      display: inline-block;
+      min-width: 4em;
+    }
+
   }
 
 }

@@ -2,6 +2,8 @@ ckauthenticateService.$inject = [];
 
 export default function ckauthenticateService(){
 
+  var _subscribers = [];
+
   return {
     authenticate(){
 
@@ -9,6 +11,12 @@ export default function ckauthenticateService(){
       var container = CloudKit.getDefaultContainer();
 
       function gotoAuthenticatedState(userIdentity) {
+
+        // Send notifcation to observers
+        _subscribers.forEach( handler => {
+          handler(userIdentity);
+        });
+
         var name = userIdentity.nameComponents;
         if(name) {
           // displayUserName(name.givenName + ' ' + name.familyName);
@@ -20,6 +28,11 @@ export default function ckauthenticateService(){
         .then(gotoUnauthenticatedState);
       }
       function gotoUnauthenticatedState(error) {
+
+        // Send notifcation to observers
+        _subscribers.forEach( handler => {
+          handler(null);
+        });
 
         if(error && error.ckErrorCode === 'AUTH_PERSIST_ERROR') {
           showDialogForPersistError();
@@ -44,8 +57,23 @@ export default function ckauthenticateService(){
         } else {
           gotoUnauthenticatedState();
         }
+        return userIdentity;
+      })
+      .then(function(userIdentity) {
+
+        var title = null;
+
+        if (userIdentity){
+          title = 'UserIdentity for ' + userIdentity.userRecordName + ' is ' +
+            (userIdentity.nameComponents || 'non-discoverable');
+        } 
+        return title;
       });
 
+    },
+
+    subscribe(handler){
+      _subscribers.push(handler);
     }
   };
 }
