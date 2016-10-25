@@ -7,7 +7,6 @@ import main from './main/main';
 import imageUpload from './image-upload/image-upload';
 import mainHeader from './main-header/main-header';
 import mainNav from './main-header/main-nav/main-nav';
-import appleDestination from './main-header/main-nav/apple-destination/apple-destination';
 import comingSoon from './coming-soon/coming-soon';
 
 const components = angular.module('components', [])
@@ -19,7 +18,6 @@ const components = angular.module('components', [])
 .component('imageUpload', imageUpload)
 .component('mainHeader', mainHeader)
 .component('mainNav', mainNav)
-.component('appleDestination', appleDestination)
 .component('comingSoon', comingSoon);
 
 export default components.name;
