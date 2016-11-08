@@ -2,7 +2,9 @@
 
 	<!-- |============================== Header ============================== -->
 	<section class="l-overflow-auto">
-		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PRIVATE'">Draft</h3>
+		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PRIVATE'">Drafts
+      <span ng-show="$ctrl.userName" class="t-highlight"> — by {{$ctrl.userName}}</span>
+    </h3>
 		<h3 class="t-highlight" ng-show="$ctrl.dbType == 'PUBLIC'">Published</h3>
 	</section>
 

@@ -6,7 +6,7 @@ export default {
   bindings: {
     publicEvents: '=',
     privateEvents: '=',
-    userIdentity: '<'
+    userIdentity: '<',
   },
   controller: ['ngDialog', 'ckrecordService', '$scope', controller]
 };
@@ -18,8 +18,6 @@ function controller(ngDialog, ckrecordService, $scope) {
 
   // Methods
   this.showadd = showadd;
-
-  // console.log('userIdentity', this.userIdentity);
 
   function showadd(){
     const dialog = ngDialog.open({

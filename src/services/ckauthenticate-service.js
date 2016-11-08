@@ -11,17 +11,18 @@ export default function ckauthenticateService(){
       var container = CloudKit.getDefaultContainer();
 
       function gotoAuthenticatedState(userIdentity) {
+
+        var name = null;
+
+        if(userIdentity.nameComponents) {
+          name = userIdentity.nameComponents.givenName;
+        }
+
         // Send notifcation to observers
         _subscribers.forEach( handler => {
-          handler(userIdentity);
+          handler(name);
         });
 
-        var name = userIdentity.nameComponents;
-        if(name) {
-          // displayUserName(name.givenName + ' ' + name.familyName);
-        } else {
-          // displayUserName('User record name: ' + userIdentity.userRecordName);
-        }
         container
         .whenUserSignsOut()
         .then(gotoUnauthenticatedState);
@@ -47,8 +48,6 @@ export default function ckauthenticateService(){
       return container.setUpAuth()
       .then(function(userIdentity) {
 
-        // Either a sign-in or a sign-out button was added to the DOM.
-
         // userIdentity is the signed-in user or null.
         if(userIdentity) {
           gotoAuthenticatedState(userIdentity);
@@ -62,6 +61,7 @@ export default function ckauthenticateService(){
         var title = null;
 
         if (userIdentity){
+
           title = 'UserIdentity for ' + userIdentity.userRecordName + ' is ' +
             (userIdentity.nameComponents || 'non-discoverable');
         }
@@ -73,6 +73,22 @@ export default function ckauthenticateService(){
     subscribe(handler){
       // console.log('adding a handler');
       _subscribers.push(handler);
+    },
+
+    fetchCurrentName() {
+      var container = CloudKit.getDefaultContainer();
+
+      // Fetch user's info.
+      return container.fetchCurrentUserIdentity()
+      .then(function(userIdentity) {
+        var name = null;
+
+        if (userIdentity.nameComponents){
+          name = userIdentity.nameComponents.givenName;
+        }
+        return name;
+      });
     }
+
   };
 }

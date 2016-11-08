@@ -7,12 +7,12 @@ export default {
     // userIdentity: '<',
     ckqueryResult: '=',
     dbType: '<',
-    publish: '&'
+    publish: '&',
   },
-  controller: ['ckqueryService', 'ckconfigureService', '$scope', controller]
+  controller: ['ckqueryService', 'ckconfigureService', '$scope', 'ckauthenticateService', controller]
 };
 
-function controller(ckqueryService, ckconfigureService, $scope){
+function controller(ckqueryService, ckconfigureService, $scope, ckauthenticateService){
   this.styles = styles;
 
   if (this.ckqueryResult.error) {
@@ -24,9 +24,17 @@ function controller(ckqueryService, ckconfigureService, $scope){
     }
   }
 
-  // $scope.$watch('$ctrl.ckqueryResult', () => {
-  //
-  // });
+  // Get inital value of name
+  ckauthenticateService.fetchCurrentName()
+  .then(name => this.userName = name);
+
+  // Observer changes to state of authentication
+  ckauthenticateService.subscribe( userIdentity => {
+    $scope.$apply( () => {
+      // this.userName = 'testerset'
+      this.userName = userIdentity || '';
+    });
+  });
 
   this.loadMore = function loadMore(){
     ckqueryService.query(

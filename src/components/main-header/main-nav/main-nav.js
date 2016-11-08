@@ -15,7 +15,6 @@ function controller($document, ckauthenticateService, $scope) {
   this.auth = 'Sign In with Apple ID';
 
   // Initial setup
-
   // Observer changes to state of authentication
   ckauthenticateService.subscribe( userIdentity => {
     $scope.$apply( () => {
