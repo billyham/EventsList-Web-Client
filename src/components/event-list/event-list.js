@@ -8,11 +8,12 @@ export default {
     ckqueryResult: '=',
     dbType: '<',
     publish: '&',
+    userName: '<'
   },
-  controller: ['ckqueryService', 'ckconfigureService', '$scope', 'ckauthenticateService', controller]
+  controller: ['ckqueryService', 'ckconfigureService', '$scope', controller]
 };
 
-function controller(ckqueryService, ckconfigureService, $scope, ckauthenticateService){
+function controller(ckqueryService, ckconfigureService, $scope){
   this.styles = styles;
 
   if (this.ckqueryResult.error) {
@@ -23,18 +24,6 @@ function controller(ckqueryService, ckconfigureService, $scope, ckauthenticateSe
       //TODO: Show generic server error message
     }
   }
-
-  // Get inital value of name
-  ckauthenticateService.fetchCurrentName()
-  .then(name => this.userName = name);
-
-  // Observer changes to state of authentication
-  ckauthenticateService.subscribe( userIdentity => {
-    $scope.$apply( () => {
-      // this.userName = 'testerset'
-      this.userName = userIdentity || '';
-    });
-  });
 
   this.loadMore = function loadMore(){
     ckqueryService.query(

@@ -8,16 +8,36 @@ export default {
     privateEvents: '=',
     userIdentity: '<',
   },
-  controller: ['ngDialog', 'ckrecordService', '$scope', controller]
+  controller: ['ngDialog', 'ckrecordService', '$scope', 'ckauthenticateService', 'ckqueryService', controller]
 };
 
-function controller(ngDialog, ckrecordService, $scope) {
+function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ckqueryService) {
   this.styles = styles;
   this.typepublic = 'PUBLIC';
   this.typeprivate = 'PRIVATE';
 
   // Methods
   this.showadd = showadd;
+
+  // Get inital value of name
+  ckauthenticateService.fetchCurrentName()
+  .then(name => this.userName = name);
+
+  // Register to observer changes in authentication
+  ckauthenticateService.subscribe( userName => {
+    $scope.$apply( () => {
+      // Update display name
+      this.userName = userName || '';
+      // Update list of private events
+      ckqueryService.query('PRIVATE','_defaultZone',null,'Program',
+        ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
+        [], null)
+        .then(result => {
+          this.privateEvents = {records: result.records, continuationMarker: result.continuationMarker, error: result.error};
+          $scope.$apply();
+        });
+    });
+  });
 
   function showadd(){
     const dialog = ngDialog.open({
@@ -49,25 +69,25 @@ function controller(ngDialog, ckrecordService, $scope) {
 
   this.publish = function publish(rec){
     ckrecordService.save(
-      'PUBLIC', //databaseScope, PUBLIC or PRIVATE
-      rec.recordName, // recordName,
-      null, // recordChangeTag
-      'Program', //recordType
-      null, //zoneName,  null will be default _defaultZone, PUBLIC databases are limited to the one default zone
-      null, //forRecordName,
-      null, //forRecordChangeTag,
-      null, //publicPermission,
-      null, //ownerRecordName,
-      null, //participants,
-      null, //parentRecordName,
-      rec.fields //fields
+      'PUBLIC',           //databaseScope, PUBLIC or PRIVATE
+      rec.recordName,     // recordName,
+      null,               // recordChangeTag
+      'Program',          //recordType
+      null,               //zoneName,  null is _defaultZone, PUBLIC databases have only the default zone
+      null,               //forRecordName,
+      null,               //forRecordChangeTag,
+      null,               //publicPermission,
+      null,               //ownerRecordName,
+      null,               //participants,
+      null,               //parentRecordName,
+      rec.fields          //fields
     ).then( record => {
 
       ckrecordService.delete(
-        'PRIVATE',  // databaseScope
+        'PRIVATE',          // databaseScope
         record.recordName,  // recordName
-        null,  // zoneName
-        null  //ownerRecordName
+        null,               // zoneName
+        null                //ownerRecordName
       ).then( rec => {
 
         var indexToDelete = -1;

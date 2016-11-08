@@ -15,7 +15,7 @@ export default function ckauthenticateService(){
         var name = null;
 
         if(userIdentity.nameComponents) {
-          name = userIdentity.nameComponents.givenName;
+          name = `${userIdentity.nameComponents.givenName} ${userIdentity.nameComponents.familyName}`;
         }
 
         // Send notifcation to observers
@@ -84,7 +84,7 @@ export default function ckauthenticateService(){
         var name = null;
 
         if (userIdentity.nameComponents){
-          name = userIdentity.nameComponents.givenName;
+          name = `${userIdentity.nameComponents.givenName} ${userIdentity.nameComponents.familyName}`;
         }
         return name;
       });
