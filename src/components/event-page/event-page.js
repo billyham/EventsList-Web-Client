@@ -69,56 +69,49 @@ function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ck
 
   this.publish = function publish(rec){
     ckrecordService.save(
-      'PUBLIC',           //databaseScope, PUBLIC or PRIVATE
+      'PUBLIC',           // databaseScope, PUBLIC or PRIVATE
       rec.recordName,     // recordName,
       null,               // recordChangeTag
-      'Program',          //recordType
-      null,               //zoneName,  null is _defaultZone, PUBLIC databases have only the default zone
-      null,               //forRecordName,
-      null,               //forRecordChangeTag,
-      null,               //publicPermission,
-      null,               //ownerRecordName,
-      null,               //participants,
-      null,               //parentRecordName,
-      rec.fields          //fields
+      'Program',          // recordType
+      null,               // zoneName,  null is _defaultZone, PUBLIC databases have only the default zone
+      null,               // forRecordName,
+      null,               // forRecordChangeTag,
+      null,               // publicPermission,
+      null,               // ownerRecordName,
+      null,               // participants,
+      null,               // parentRecordName,
+      rec.fields          // fields
     ).then( record => {
 
       ckrecordService.delete(
         'PRIVATE',          // databaseScope
         record.recordName,  // recordName
         null,               // zoneName
-        null                //ownerRecordName
+        null                // ownerRecordName
       ).then( rec => {
 
-        var indexToDelete = -1;
-        this.privateEvents.records.forEach(function(element, index){
-          if (element.recordName === rec.recordName){
+        // Add the published item to the publicEvents, and sort.
+        this.publicEvents.records.push(record);
+        this.publicEvents.records.sort( (a,b) => {
+          if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
+          if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
+          return 0;
+        });
 
-            // Add the published item to the publicEvents, and sort.
-            this.publicEvents.records.push(element);
-            this.publicEvents.records.sort( (a,b) => {
-              if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
-              if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
-              return 0;
-            });
-
-            // If a continuationMarker exists and the published object
-            // is at the end of the array, don't add it.
-            // Or an error occures when you load more.
-            if (this.publicEvents.continuationMarker){
-              if (this.publicEvents.records[this.publicEvents.records.length - 1] === element ){
-                this.publicEvents.records.pop();
-              }
-            }
-
-            // Identify the index to be deleted (don't mutate the array inside forEach)
-            indexToDelete = index;
+        // If a continuationMarker exists and the published object
+        // is at the end of the array, don't add it.
+        // Or an error occures when you load more.
+        if (this.publicEvents.continuationMarker){
+          if (this.publicEvents.records[this.publicEvents.records.length - 1] === record ){
+            this.publicEvents.records.pop();
           }
-        }, this);
+        }
 
         // Remove the published event from privateEvents
+        let indexToDelete = this.privateEvents.records.findIndex( element => {
+          return element.recordName === rec.recordName;
+        });
         if (indexToDelete > -1) this.privateEvents.records.splice(indexToDelete, 1);
-
         $scope.$apply();
 
       }).catch( err => {
