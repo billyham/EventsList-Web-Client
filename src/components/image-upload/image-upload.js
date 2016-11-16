@@ -11,13 +11,14 @@ export default {
 };
 
 function controller(ckassetService, $scope){
+  // Properties
   this.styles = styles;
+  this.boxtext = 'Drag and drop an image file';
+  this.imagetype = '';
 
   // Methods
   this.dodrop = ondrop;
   this.sendRequest = sendRequest;
-  this.boxtext = 'Drag and drop an image file';
-  this.imagetype = '';
 
   // Function declarations
   function ondrop(evnt) {
@@ -53,7 +54,7 @@ function controller(ckassetService, $scope){
 
         var data = new Uint8Array(element.target.result);
 
-        ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, assetDictionary => {
+        ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, this.imagetype, assetDictionary => {
           const { recordName } = tokenResponseDictionary.data.tokens[0];
           const { name } = filePath.files[0];
           const { singleFile } = assetDictionary.data;

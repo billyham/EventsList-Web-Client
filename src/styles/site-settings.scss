@@ -21,6 +21,7 @@ $green: 125;
    ========================================================================== */
 $navyDark: hsla($navy, 19%, 16%, 1);
 $navyPowderBlue: hsla($navy, 42%, 68%, 1);
+$navyPowderBlueHalfTransparent: hsla($navy, 42%, 68%, .5);
 $navyLessDark: hsla($navy, 25%, 22%, 1);
 $navyMoreDark: hsla($navy, 18%, 10%, 1);
 
@@ -38,18 +39,20 @@ $orangeTransparent: hsla($orange, 83%, 45%, 0.2);
 $greenFull: hsla($green, 70%, 30%, 1);
 $greenLight: hsla($green, 90%, 50%, 1);
 
-$mediumGray: hsla(1, 0%, 50%, 1);
+$greyMedium: hsla(1, 0%, 50%, 1);
+
 $whiteHalfTransparent: hsla(1, 0%, 100%, .4);
 
 /* Color Contexts
    ========================================================================== */
 $canvas: $navyDark;
 $canvas-light: $navyLessDark;
-$highlightText: $navyPowderBlue;
 
 $background__imagebox: $navyLessDark;
 $background--selected: $navyMoreDark;
 $background--hover: $navyLessDark;
+
+$highlightText: $navyPowderBlue;
 
 $anchor: $orangeFull;
 $anchor--hover: $orangeTransparent;
@@ -57,4 +60,4 @@ $anchor--hover: $orangeTransparent;
 $submit-button: $greenFull;
 $submit-button__active: $greenLight;
 $form-text__dirty: $greenFull;
-$form-text__placeholder: $whiteHalfTransparent;
+$form-text__placeholder: $navyPowderBlueHalfTransparent;

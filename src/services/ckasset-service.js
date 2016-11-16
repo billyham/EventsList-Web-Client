@@ -25,8 +25,8 @@ export default function ckassetService($http, $cookies){
       return $http.post(reqUrl, reqBody);
     },
 
-    upload: function upload(url, file, callback){
-      $http.post(url, file, { headers: { 'Content-Type': 'image/png' }, transformRequest: [] })
+    upload: function upload(url, file, contentType, callback){
+      $http.post(url, file, { headers: { 'Content-Type': contentType }, transformRequest: [] })
       .then( returnObj => {
         callback(returnObj);
       })
