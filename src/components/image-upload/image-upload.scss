@@ -3,4 +3,32 @@
 
   width: 100%;
 
+// TODO: This is duplicated from event.scss. DRY it out.
+  .addimage{
+    width: 130px;
+    height: 130px;
+    background-color: $background__imagebox;
+    border: 2px dashed $highlightText;
+    color: white;
+
+    // The following is not from event.scss
+    border-radius: 4px;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    padding: .5em;
+
+    // Text styling
+    font-size: 80%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+  }
+
+  .addimage__pristine{
+      color: $form-text__placeholder;
+  }
+
+
+
 }

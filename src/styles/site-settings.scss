@@ -38,6 +38,9 @@ $orangeTransparent: hsla($orange, 83%, 45%, 0.2);
 $greenFull: hsla($green, 70%, 30%, 1);
 $greenLight: hsla($green, 90%, 50%, 1);
 
+$mediumGray: hsla(1, 0%, 50%, 1);
+$whiteHalfTransparent: hsla(1, 0%, 100%, .4);
+
 /* Color Contexts
    ========================================================================== */
 $canvas: $navyDark;
@@ -54,3 +57,4 @@ $anchor--hover: $orangeTransparent;
 $submit-button: $greenFull;
 $submit-button__active: $greenLight;
 $form-text__dirty: $greenFull;
+$form-text__placeholder: $whiteHalfTransparent;

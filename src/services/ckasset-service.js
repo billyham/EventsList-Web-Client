@@ -23,11 +23,6 @@ export default function ckassetService($http, $cookies){
         }]
       });
       return $http.post(reqUrl, reqBody);
-      // .then( obj => {
-      //   callback(obj);
-      // })
-      // .catch( () => {
-      // });
     },
 
     upload: function upload(url, file, callback){

@@ -3,6 +3,7 @@ import router from 'angular-ui-router';
 import ngCookies from 'angular-cookies';
 import components from './components';
 import services from './services';
+import directives from './directives';
 import 'angular-ui-router/release/stateEvents';
 import ngDialog from 'ng-dialog';
 import 'ng-dialog/css/ngDialog.css';
@@ -14,7 +15,8 @@ const app = angular.module('app', [
   angular.module( 'ui.router.state.events' ).name,
   ngDialog,
   components,
-  services
+  services,
+  directives
 ]);
 
 export default app;
