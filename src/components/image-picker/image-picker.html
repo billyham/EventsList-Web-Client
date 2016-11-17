@@ -1,0 +1,29 @@
+<div class="{{$ctrl.styles.upload}}">
+  <div class="imagecontainer">
+
+    <image-crop
+      class="cropimage"
+      imagedata="$ctrl.imagedata"
+      imagetype="$ctrl.imagetype">
+    </image-crop>
+
+    <div class="addimage"
+      ng-class="{addimage__pristine: !$ctrl.imagetype}"
+      ondragenter="event.stopPropagation(); event.preventDefault();"
+      ondragover="event.stopPropagation(); event.preventDefault();"
+      ng-on-drop="$ctrl.dodrop()"
+      ng-hide="$ctrl.imagedata">
+      {{$ctrl.boxtext}}
+    </div>
+
+  </div>
+
+  <input type="file" name="file" id="{{$ctrl.record}}" class="file"></input><br>
+  <button type="button" ng-click="$ctrl.clearImage()">Clear Image</button>
+  <!-- <button type="button" ng-click="$ctrl.loadImage()" ng-class="{'button__inactive': !$ctrl.imagetype}">Load Image</button> -->
+  <button type="submit" ng-click="$ctrl.submitRequest()" ng-class="{'button__inactive': !$ctrl.imagedata}">Submit</button>
+</div>
+
+
+<!-- Removed from imagedropper because of the ngOnDrop function  -->
+<!-- ondrop="event.stopPropagation(); event.preventDefault();" -->

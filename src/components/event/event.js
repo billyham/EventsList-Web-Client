@@ -92,7 +92,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   // Displays ngDialog for adding a new image
   function showAddImage(){
     const dialog = ngDialog.open({
-      template: '<image-upload record="ngDialogData.recordName" edit="pic(image)" close="close()"></image-upload>',
+      template: '<image-picker record="ngDialogData.recordName" edit="pic(image)" close="close()"></image-picker>',
       className: 'ngdialog-theme-default ngdialog-wide-content',
       plain: true,
       data: this.record,

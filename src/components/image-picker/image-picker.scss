@@ -3,18 +3,32 @@
 
   width: 100%;
 
+  .imagecontainer{
+    width: 220px;
+    height: 220px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cropimage{
+    position: absolute;
+  }
+
 // TODO: This is duplicated from event.scss. DRY it out.
   .addimage{
-    width: 130px;
-    height: 130px;
+    // width: 130px;
+    // height: 130px;
+    position: absolute;
+    width: 220px;
+    height: 220px;
     background-color: $background__imagebox;
     border: 2px dashed $highlightText;
     color: white;
 
     // The following is not from event.scss
     border-radius: 4px;
-    margin-top: .5em;
-    margin-bottom: .5em;
+    // margin-top: .5em;
+    // margin-bottom: .5em;
     padding: .5em;
 
     // Text styling

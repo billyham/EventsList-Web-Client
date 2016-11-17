@@ -7,8 +7,8 @@ export default function() {
       // attrs -> attributes (keys and values) of the HTML element
       element.bind('drop', function(event){
 
-        // TODO decouple this directive from the image-upload component
-        // dodrop() is a function in image-upload.js
+        // TODO decouple this directive from the image-picker component
+        // dodrop() is a function in image-picker.js
 
         scope.$ctrl.dodrop(event);
       });

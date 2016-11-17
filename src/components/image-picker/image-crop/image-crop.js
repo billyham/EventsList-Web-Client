@@ -18,23 +18,20 @@ function controller($document, $scope) {
   // var _canvas = null;
 
   // ---------------------------- Initialization ---------------------------- //
+  const canvasWidth = 220;
+  const canvasHeight = 220;
+
   // Wait for HTML to render
   $scope.$watch('$ctrl.imagedata', () => {
     this.showerror = false;
-
-    console.log('image-crop $watch fires ', this.imagedata);
-
     if (!this.imagedata) return;
 
-    // Initialization
     const canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
 
     // This is important, a mismatch with CSS will distort the the dimensions
-    canvas.width = 220;
-    canvas.height = 220;
-
-    console.log($document.find('canvas'));
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
 
     // Make a blob from the image
     const blob = new Blob([this.imagedata], { type: this.imagetype });
@@ -54,11 +51,13 @@ function controller($document, $scope) {
       const small = landscape ? imageBitmap.height : imageBitmap.width;
       ratio = small / big;
 
-      const finalWidth = landscape ? 220 : 220 * ratio;
-      const finalHeight = landscape ? 220 * ratio : 220;
+      const finalWidth = landscape ? canvasWidth : canvasWidth * ratio;
+      const finalHeight = landscape ? canvasHeight * ratio : canvasHeight;
 
-      // console.log('this is the imageBitmap: ', imageBitmap);
-      ctx.drawImage(imageBitmap, 0, 0, finalWidth, finalHeight);
+      const xoffset = (canvasWidth - finalWidth) / 2;
+      const yoffset = (canvasHeight - finalHeight) / 2;
+
+      ctx.drawImage(imageBitmap, xoffset, yoffset, finalWidth, finalHeight);
     });
 
   });
