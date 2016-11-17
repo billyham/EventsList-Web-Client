@@ -1,0 +1,15 @@
+@import "../../../styles/site-settings";
+:local(.crop){
+
+  width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+
+  canvas {
+    background-color: $canvas;
+    width: 220px;
+    height: 220px;
+  }
+
+
+}

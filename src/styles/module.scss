@@ -78,3 +78,10 @@ a.clickable:active{
 .ngdialog-content{
   background-color: $canvas-light   !important;
 }
+
+.ngdialog-wide-content{
+
+  .ngdialog-content{
+    width: 600px                      !important;
+  }
+}

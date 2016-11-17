@@ -14,8 +14,14 @@ export default {
 };
 
 function controller(ckqueryService, ckconfigureService, $scope){
+  // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
 
+  // ------------------------------- Methods -------------------------------- //
+  this.loadMore = loadMore;
+  this.remove = remove;
+
+  // ---------------------------- Initialization ---------------------------- //
   if (this.ckqueryResult.error) {
     if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
       //TODO: Show message that user needs to be logged in.
@@ -25,7 +31,8 @@ function controller(ckqueryService, ckconfigureService, $scope){
     }
   }
 
-  this.loadMore = function loadMore(){
+  // ------------------------ Function declarations ------------------------- //
+  function loadMore(){
     ckqueryService.query(
       'PUBLIC','_defaultZone',null,'Program',
       ['title', 'imageRef', 'video'],'title',null,null,null,
@@ -39,7 +46,7 @@ function controller(ckqueryService, ckconfigureService, $scope){
     });
   };
 
-  this.remove = function remove(rec){
+  function remove(rec){
     let index = this.ckqueryResult.records.findIndex( element => element.recordName === rec.recordName );
     if (index > -1) {
       this.ckqueryResult.records.splice(index, 1);

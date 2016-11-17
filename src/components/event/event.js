@@ -13,13 +13,12 @@ export default {
 };
 
 function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
+  // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
-
-  // State properties
   this.isSelected = false;
   this.imageVisible = true;
 
-  // Methods
+  // -------------------------------- Methods ------------------------------- //
   this.renderImage = renderImage;
   this.delete = deleteEvent;
   this.edit = edit;
@@ -28,12 +27,12 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.removeSelected = removeSelected;
   this.showAddImage = showAddImage;
 
+  // ---------------------------- Initialization ---------------------------- //
   // Set values for UI elements
   this.formtitle = this.record.fields.title.value;
   if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
   if (this.record.fields.fulldescription) this.formfulldescription = this.record.fields.fulldescription.value;
   this.imagesrc = '';
-
 
   // Save initial values in case editing fails
   this.oldValue = '';
@@ -52,6 +51,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     }
   });
 
+  // ------------------------- Function declarations ------------------------ //
   // Load new URL for video
   function play(clickEvent){
     if (clickEvent) clickEvent.cancelBubble = true;
@@ -61,27 +61,8 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   // Fetch image from the server only if necessary
   function renderImage(){
     if (!this.imagesrc) {
-      // const refFilter = {
-      //   comparator: 'EQUALS',
-      //   fieldName: 'programRef',
-      //   fieldValue: { recordName: this.record.recordName }
-      // };
-      //
-      // ckqueryService.query(
-      //   'PUBLIC',
-      //   '_defaultZone',
-      //   null,
-      //   'Image440',
-      //   ['image', 'programRef', 'fileName'],
-      //   'fileName',
-      //   null,
-      //   null,
-      //   null,
-      //   [refFilter],
-      //   null
 
-      ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone'
-      )
+      ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
       .then( result => {
         // if (result.records.length > 0){
           // this.imagesrc = result.records[result.records.length - 1].fields.image.value.downloadURL;
@@ -94,7 +75,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
       .catch( error => {
         console.log(error);
       });
-
     }
   };
 
@@ -113,7 +93,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   function showAddImage(){
     const dialog = ngDialog.open({
       template: '<image-upload record="ngDialogData.recordName" edit="pic(image)" close="close()"></image-upload>',
-      className: 'ngdialog-theme-default',
+      className: 'ngdialog-theme-default ngdialog-wide-content',
       plain: true,
       data: this.record,
       scope: $scope,    // Note how $scope is passed to the ngDialog
@@ -137,7 +117,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     // $timeout overrides implicit context.
     // var renderImageWithContext = this.renderImage.bind(this);
     // $timeout(renderImageWithContext, 1000);
-
     $scope.close();
   };
 

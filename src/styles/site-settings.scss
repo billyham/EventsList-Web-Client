@@ -52,12 +52,15 @@ $background__imagebox: $navyLessDark;
 $background--selected: $navyMoreDark;
 $background--hover: $navyLessDark;
 
+$submit-button: $greenFull;
+$submit-button__active: $greenLight;
+
 $highlightText: $navyPowderBlue;
 
 $anchor: $orangeFull;
 $anchor--hover: $orangeTransparent;
 
-$submit-button: $greenFull;
-$submit-button__active: $greenLight;
 $form-text__dirty: $greenFull;
 $form-text__placeholder: $navyPowderBlueHalfTransparent;
+
+$warning-text: $red-dark;

@@ -10,11 +10,17 @@ export default {
 };
 
 function controller($document, ckauthenticateService, $scope) {
+  // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
   this.isopen = false;
   this.auth = 'Sign In with Apple ID';
 
-  // Initial setup
+  // -------------------------------- Methods ------------------------------- //
+  this.togglemenu = togglemenu;
+  this.signInOut = signInOut;
+
+
+  // ---------------------------- Initialization ---------------------------- //
   // Observer changes to state of authentication
   ckauthenticateService.subscribe( userIdentity => {
     $scope.$apply( () => {
@@ -22,12 +28,12 @@ function controller($document, ckauthenticateService, $scope) {
     });
   });
 
-  // Methods
-  this.togglemenu = function togglemenu(){
+  // -------------------------- Function declarions ------------------------- //
+  function togglemenu(){
     this.isopen = !this.isopen;
   };
 
-  this.signInOut = function signInOut(){
+  function signInOut(){
     // Create a new event and give it to the hidden apple button
     const customEvent = new CustomEvent('click');
 

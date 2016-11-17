@@ -9,5 +9,6 @@ export default {
 };
 
 function controller(){
+  // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
 }

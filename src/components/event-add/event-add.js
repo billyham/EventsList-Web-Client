@@ -11,11 +11,16 @@ export default {
 };
 
 function controller(ckrecordService, $scope){
+  // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
   this.formtitle = '';
   this.formvideo = '';
 
-  this.submit = function submit(){
+  // -------------------------------- Methods ------------------------------- //
+  this.submit = submit;
+
+  // ------------------------- Function declarations ------------------------ //
+  function submit(){
     if (!this.formtitle) return;
 
     var obj = {

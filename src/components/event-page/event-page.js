@@ -12,14 +12,15 @@ export default {
 };
 
 function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ckqueryService) {
+  // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
   this.typepublic = 'PUBLIC';
   this.typeprivate = 'PRIVATE';
 
-  // Methods
+  // ------------------------------- Methods -------------------------------- //
   this.showadd = showadd;
 
-  // Get inital value of name
+  // ---------------------------- Initialization ---------------------------- //
   ckauthenticateService.fetchCurrentName()
   .then(name => this.userName = name);
 
@@ -39,6 +40,7 @@ function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ck
     });
   });
 
+  // ------------------------- Function declarations ------------------------ //
   function showadd(){
     const dialog = ngDialog.open({
       template:'<event-add close="close()" add="add(rec)">Enter</event-add>',

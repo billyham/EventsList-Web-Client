@@ -1,4 +1,5 @@
 <div class="{{$ctrl.styles.upload}}">
+  <image-crop imagedata="$ctrl.imagedata" imagetype="$ctrl.imagetype"></image-crop>
   <div class="addimage"
     ng-class="{addimage__pristine: !$ctrl.imagetype}"
     ondragenter="event.stopPropagation(); event.preventDefault();"
