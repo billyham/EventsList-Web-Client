@@ -11,5 +11,49 @@
     height: 220px;
   }
 
+  .overlay{
+    width: 220px;
+    height: 220px;
+    position: absolute;
+    border: solid 2px white;
+  }
+
+  .overlay-inner{
+    width: 220px;
+    height: 220px;
+    position: absolute;
+  }
+
+  .crop-handle-ne, .crop-handle-se, .crop-handle-sw, .crop-handle-nw{
+    position: absolute;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: hsla(1, 1%, 100%, 1);
+  }
+
+  .crop-handle-ne{
+    top: 0px;
+    right: 0px;
+    cursor: ne-resize;
+  }
+
+  .crop-handle-se{
+    bottom: 0px;
+    right: 0px;
+    cursor: se-resize;
+  }
+
+  .crop-handle-sw{
+    bottom: 0px;
+    left: 0px;
+    cursor: sw-resize;
+  }
+
+  .crop-handle-nw{
+    top: 0px;
+    left: 0px;
+    cursor: nw-resize;
+  }
 
 }

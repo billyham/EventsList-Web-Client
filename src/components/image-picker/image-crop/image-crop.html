@@ -1,4 +1,23 @@
 <div class="{{$ctrl.styles.crop}}">
-  <canvas id="canvas"></canvas>
-  <span ng-show="$ctrl.showerror" class="text__warning">Image needs to be at least 440px by 440px</span>
+
+  <div class="imagecontainer">
+
+    <canvas id="canvas" class="imageitem"></canvas>
+
+
+    <div class="overlay imageitem">
+      <span class="crop-handle-nw" draggable="true"></span>
+      <span class="crop-handle-ne" draggable="true"></span>
+
+
+      <!-- <div class="overlay-inner">
+      </div> -->
+
+      <span class="crop-handle-sw" draggable="true"></span>
+      <span class="crop-handle-se" draggable="true"></span>
+    </div>
+
+
+  </div>
+
 </div>

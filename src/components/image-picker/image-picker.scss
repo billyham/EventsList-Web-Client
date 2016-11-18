@@ -1,5 +1,5 @@
 @import "../../styles/site-settings";
-:local(.upload){
+:local(.picker){
 
   width: 100%;
 
@@ -10,7 +10,7 @@
     margin-right: auto;
   }
 
-  .cropimage{
+  .imageitem{
     position: absolute;
   }
 
@@ -18,7 +18,6 @@
   .addimage{
     // width: 130px;
     // height: 130px;
-    position: absolute;
     width: 220px;
     height: 220px;
     background-color: $background__imagebox;
@@ -39,10 +38,8 @@
     white-space: pre-line;
   }
 
-  .addimage__pristine{
-      color: $form-text__placeholder;
+  .dim{
+    opacity: 0.1;
   }
-
-
 
 }

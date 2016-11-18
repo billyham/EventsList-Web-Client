@@ -5,17 +5,21 @@ export default {
   template,
   bindings: {
     imagedata: '<',
-    imagetype: '<'
+    imagetype: '<',
+    clearImage: '&',
+    showError: '='
   },
   controller: ['$document', '$scope', controller]
-
 };
 
 function controller($document, $scope) {
   // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
-  this.showerror = false;
   // var _canvas = null;
+
+
+  // ------------------------------- Methods -------------------------------- //
+  this.tryClear = tryClear;
 
   // ---------------------------- Initialization ---------------------------- //
   const canvasWidth = 220;
@@ -23,7 +27,6 @@ function controller($document, $scope) {
 
   // Wait for HTML to render
   $scope.$watch('$ctrl.imagedata', () => {
-    this.showerror = false;
     if (!this.imagedata) return;
 
     const canvas = document.getElementById('canvas');
@@ -35,12 +38,14 @@ function controller($document, $scope) {
 
     // Make a blob from the image
     const blob = new Blob([this.imagedata], { type: this.imagetype });
+
     createImageBitmap(blob)
     .then( imageBitmap => {
 
       // Guard against images that are too small
       if (imageBitmap.height < 440 || imageBitmap.width < 440){
-        this.showerror = true;
+        this.showError = true;
+        this.tryClear();
         return;
       }
 
@@ -58,9 +63,18 @@ function controller($document, $scope) {
       const yoffset = (canvasHeight - finalHeight) / 2;
 
       ctx.drawImage(imageBitmap, xoffset, yoffset, finalWidth, finalHeight);
+
+
+
     });
 
   });
+
+  // Need to call $apply
+  function tryClear(){
+    this.clearImage();
+    $scope.$apply();
+  };
 
 
 

@@ -17,6 +17,7 @@ function controller(ckassetService, $scope){
   this.imagetype = '';
   this.imagedata = null;
   this.recordName = '';
+  this.showError = false;
 
   // ------------------------------- Methods -------------------------------- //
   this.dodrop = dodrop;
@@ -34,6 +35,7 @@ function controller(ckassetService, $scope){
     this.imagedata = null;
     this.imagetype = '';
     this.recordName = '';
+    this.showError = false;
 
     // Clear the value of the file input HTML element
     let filePath = document.getElementById(this.record);
@@ -41,7 +43,6 @@ function controller(ckassetService, $scope){
   }
 
   function dodrop(evnt) {
-
     evnt.stopPropagation();
     evnt.preventDefault();
 
@@ -59,6 +60,8 @@ function controller(ckassetService, $scope){
   };
 
   function loadImage(){
+    this.showError = false;
+
     let filePath = document.getElementById(this.record);
 
     // Guard against no files
@@ -81,6 +84,8 @@ function controller(ckassetService, $scope){
   };
 
   function submitRequest(){
+    if (!this.imagedata) return;
+
     // TODO: Provide UI sprite to indicate workin progress
 
     // Helper function requires 'This' context

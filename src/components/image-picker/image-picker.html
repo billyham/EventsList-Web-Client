@@ -1,13 +1,15 @@
-<div class="{{$ctrl.styles.upload}}">
+<div class="{{$ctrl.styles.picker}}">
   <div class="imagecontainer">
 
     <image-crop
-      class="cropimage"
+      class="imageitem"
       imagedata="$ctrl.imagedata"
-      imagetype="$ctrl.imagetype">
+      imagetype="$ctrl.imagetype"
+      clear-image="$ctrl.clearImage()"
+      show-error="$ctrl.showError">
     </image-crop>
 
-    <div class="addimage"
+    <div class="addimage imageitem"
       ng-class="{addimage__pristine: !$ctrl.imagetype}"
       ondragenter="event.stopPropagation(); event.preventDefault();"
       ondragover="event.stopPropagation(); event.preventDefault();"
@@ -18,6 +20,8 @@
 
   </div>
 
+  <p ng-show="$ctrl.showError" class="text__warning">Image needs to be at least 440px by 440px</p>
+
   <input type="file" name="file" id="{{$ctrl.record}}" class="file"></input><br>
   <button type="button" ng-click="$ctrl.clearImage()">Clear Image</button>
   <!-- <button type="button" ng-click="$ctrl.loadImage()" ng-class="{'button__inactive': !$ctrl.imagetype}">Load Image</button> -->
@@ -25,5 +29,5 @@
 </div>
 
 
-<!-- Removed from imagedropper because of the ngOnDrop function  -->
+<!-- Removed from addimage because of the ngOnDrop function  -->
 <!-- ondrop="event.stopPropagation(); event.preventDefault();" -->
