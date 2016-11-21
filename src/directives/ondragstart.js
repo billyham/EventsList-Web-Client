@@ -5,9 +5,10 @@ export default function() {
       // scope -> Access to the Angular controller's properties and methods
       // element -> The HTML element
       // attrs -> attributes (keys and values) of the HTML element
-      element.bind('drop', function(event){
-        scope.$ctrl.onDrop(event);
+      element.bind('dragstart', function(event){
+        scope.$ctrl.onDragStart(event);
       });
     }
   };
+
 }

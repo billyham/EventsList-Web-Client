@@ -1,22 +1,13 @@
 <div class="{{$ctrl.styles.crop}}">
 
-  <div class="imagecontainer">
+  <div class="image-container"
+    ng-mousedown="$ctrl.onMouseDown($event)"
+    ng-mousemove="$ctrl.onMouseMove($event)"
+    ng-mouseup="$ctrl.onMouseUp($event)"
+    ng-mouseleave="$ctrl.onMouseLeave($event)">
 
-    <canvas id="canvas" class="imageitem"></canvas>
-
-
-    <div class="overlay imageitem">
-      <span class="crop-handle-nw" draggable="true"></span>
-      <span class="crop-handle-ne" draggable="true"></span>
-
-
-      <!-- <div class="overlay-inner">
-      </div> -->
-
-      <span class="crop-handle-sw" draggable="true"></span>
-      <span class="crop-handle-se" draggable="true"></span>
-    </div>
-
+    <canvas id="canvas-image" class="image-item canvas-image image-initial-size"></canvas>
+    <canvas id="canvas-overlay" class="image-item canvas-overlay image-initial-size"></canvas>
 
   </div>
 

@@ -20,7 +20,7 @@ function controller(ckassetService, $scope){
   this.showError = false;
 
   // ------------------------------- Methods -------------------------------- //
-  this.dodrop = dodrop;
+  this.onDrop = onDrop;
   this.clearImage = clearImage;
   this.loadImage = loadImage;
   this.submitRequest = submitRequest;
@@ -42,7 +42,7 @@ function controller(ckassetService, $scope){
     angular.element(filePath).val('');
   }
 
-  function dodrop(evnt) {
+  function onDrop(evnt) {
     evnt.stopPropagation();
     evnt.preventDefault();
 
@@ -66,7 +66,6 @@ function controller(ckassetService, $scope){
 
     // Guard against no files
     if (filePath.files.length < 1) return;
-
     let file = filePath.files[0];
 
     // Save Content-Type, to be given to ckasset method
@@ -86,7 +85,7 @@ function controller(ckassetService, $scope){
   function submitRequest(){
     if (!this.imagedata) return;
 
-    // TODO: Provide UI sprite to indicate workin progress
+    // TODO: Provide UI sprite to indicate progress
 
     // Helper function requires 'This' context
     _cloudKitUpload.call(this, () => {

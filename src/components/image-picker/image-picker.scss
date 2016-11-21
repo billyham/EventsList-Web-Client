@@ -3,21 +3,22 @@
 
   width: 100%;
 
-  .imagecontainer{
-    width: 220px;
-    height: 220px;
+  .image-container{
     margin-left: auto;
     margin-right: auto;
   }
 
-  .imageitem{
+  .image-item{
     position: absolute;
+  }
+
+  .image-initial-size{
+    width: 220px;
+    height: 220px;
   }
 
 // TODO: This is duplicated from event.scss. DRY it out.
   .addimage{
-    // width: 130px;
-    // height: 130px;
     width: 220px;
     height: 220px;
     background-color: $background__imagebox;
@@ -26,8 +27,6 @@
 
     // The following is not from event.scss
     border-radius: 4px;
-    // margin-top: .5em;
-    // margin-bottom: .5em;
     padding: .5em;
 
     // Text styling

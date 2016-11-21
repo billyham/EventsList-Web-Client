@@ -1,25 +1,30 @@
 <div class="{{$ctrl.styles.picker}}">
-  <div class="imagecontainer">
 
+  <!-- |=========================== Image & Crop =========================== -->
+  <div class="image-container image-initial-size">
+
+    <!-- ==|========================== Crop ================================ -->
     <image-crop
-      class="imageitem"
+      class="image-item"
       imagedata="$ctrl.imagedata"
       imagetype="$ctrl.imagetype"
       clear-image="$ctrl.clearImage()"
       show-error="$ctrl.showError">
     </image-crop>
 
-    <div class="addimage imageitem"
+    <!-- ==|========================== Image =============================== -->
+    <div class="addimage image-item"
       ng-class="{addimage__pristine: !$ctrl.imagetype}"
       ondragenter="event.stopPropagation(); event.preventDefault();"
       ondragover="event.stopPropagation(); event.preventDefault();"
-      ng-on-drop="$ctrl.dodrop()"
+      ng-on-drop
       ng-hide="$ctrl.imagedata">
       {{$ctrl.boxtext}}
     </div>
 
   </div>
 
+  <!-- |============================== Buttons ============================= -->
   <p ng-show="$ctrl.showError" class="text__warning">Image needs to be at least 440px by 440px</p>
 
   <input type="file" name="file" id="{{$ctrl.record}}" class="file"></input><br>
