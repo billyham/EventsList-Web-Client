@@ -7,6 +7,7 @@
     <image-crop
       class="image-item"
       imagedata="$ctrl.imagedata"
+      cropped-image-data="$ctrl.croppedImageData"
       imagetype="$ctrl.imagetype"
       clear-image="$ctrl.clearImage()"
       show-error="$ctrl.showError">
@@ -30,9 +31,7 @@
   <input type="file" name="file" id="{{$ctrl.record}}" class="file"></input><br>
   <button type="button" ng-click="$ctrl.clearImage()">Clear Image</button>
   <!-- <button type="button" ng-click="$ctrl.loadImage()" ng-class="{'button__inactive': !$ctrl.imagetype}">Load Image</button> -->
-  <button type="submit" ng-click="$ctrl.submitRequest()" ng-class="{'button__inactive': !$ctrl.imagedata}">Submit</button>
+  <button type="submit"
+    ng-click="$ctrl.submitRequest()"
+    ng-class="{'button__inactive': !$ctrl.imagedata}">Submit</button>
 </div>
-
-
-<!-- Removed from addimage because of the ngOnDrop function  -->
-<!-- ondrop="event.stopPropagation(); event.preventDefault();" -->

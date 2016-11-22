@@ -5,6 +5,7 @@ export default {
   template,
   bindings: {
     imagedata: '<',
+    croppedImageData: '=',
     imagetype: '<',
     clearImage: '&',
     showError: '='
@@ -18,15 +19,20 @@ function controller($document, $scope) {
   this.isEditing = false;
   this.canvasWidth = 0;
   this.canvasHeight = 0;
+  this.imageBitmap = null;
+  this.overlayOriginX = 0;
+  this.overlayOriginY = 0;
+  this.resizeRatio = 1;
 
   // ------------------------------- Methods -------------------------------- //
   this.setSize = setSize;
   this.tryClear = tryClear;
+  this.drawCrop = drawCrop;
   this.onMouseMove = onMouseMove;
   this.onMouseDown = onMouseDown;
   this.onMouseUp = onMouseUp;
   this.onMouseLeave = onMouseLeave;
-  this.drawCrop = drawCrop;
+  this.drawCroppedCanvas = drawCroppedCanvas;
 
   // ---------------------------- Initialization ---------------------------- //
   const initiaWidth = 220, initialHeight = 220;
@@ -51,24 +57,26 @@ function controller($document, $scope) {
         this.tryClear();
         return;
       }
-
-      // Identify the resize-ratio
-      let ratio = 1;
+      this.imageBitmap = imageBitmap;
+      // Identify the resize-ratio and aspect ratio
+      let aspectRatio = 1;
       let landscape = imageBitmap.width >= imageBitmap.height;
       const big = landscape ? imageBitmap.width : imageBitmap.height;
       const small = landscape ? imageBitmap.height : imageBitmap.width;
-      ratio = big / small;
+      aspectRatio = big / small;
+      this.resizeRatio = landscape ? imageBitmap.height / 440 : imageBitmap.width / 440;
 
-      const finalWidth = landscape ? this.canvasWidth * ratio : this.canvasWidth;
-      const finalHeight = landscape ? this.canvasHeight : this.canvasHeight * ratio ;
+      const finalWidth = landscape ? this.canvasWidth * aspectRatio : this.canvasWidth;
+      const finalHeight = landscape ? this.canvasHeight : this.canvasHeight * aspectRatio ;
 
       // Adjust elements to new size
       this.setSize(finalWidth, finalHeight);
-
-      const xoffset = (this.canvasWidth - finalWidth) / 2;
-      const yoffset = (this.canvasHeight - finalHeight) / 2;
-
-      ctx.drawImage(imageBitmap, xoffset, yoffset, finalWidth, finalHeight);
+      // Draw to canvas-image
+      ctx.drawImage(imageBitmap, 0, 0, finalWidth, finalHeight);
+      // Draw an initial overlay
+      this.drawCrop({pageX: 0, pageY: 0});
+      // Create an initial cropped image
+      this.drawCroppedCanvas();
     });
   });
 
@@ -100,7 +108,6 @@ function controller($document, $scope) {
 
   // Crop overlay canvas
   function drawCrop(event){
-    if (!this.isEditing) return;
     // The crop box size
     const cropSize = 220;
     const cropHalf = cropSize / 2;
@@ -112,7 +119,7 @@ function controller($document, $scope) {
     // ---------------------------------------------------------------------- //
     // courtesy of http://simonsarris.com/blog/510-making-html5-canvas-useful
     var element = canvas, offsetX = 0, offsetY = 0;
-  
+
     if (element.offsetParent !== undefined) {
       do {
         offsetX += element.offsetLeft;
@@ -123,7 +130,7 @@ function controller($document, $scope) {
     let y = event.pageY - offsetY;
     // ---------------------------------------------------------------------- //
 
-    // Keep the rect in the frame
+    // Keep overlay rect in the frame
     if (x < cropHalf) x = cropHalf;
     if (x > this.canvasWidth - cropHalf) x = this.canvasWidth - cropHalf;
     if (y < cropHalf) y = cropHalf;
@@ -133,6 +140,9 @@ function controller($document, $scope) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = 'white';
     ctx.strokeRect(x - cropHalf, y - cropHalf, cropSize, cropSize);
+
+    this.overlayOriginX = (x - cropHalf) * 2;
+    this.overlayOriginY = (y - cropHalf) * 2;
   }
 
   function onMouseDown(event){
@@ -141,15 +151,45 @@ function controller($document, $scope) {
   }
 
   function onMouseMove(event){
+    if (!this.isEditing) return;
     this.drawCrop(event);
   }
 
   function onMouseUp(){
     this.isEditing = false;
+    this.drawCroppedCanvas();
   }
 
   function onMouseLeave(){
     this.isEditing = false;
+    this.drawCroppedCanvas();
+  }
+
+  function drawCroppedCanvas(){
+    const croppedCanvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas');
+    croppedCanvas.width = 440;
+    croppedCanvas.height = 440;
+
+    const cropCtx = croppedCanvas.getContext('2d');
+    cropCtx.drawImage(
+      this.imageBitmap,
+      this.overlayOriginX * this.resizeRatio,
+      this.overlayOriginY * this.resizeRatio,
+      440 * this.resizeRatio,
+      440 * this.resizeRatio,
+      0,
+      0,
+      440,
+      440
+    );
+    // Convert Canvas > Blob > ArrayBuffer
+    croppedCanvas.toBlob( blob => {
+      var fileReader = new FileReader();
+      fileReader.onloadend = element => {
+        this.croppedImageData = element.target.result;
+      };
+      fileReader.readAsArrayBuffer(blob);
+    }, 'image/png');
   }
 
 }

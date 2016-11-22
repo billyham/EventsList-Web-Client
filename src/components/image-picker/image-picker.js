@@ -16,12 +16,13 @@ function controller(ckassetService, $scope){
   this.boxtext = 'Drag and drop an image file';
   this.imagetype = '';
   this.imagedata = null;
+  this.croppedImageData = null;
   this.recordName = '';
   this.showError = false;
 
   // ------------------------------- Methods -------------------------------- //
-  this.onDrop = onDrop;
   this.clearImage = clearImage;
+  this.onDrop = onDrop;
   this.loadImage = loadImage;
   this.submitRequest = submitRequest;
 
@@ -83,7 +84,7 @@ function controller(ckassetService, $scope){
   };
 
   function submitRequest(){
-    if (!this.imagedata) return;
+    if (!this.croppedImageData) return;
 
     // TODO: Provide UI sprite to indicate progress
 
@@ -101,9 +102,9 @@ function controller(ckassetService, $scope){
 
     ckassetService.request()
     .then( tokenResponseDictionary => {
-      var data = new Uint8Array(this.imagedata);
+      var data = new Uint8Array(this.croppedImageData);
 
-      ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, this.imagetype, assetDictionary => {
+      ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, 'image/png', assetDictionary => {
         this.recordName = tokenResponseDictionary.data.tokens[0].recordName;
         const { name } = filePath.files[0];
         const { singleFile } = assetDictionary.data;
@@ -112,6 +113,9 @@ function controller(ckassetService, $scope){
           if (cb) cb();
         });
       });
+    })
+    .catch( err => {
+      console.log('err trying to upload image', err);
     });
   }
 
