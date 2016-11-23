@@ -28,7 +28,7 @@
   <!-- |============================== Buttons ============================= -->
   <p ng-show="$ctrl.showError" class="text__warning">Image needs to be at least 440px by 440px</p>
 
-  <input type="file" name="file" id="{{$ctrl.record}}" class="file"></input><br>
+  <input type="file" name="file" id="{{$ctrl.record}}" class="file" ng-on-change></input><br>
   <button type="button" ng-click="$ctrl.clearImage()">Clear Image</button>
   <!-- <button type="button" ng-click="$ctrl.loadImage()" ng-class="{'button__inactive': !$ctrl.imagetype}">Load Image</button> -->
   <button type="submit"

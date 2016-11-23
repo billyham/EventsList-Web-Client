@@ -22,12 +22,11 @@ function controller(ckassetService, $scope){
 
   // ------------------------------- Methods -------------------------------- //
   this.clearImage = clearImage;
+  this.onChange = onChange;
   this.onDrop = onDrop;
   this.loadImage = loadImage;
   this.submitRequest = submitRequest;
-
   // ------------------------------- Init ----------------------------------- //
-
 
   // -------------------------- Function declarions ------------------------- //
   function clearImage(){
@@ -43,21 +42,26 @@ function controller(ckassetService, $scope){
     angular.element(filePath).val('');
   }
 
+  // Watch for changes in the input-file element
+  function onChange(){
+    this.loadImage();
+  }
+
   function onDrop(evnt) {
     evnt.stopPropagation();
     evnt.preventDefault();
-
-    // Set files on input-file HTML element
-    let filePath = document.getElementById(this.record);
-    // dataTranfser is a property on all drag events
-    filePath.files = evnt.dataTransfer.files;
-
     if (evnt.dataTransfer.files.length < 1) return;
 
     this.boxtext = evnt.dataTransfer.files[0].name;
     this.imagetype = evnt.dataTransfer.files[0].type;
-    this.loadImage();
 
+    // Set files on input-file HTML element
+    let filePath = document.getElementById(this.record);
+
+    // TODO: Firefox doesn't allow this, filePath.files is READ only
+    filePath.files = evnt.dataTransfer.files;
+
+    // onChange will fire next...
   };
 
   function loadImage(){

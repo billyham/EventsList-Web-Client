@@ -1,5 +1,6 @@
 import template from './image-crop.html';
 import styles from './image-crop.scss';
+import EXIF from 'exif-js';
 
 export default {
   template,
@@ -10,10 +11,10 @@ export default {
     clearImage: '&',
     showError: '='
   },
-  controller: ['$document', '$scope', controller]
+  controller: ['$document', '$scope', '$window', controller]
 };
 
-function controller($document, $scope) {
+function controller($document, $scope, $window) {
   // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
   this.isEditing = false;
@@ -23,11 +24,12 @@ function controller($document, $scope) {
   this.overlayOriginX = 0;
   this.overlayOriginY = 0;
   this.resizeRatio = 1;
+  this.rawWidth = 0;
+  this.rawHeight = 0;
 
   // ------------------------------- Methods -------------------------------- //
   this.setSize = setSize;
-  this.tryClear = tryClear;
-  this.drawCrop = drawCrop;
+  this.drawOverlay = drawOverlay;
   this.onMouseMove = onMouseMove;
   this.onMouseDown = onMouseDown;
   this.onMouseUp = onMouseUp;
@@ -41,43 +43,57 @@ function controller($document, $scope) {
   // Wait for HTML to render, watch for changes to imageData
   $scope.$watch('$ctrl.imagedata', () => {
     this.setSize(initiaWidth, initialHeight);
+
     if (!this.imagedata) return;
 
     const canvas = document.getElementById('canvas-image');
     var ctx = canvas.getContext('2d');
 
-    // Make a blob from the image
-    const blob = new Blob([this.imagedata], { type: this.imagetype });
-    // Make a bitmap from blob
-    createImageBitmap(blob)
-    .then( imageBitmap => {
-      // Guard against images that are too small
-      if (imageBitmap.height < 440 || imageBitmap.width < 440){
-        this.showError = true;
-        this.tryClear();
-        return;
-      }
-      this.imageBitmap = imageBitmap;
-      // Identify the resize-ratio and aspect ratio
-      let aspectRatio = 1;
-      let landscape = imageBitmap.width >= imageBitmap.height;
-      const big = landscape ? imageBitmap.width : imageBitmap.height;
-      const small = landscape ? imageBitmap.height : imageBitmap.width;
-      aspectRatio = big / small;
-      this.resizeRatio = landscape ? imageBitmap.height / 440 : imageBitmap.width / 440;
+    if (this.imagetype === 'image/png'){
+      const dataV = new DataView(this.imagedata);
+      this.rawWidth = dataV.getUint32(16);
+      this.rawHeight = dataV.getUint32(20);
+    }
+    // TODO: I think this works for TIFF formats too
+    if (this.imagetype === 'image/jpeg'){
+      const exifObj = EXIF.readFromBinaryFile(this.imagedata);
+      this.rawWidth = exifObj.PixelXDimension;
+      this.rawHeight = exifObj.PixelYDimension;
+    }
 
-      const finalWidth = landscape ? this.canvasWidth * aspectRatio : this.canvasWidth;
-      const finalHeight = landscape ? this.canvasHeight : this.canvasHeight * aspectRatio ;
+    // Guard against images that are too small
+    if (this.rawWidth < 440 || this.rawHeight < 440){
+      this.showError = true;
+      this.clearImage();
+      return;
+    }
 
-      // Adjust elements to new size
-      this.setSize(finalWidth, finalHeight);
-      // Draw to canvas-image
-      ctx.drawImage(imageBitmap, 0, 0, finalWidth, finalHeight);
-      // Draw an initial overlay
-      this.drawCrop({pageX: 0, pageY: 0});
-      // Create an initial cropped image
-      this.drawCroppedCanvas();
-    });
+    // Identify the resize-ratio and aspect ratio
+    let aspectRatio = 1;
+    let landscape = this.rawWidth >= this.rawHeight;
+    const big = landscape ? this.rawWidth : this.rawHeight;
+    const small = landscape ? this.rawHeight : this.rawWidth;
+    aspectRatio = big / small;
+    this.resizeRatio = landscape ? this.rawHeight / 440 : this.rawWidth / 440;
+
+    const finalWidth = landscape ? this.canvasWidth * aspectRatio : this.canvasWidth;
+    const finalHeight = landscape ? this.canvasHeight : this.canvasHeight * aspectRatio ;
+
+    // Adjust elements to new size
+    this.setSize(finalWidth, finalHeight);
+
+    const imageForDraw = new Image(finalWidth, finalHeight);
+    const blobForDraw = new Blob([this.imagedata], { type: this.imagetype });
+    imageForDraw.src = $window.URL.createObjectURL(blobForDraw);
+    imageForDraw.onload = function(){
+      // Draw the image canvas
+      ctx.drawImage(imageForDraw, 0, 0, finalWidth, finalHeight);
+    };
+
+    // Draw an initial overlay
+    this.drawOverlay({pageX: 0, pageY: 0});
+    // Create an initial cropped image
+    this.drawCroppedCanvas();
   });
 
   // ------------------------ Function declarations ------------------------- //
@@ -100,14 +116,8 @@ function controller($document, $scope) {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
   }
 
-  // Called automatically when image doesn't match mimimum size
-  function tryClear(){
-    this.clearImage();
-    $scope.$apply();
-  };
-
   // Crop overlay canvas
-  function drawCrop(event){
+  function drawOverlay(event){
     // The crop box size
     const cropSize = 220;
     const cropHalf = cropSize / 2;
@@ -147,12 +157,12 @@ function controller($document, $scope) {
 
   function onMouseDown(event){
     this.isEditing = true;
-    this.drawCrop(event);
+    this.drawOverlay(event);
   }
 
   function onMouseMove(event){
     if (!this.isEditing) return;
-    this.drawCrop(event);
+    this.drawOverlay(event);
   }
 
   function onMouseUp(){
@@ -161,8 +171,8 @@ function controller($document, $scope) {
   }
 
   function onMouseLeave(){
+    if (this.isEditing) this.drawCroppedCanvas();
     this.isEditing = false;
-    this.drawCroppedCanvas();
   }
 
   function drawCroppedCanvas(){
@@ -170,26 +180,52 @@ function controller($document, $scope) {
     croppedCanvas.width = 440;
     croppedCanvas.height = 440;
 
-    const cropCtx = croppedCanvas.getContext('2d');
-    cropCtx.drawImage(
-      this.imageBitmap,
-      this.overlayOriginX * this.resizeRatio,
-      this.overlayOriginY * this.resizeRatio,
-      440 * this.resizeRatio,
-      440 * this.resizeRatio,
-      0,
-      0,
-      440,
-      440
-    );
-    // Convert Canvas > Blob > ArrayBuffer
-    croppedCanvas.toBlob( blob => {
-      var fileReader = new FileReader();
-      fileReader.onloadend = element => {
-        this.croppedImageData = element.target.result;
-      };
-      fileReader.readAsArrayBuffer(blob);
-    }, 'image/png');
+    const imageForDraw = new Image();
+    const blobForDraw = new Blob([this.imagedata], { type: this.imagetype });
+    imageForDraw.src = $window.URL.createObjectURL(blobForDraw);
+    imageForDraw.onload = () => {
+
+      const cropCtx = croppedCanvas.getContext('2d');
+      cropCtx.drawImage(
+        imageForDraw,
+        this.overlayOriginX * this.resizeRatio,
+        this.overlayOriginY * this.resizeRatio,
+        440 * this.resizeRatio,
+        440 * this.resizeRatio,
+        0,
+        0,
+        440,
+        440
+      );
+      // Convert Canvas > Blob > ArrayBuffer
+      // -------------------------------------------------------------------- //
+      // toBlob() is NOT available in Safari / WebKit
+      // Polyfill courtesy of: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
+      if (!HTMLCanvasElement.prototype.toBlob) {
+        Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+          value: function (callback, type, quality) {
+
+            var binStr = atob( this.toDataURL(type, quality).split(',')[1] ),
+              len = binStr.length,
+              arr = new Uint8Array(len);
+
+            for (var i=0; i<len; i++ ) {
+              arr[i] = binStr.charCodeAt(i);
+            }
+
+            callback( new Blob( [arr], {type: type || 'image/png'} ) );
+          }
+        });
+      }
+      // -------------------------------------------------------------------- //
+      croppedCanvas.toBlob( blob => {
+        var fileReader = new FileReader();
+        fileReader.onloadend = element => {
+          this.croppedImageData = element.target.result;
+        };
+        fileReader.readAsArrayBuffer(blob);
+      }, 'image/png');
+    };
   }
 
 }
