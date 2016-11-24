@@ -4,7 +4,11 @@
     ng-mousedown="$ctrl.onMouseDown($event)"
     ng-mousemove="$ctrl.onMouseMove($event)"
     ng-mouseup="$ctrl.onMouseUp($event)"
-    ng-mouseleave="$ctrl.onMouseLeave($event)">
+    ng-mouseleave="$ctrl.onMouseLeave($event)"
+    ng-on-touch-start="$ctrl.onMouseDown($event)"
+    ng-on-touch-move="$ctrl.onMouseMove($event)"
+    ng-on-touch-end="$ctrl.onMouseUp($event)"
+    ng-on-touch-cancel="$ctrl.onMouseLeave($event)">
 
     <canvas id="canvas-image" class="image-item canvas-image image-initial-size"></canvas>
     <canvas id="canvas-overlay" class="image-item canvas-overlay image-initial-size"></canvas>

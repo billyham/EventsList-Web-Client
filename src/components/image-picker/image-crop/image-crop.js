@@ -30,11 +30,17 @@ function controller($document, $scope, $window) {
   // ------------------------------- Methods -------------------------------- //
   this.setSize = setSize;
   this.drawOverlay = drawOverlay;
-  this.onMouseMove = onMouseMove;
+  this.drawCroppedCanvas = drawCroppedCanvas;
+  // Mouse events
   this.onMouseDown = onMouseDown;
+  this.onMouseMove = onMouseMove;
   this.onMouseUp = onMouseUp;
   this.onMouseLeave = onMouseLeave;
-  this.drawCroppedCanvas = drawCroppedCanvas;
+  // Touch events
+  this.onTouchStart = onMouseDown;
+  this.onTouchMove = onMouseMove;
+  this.onTouchEnd = onMouseUp;
+  this.onTouchCancel = onMouseLeave;
 
   // ---------------------------- Initialization ---------------------------- //
   const initiaWidth = 220, initialHeight = 220;
@@ -141,16 +147,23 @@ function controller($document, $scope, $window) {
 
     // ---------------------------------------------------------------------- //
     // courtesy of http://simonsarris.com/blog/510-making-html5-canvas-useful
+    // TODO: Need to factor in the movement of the angular model window
     var element = canvas, offsetX = 0, offsetY = 0;
-
     if (element.offsetParent !== undefined) {
       do {
         offsetX += element.offsetLeft;
         offsetY += element.offsetTop;
       } while ((element = element.offsetParent));
     }
-    let x = event.pageX - offsetX;
-    let y = event.pageY - offsetY;
+
+    let x = event.pageX - (offsetX + $window.scrollX);
+    let y = event.pageY - (offsetY + $window.scrollY);
+
+    // Accommodate touch events
+    if (event.touches && event.touches.length > 0){
+      x = event.touches.item(0).pageX - (offsetX + $window.scrollX);
+      y = event.touches.item(0).pageY - (offsetY + $window.scrollY);
+    }
     // ---------------------------------------------------------------------- //
 
     // Keep overlay rect in the frame
@@ -179,8 +192,8 @@ function controller($document, $scope, $window) {
   }
 
   function onMouseUp(){
+    if (this.isEditing) this.drawCroppedCanvas();
     this.isEditing = false;
-    this.drawCroppedCanvas();
   }
 
   function onMouseLeave(){
