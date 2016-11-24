@@ -49,16 +49,29 @@ function controller($document, $scope, $window) {
     const canvas = document.getElementById('canvas-image');
     var ctx = canvas.getContext('2d');
 
+    const dataV = new DataView(this.imagedata);
     if (this.imagetype === 'image/png'){
-      const dataV = new DataView(this.imagedata);
       this.rawWidth = dataV.getUint32(16);
       this.rawHeight = dataV.getUint32(20);
     }
-    // TODO: I think this works for TIFF formats too
     if (this.imagetype === 'image/jpeg'){
       const exifObj = EXIF.readFromBinaryFile(this.imagedata);
-      this.rawWidth = exifObj.PixelXDimension;
-      this.rawHeight = exifObj.PixelYDimension;
+      if (!exifObj){
+        for(let x = 0; x < 4000; x++){
+          if (dataV.getUint8(x) === 255){
+            if (dataV.getUint8(x+1) === 192){
+              this.rawHeight = dataV.getUint16(x + 5);
+              this.rawWidth = dataV.getUint16(x + 7);
+              break;
+            // }else if(dataV.getUint8(x+1) === 194){
+            //   console.log('found SOF2 marker at: ', x);
+            }
+          }
+        }
+      }else{
+        this.rawWidth = exifObj.PixelXDimension;
+        this.rawHeight = exifObj.PixelYDimension;
+      }
     }
 
     // Guard against images that are too small
