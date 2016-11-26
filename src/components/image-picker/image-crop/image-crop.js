@@ -42,7 +42,7 @@ function controller($document, $scope, $window) {
   this.onTouchEnd = onMouseUp;
   this.onTouchCancel = onMouseLeave;
 
-  // ---------------------------- Initialization ---------------------------- //
+  // -------------------------------- Init ---------------------------------- //
   const initiaWidth = 220, initialHeight = 220;
   this.canvasWidth = initiaWidth, this.canvasHeight = initialHeight;
 
@@ -66,13 +66,14 @@ function controller($document, $scope, $window) {
       for(let x = 0; x < 40000; x++){
         if (dataV.getUint8(x) === 255){
 
+          // APPO marker
           if(dataV.getUint8(x+1) === 224){
-            // APPO header
             // console.log('density units: ', dataV.getUint8(11));
             // console.log('x density: ', dataV.getUint16(x + 12));
             // console.log('y density: ', dataV.getUint16(x + 14));
           }
 
+          // Start Of Frame marker
           if (dataV.getUint8(x+1) === 192){
             // console.log('found SOF0 marker at: ', x);
             this.rawHeight = dataV.getUint16(x + 5);
@@ -92,13 +93,13 @@ function controller($document, $scope, $window) {
             this.rawWidth = dataV.getUint16(x + 7);
           }
 
-          // start of scan, stop looking for headers
+          //Start Of Scan marker, stop looking for markers
           if (dataV.getUint8(x+1) === 218) break;
         }
-        // if (x === 39999) console.log('more than 4000 bytes');
+        // if (x === 39999) console.log('more than 40000 bytes');
       }
 
-      // Override raw header info if EXIF data exists
+      // Override raw JPEG and PNG header info if EXIF data exists
       const exifObj = EXIF.readFromBinaryFile(this.imagedata);
       // console.log('exif: ', exifObj);
       if (exifObj && exifObj.PixelXDimension && exifObj.PixelYDimension){

@@ -19,6 +19,7 @@ function controller(ckassetService, $scope){
   this.croppedImageData = null;
   this.recordName = '';
   this.showError = false;
+  this.fileName = '';
 
   // ------------------------------- Methods -------------------------------- //
   this.clearImage = clearImage;
@@ -43,8 +44,8 @@ function controller(ckassetService, $scope){
   }
 
   // Watch for changes in the input-file element
-  function onChange(){
-    this.loadImage();
+  function onChange(tryFiles){
+    this.loadImage(tryFiles);
   }
 
   function onDrop(evnt) {
@@ -55,24 +56,19 @@ function controller(ckassetService, $scope){
     this.boxtext = evnt.dataTransfer.files[0].name;
     this.imagetype = evnt.dataTransfer.files[0].type;
 
-    // Set files on input-file HTML element
-    let filePath = document.getElementById(this.record);
-
-    // TODO: Firefox doesn't allow this, filePath.files is READ only
-    filePath.files = evnt.dataTransfer.files;
-
-    // onChange will fire next...
+    this.loadImage(evnt.dataTransfer.files);
   };
 
-  function loadImage(){
+  function loadImage(tryFiles){
     this.showError = false;
+    this.fileName = '';
 
-    let filePath = document.getElementById(this.record);
+    if (!tryFiles || tryFiles.length < 1) return;
 
-    // Guard against no files
-    if (filePath.files.length < 1) return;
-    let file = filePath.files[0];
+    let file = tryFiles[0];
 
+    // Save file name, to be given to ckasset method
+    this.fileName = file.name;
     // Save Content-Type, to be given to ckasset method
     // TODO: guard against non-image Content-Types
     this.imagetype = file.type;
@@ -88,6 +84,10 @@ function controller(ckassetService, $scope){
   };
 
   function submitRequest(){
+    // TODO: Revoke ObjectURLs
+    // Is this necessary? Weird location dealing with createObjectURL in image-crop...
+    // $window.URL.revokeObjectURL();
+
     if (!this.croppedImageData) return;
 
     // TODO: Provide UI sprite to indicate progress
@@ -102,15 +102,13 @@ function controller(ckassetService, $scope){
   // Call upon the ckasset service to upload the image to CloudKit,
   // a sequence of three distinct ckasset calls
   function _cloudKitUpload(cb){
-    let filePath = document.getElementById(this.record);
-
     ckassetService.request()
     .then( tokenResponseDictionary => {
       var data = new Uint8Array(this.croppedImageData);
 
       ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, 'image/png', assetDictionary => {
         this.recordName = tokenResponseDictionary.data.tokens[0].recordName;
-        const { name } = filePath.files[0];
+        const name = this.fileName;
         const { singleFile } = assetDictionary.data;
         const referenceObj = { type: 'REFERENCE', value: { recordName: this.record, action: 'DELETE_SELF' } };
         ckassetService.modify(name, referenceObj, this.recordName, singleFile, finalObj => {  //eslint-disable-line

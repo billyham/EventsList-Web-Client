@@ -2,8 +2,9 @@ export default function(){
   return{
     scope: false,
     link: function(scope, element){
-      element.bind('change', function(){
-        scope.$ctrl.onChange();
+      element.bind('change', () => {
+        // Provide input files to change handler
+        scope.$ctrl.onChange(element[0].files);
       });
     }
   };
