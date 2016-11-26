@@ -49,6 +49,7 @@ function controller($document, $scope, $window) {
   // Wait for HTML to render, watch for changes to imageData
   $scope.$watch('$ctrl.imagedata', () => {
     this.setSize(initiaWidth, initialHeight);
+    this.rawWidth = this.rawHeight = 0;
 
     if (!this.imagedata) return;
 
@@ -61,26 +62,53 @@ function controller($document, $scope, $window) {
       this.rawHeight = dataV.getUint32(20);
     }
     if (this.imagetype === 'image/jpeg'){
-      const exifObj = EXIF.readFromBinaryFile(this.imagedata);
-      if (!exifObj){
-        for(let x = 0; x < 4000; x++){
-          if (dataV.getUint8(x) === 255){
-            if (dataV.getUint8(x+1) === 192){
-              this.rawHeight = dataV.getUint16(x + 5);
-              this.rawWidth = dataV.getUint16(x + 7);
-              break;
-            // }else if(dataV.getUint8(x+1) === 194){
-            //   console.log('found SOF2 marker at: ', x);
-            }
+
+      for(let x = 0; x < 40000; x++){
+        if (dataV.getUint8(x) === 255){
+
+          if(dataV.getUint8(x+1) === 224){
+            // APPO header
+            // console.log('density units: ', dataV.getUint8(11));
+            // console.log('x density: ', dataV.getUint16(x + 12));
+            // console.log('y density: ', dataV.getUint16(x + 14));
           }
+
+          if (dataV.getUint8(x+1) === 192){
+            // console.log('found SOF0 marker at: ', x);
+            this.rawHeight = dataV.getUint16(x + 5);
+            this.rawWidth = dataV.getUint16(x + 7);
+            // console.log('height and width: ', dataV.getUint16(x + 5), dataV.getUint16(x + 7));
+          }
+
+          if(dataV.getUint8(x+1) === 193){
+            // console.log('found SOF1 marker at: ', x);
+            this.rawHeight = dataV.getUint16(x + 5);
+            this.rawWidth = dataV.getUint16(x + 7);
+          }
+
+          if(dataV.getUint8(x+1) === 194){
+            // console.log('found SOF2 marker at: ', x);
+            this.rawHeight = dataV.getUint16(x + 5);
+            this.rawWidth = dataV.getUint16(x + 7);
+          }
+
+          // start of scan, stop looking for headers
+          if (dataV.getUint8(x+1) === 218) break;
         }
-      }else{
+        // if (x === 39999) console.log('more than 4000 bytes');
+      }
+
+      // Override raw header info if EXIF data exists
+      const exifObj = EXIF.readFromBinaryFile(this.imagedata);
+      // console.log('exif: ', exifObj);
+      if (exifObj && exifObj.PixelXDimension && exifObj.PixelYDimension){
         this.rawWidth = exifObj.PixelXDimension;
         this.rawHeight = exifObj.PixelYDimension;
       }
     }
 
     // Guard against images that are too small
+    if (this.rawWidth === 0 && this.rawHeight === 0) console.log('failed to read image dimensions');
     if (this.rawWidth < 440 || this.rawHeight < 440){
       this.showError = true;
       this.clearImage();
@@ -116,7 +144,7 @@ function controller($document, $scope, $window) {
   });
 
   // ------------------------ Function declarations ------------------------- //
-  // Set size of image canvas and container elements based on bitmap size
+  // Set size of image canvas and container elements based on raw image size
   function setSize(setWidth, setHeight){
 
     const collectionOfElements = document.getElementsByClassName('image-initial-size');
@@ -172,11 +200,18 @@ function controller($document, $scope, $window) {
     if (y < cropHalf) y = cropHalf;
     if (y > this.canvasHeight - cropHalf) y = this.canvasHeight - cropHalf;
 
+    // Draw cropping frame
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = 'white';
     ctx.strokeRect(x - cropHalf, y - cropHalf, cropSize, cropSize);
+    // Draw semi-transparent overlay on cropped out parts of image
+    let landscape = this.rawWidth >= this.rawHeight;
+    ctx.fillStyle = 'hsla(1, 1%, 1%, 0.4)';
+    ctx.fillRect(0, 0, landscape ? x - cropHalf : this.canvasWidth, landscape ? this.canvasHeight : y - cropHalf);
+    ctx.fillRect(landscape ? x + cropHalf : 0, landscape ? 0 : y + cropHalf, canvas.width, canvas.height);
 
+    // Save origin at full size resolution
     this.overlayOriginX = (x - cropHalf) * 2;
     this.overlayOriginY = (y - cropHalf) * 2;
   }
