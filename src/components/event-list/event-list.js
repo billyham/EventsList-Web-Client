@@ -40,7 +40,7 @@ function controller(ckqueryService, ckconfigureService, $scope){
     ).then(result => {
       this.ckqueryResult.records = this.ckqueryResult.records.concat(result.records);
       this.ckqueryResult.continuationMarker = result.continuationMarker;
-      $scope.$apply();  // Forces Angular to evalute any $watchers
+      $scope.$apply(); 
     }).catch(error => {
       console.log('loadMore error ' + error);
     });

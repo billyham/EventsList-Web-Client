@@ -1,6 +1,6 @@
 import template from './image-crop.html';
 import styles from './image-crop.scss';
-import EXIF from 'exif-js';
+import exif from 'exif-js';
 
 export default {
   template,
@@ -15,19 +15,24 @@ export default {
 };
 
 function controller($document, $scope, $window) {
-  // ------------------------------ Properties ------------------------------ //
+  // ============================== Properties ============================== //
   this.styles = styles;
-  this.isEditing = false;
-  this.canvasWidth = 0;
-  this.canvasHeight = 0;
-  this.imageBitmap = null;
-  this.overlayOriginX = 0;
-  this.overlayOriginY = 0;
-  this.resizeRatio = 1;
-  this.rawWidth = 0;
-  this.rawHeight = 0;
+  var _isEditing = false;
+  var _canvasWidth = 0;
+  var _canvasHeight = 0;
+  var _overlayOriginX = 0;
+  var _overlayOriginY = 0;
+  var _resizeRatio = 1;
+  var _rawWidth = 0;
+  var _rawHeight = 0;
+  var _initialPointerX = 0;
+  var _initialPointerY = 0;
+  var _currentX = 0;
+  var _currentY = 0;
+  var _previousX = 0;
+  var _previousY = 0;
 
-  // ------------------------------- Methods -------------------------------- //
+  // ================================ Methods =============================== //
   this.setSize = setSize;
   this.drawOverlay = drawOverlay;
   this.drawCroppedCanvas = drawCroppedCanvas;
@@ -42,14 +47,14 @@ function controller($document, $scope, $window) {
   this.onTouchEnd = onMouseUp;
   this.onTouchCancel = onMouseLeave;
 
-  // -------------------------------- Init ---------------------------------- //
+  // ================================= Init ================================= //
   const initiaWidth = 220, initialHeight = 220;
-  this.canvasWidth = initiaWidth, this.canvasHeight = initialHeight;
+  _canvasWidth = initiaWidth, _canvasHeight = initialHeight;
 
   // Wait for HTML to render, watch for changes to imageData
   $scope.$watch('$ctrl.imagedata', () => {
     this.setSize(initiaWidth, initialHeight);
-    this.rawWidth = this.rawHeight = 0;
+    _rawWidth = _rawHeight = 0;
 
     if (!this.imagedata) return;
 
@@ -58,8 +63,8 @@ function controller($document, $scope, $window) {
 
     const dataV = new DataView(this.imagedata);
     if (this.imagetype === 'image/png'){
-      this.rawWidth = dataV.getUint32(16);
-      this.rawHeight = dataV.getUint32(20);
+      _rawWidth = dataV.getUint32(16);
+      _rawHeight = dataV.getUint32(20);
     }
     if (this.imagetype === 'image/jpeg'){
 
@@ -76,21 +81,21 @@ function controller($document, $scope, $window) {
           // Start Of Frame marker
           if (dataV.getUint8(x+1) === 192){
             // console.log('found SOF0 marker at: ', x);
-            this.rawHeight = dataV.getUint16(x + 5);
-            this.rawWidth = dataV.getUint16(x + 7);
+            _rawHeight = dataV.getUint16(x + 5);
+            _rawWidth = dataV.getUint16(x + 7);
             // console.log('height and width: ', dataV.getUint16(x + 5), dataV.getUint16(x + 7));
           }
 
           if(dataV.getUint8(x+1) === 193){
             // console.log('found SOF1 marker at: ', x);
-            this.rawHeight = dataV.getUint16(x + 5);
-            this.rawWidth = dataV.getUint16(x + 7);
+            _rawHeight = dataV.getUint16(x + 5);
+            _rawWidth = dataV.getUint16(x + 7);
           }
 
           if(dataV.getUint8(x+1) === 194){
             // console.log('found SOF2 marker at: ', x);
-            this.rawHeight = dataV.getUint16(x + 5);
-            this.rawWidth = dataV.getUint16(x + 7);
+            _rawHeight = dataV.getUint16(x + 5);
+            _rawWidth = dataV.getUint16(x + 7);
           }
 
           //Start Of Scan marker, stop looking for markers
@@ -99,18 +104,18 @@ function controller($document, $scope, $window) {
         // if (x === 39999) console.log('more than 40000 bytes');
       }
 
-      // Override raw JPEG and PNG header info if EXIF data exists
-      const exifObj = EXIF.readFromBinaryFile(this.imagedata);
+      // Override raw JPEG and PNG header info if exif data exists
+      const exifObj = exif.readFromBinaryFile(this.imagedata);
       // console.log('exif: ', exifObj);
       if (exifObj && exifObj.PixelXDimension && exifObj.PixelYDimension){
-        this.rawWidth = exifObj.PixelXDimension;
-        this.rawHeight = exifObj.PixelYDimension;
+        _rawWidth = exifObj.PixelXDimension;
+        _rawHeight = exifObj.PixelYDimension;
       }
     }
 
     // Guard against images that are too small
-    if (this.rawWidth === 0 && this.rawHeight === 0) console.log('failed to read image dimensions');
-    if (this.rawWidth < 440 || this.rawHeight < 440){
+    if (_rawWidth === 0 && _rawHeight === 0) console.log('failed to read image dimensions');
+    if (_rawWidth < 440 || _rawHeight < 440){
       this.showError = true;
       this.clearImage();
       return;
@@ -118,14 +123,14 @@ function controller($document, $scope, $window) {
 
     // Identify the resize-ratio and aspect ratio
     let aspectRatio = 1;
-    let landscape = this.rawWidth >= this.rawHeight;
-    const big = landscape ? this.rawWidth : this.rawHeight;
-    const small = landscape ? this.rawHeight : this.rawWidth;
+    let landscape = _rawWidth >= _rawHeight;
+    const big = landscape ? _rawWidth : _rawHeight;
+    const small = landscape ? _rawHeight : _rawWidth;
     aspectRatio = big / small;
-    this.resizeRatio = landscape ? this.rawHeight / 440 : this.rawWidth / 440;
+    _resizeRatio = landscape ? _rawHeight / 440 : _rawWidth / 440;
 
-    const finalWidth = landscape ? this.canvasWidth * aspectRatio : this.canvasWidth;
-    const finalHeight = landscape ? this.canvasHeight : this.canvasHeight * aspectRatio ;
+    const finalWidth = landscape ? _canvasWidth * aspectRatio : _canvasWidth;
+    const finalHeight = landscape ? _canvasHeight : _canvasHeight * aspectRatio ;
 
     // Adjust elements to new size
     this.setSize(finalWidth, finalHeight);
@@ -139,12 +144,12 @@ function controller($document, $scope, $window) {
     };
 
     // Draw an initial overlay
-    this.drawOverlay({pageX: 0, pageY: 0});
+    this.drawOverlay();
     // Create an initial cropped image
     this.drawCroppedCanvas();
   });
 
-  // ------------------------ Function declarations ------------------------- //
+  // ========================= Function declarations ======================== //
   // Set size of image canvas and container elements based on raw image size
   function setSize(setWidth, setHeight){
 
@@ -155,8 +160,8 @@ function controller($document, $scope, $window) {
     }
 
     const canvas = document.getElementById('canvas-image');
-    this.canvasWidth = canvas.width = setWidth;
-    this.canvasHeight = canvas.height = setHeight;
+    _canvasWidth = canvas.width = setWidth;
+    _canvasHeight = canvas.height = setHeight;
 
     // Remove any lingering crop overlays
     const overlayCanvas = document.getElementById('canvas-overlay');
@@ -171,70 +176,77 @@ function controller($document, $scope, $window) {
     const cropHalf = cropSize / 2;
 
     const canvas = document.getElementById('canvas-overlay');
-    canvas.width = this.canvasWidth;
-    canvas.height = this.canvasHeight;
+    canvas.width = _canvasWidth;
+    canvas.height = _canvasHeight;
 
-    // ---------------------------------------------------------------------- //
-    // courtesy of http://simonsarris.com/blog/510-making-html5-canvas-useful
-    // TODO: Need to factor in the movement of the angular model window
-    var element = canvas, offsetX = 0, offsetY = 0;
-    if (element.offsetParent !== undefined) {
-      do {
-        offsetX += element.offsetLeft;
-        offsetY += element.offsetTop;
-      } while ((element = element.offsetParent));
+    // If no event was provided, create an initial overlay, centered
+    if (!event){
+      _previousX = _currentX = _canvasWidth / 2;
+      _previousY = _currentY = _canvasHeight / 2;
+    }else{
+      _currentX = _previousX + (event.pageX - _initialPointerX);
+      _currentY = _previousY + (event.pageY - _initialPointerY);
+
+      // Accommodate touch events
+      if (event.touches && event.touches.length > 0){
+        _currentX = _previousX + (event.touches.item(0).pageX - _initialPointerX);
+        _currentY = _previousY + (event.touches.item(0).pageY - _initialPointerY);
+      }
     }
-
-    let x = event.pageX - (offsetX + $window.scrollX);
-    let y = event.pageY - (offsetY + $window.scrollY);
-
-    // Accommodate touch events
-    if (event.touches && event.touches.length > 0){
-      x = event.touches.item(0).pageX - (offsetX + $window.scrollX);
-      y = event.touches.item(0).pageY - (offsetY + $window.scrollY);
-    }
-    // ---------------------------------------------------------------------- //
 
     // Keep overlay rect in the frame
-    if (x < cropHalf) x = cropHalf;
-    if (x > this.canvasWidth - cropHalf) x = this.canvasWidth - cropHalf;
-    if (y < cropHalf) y = cropHalf;
-    if (y > this.canvasHeight - cropHalf) y = this.canvasHeight - cropHalf;
+    if (_currentX < cropHalf) _currentX = cropHalf;
+    if (_currentX > _canvasWidth - cropHalf) _currentX = _canvasWidth - cropHalf;
+    if (_currentY < cropHalf) _currentY = cropHalf;
+    if (_currentY > _canvasHeight - cropHalf) _currentY = _canvasHeight - cropHalf;
 
     // Draw cropping frame
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = 'white';
-    ctx.strokeRect(x - cropHalf, y - cropHalf, cropSize, cropSize);
+    ctx.strokeRect(_currentX - cropHalf, _currentY - cropHalf, cropSize, cropSize);
     // Draw semi-transparent overlay on cropped out parts of image
-    let landscape = this.rawWidth >= this.rawHeight;
+    let landscape = _rawWidth >= _rawHeight;
     ctx.fillStyle = 'hsla(1, 1%, 1%, 0.4)';
-    ctx.fillRect(0, 0, landscape ? x - cropHalf : this.canvasWidth, landscape ? this.canvasHeight : y - cropHalf);
-    ctx.fillRect(landscape ? x + cropHalf : 0, landscape ? 0 : y + cropHalf, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, landscape ? _currentX - cropHalf : _canvasWidth, landscape ? _canvasHeight : _currentY - cropHalf);
+    ctx.fillRect(landscape ? _currentX + cropHalf : 0, landscape ? 0 : _currentY + cropHalf, canvas.width, canvas.height);
 
     // Save origin at full size resolution
-    this.overlayOriginX = (x - cropHalf) * 2;
-    this.overlayOriginY = (y - cropHalf) * 2;
+    _overlayOriginX = (_currentX - cropHalf) * 2;
+    _overlayOriginY = (_currentY - cropHalf) * 2;
   }
 
   function onMouseDown(event){
-    this.isEditing = true;
+    _isEditing = true;
+    _initialPointerX = event.pageX;
+    _initialPointerY = event.pageY;
+    
+    // Accommodate touch events
+    if (event.touches && event.touches.length > 0){
+      _initialPointerX = event.touches.item(0).pageX;
+      _initialPointerY = event.touches.item(0).pageY;
+    }
+
     this.drawOverlay(event);
   }
 
   function onMouseMove(event){
-    if (!this.isEditing) return;
+    if (!_isEditing) return;
     this.drawOverlay(event);
   }
 
   function onMouseUp(){
-    if (this.isEditing) this.drawCroppedCanvas();
-    this.isEditing = false;
+    if (_isEditing) this.drawCroppedCanvas();
+    _isEditing = false;
+    _previousX = _currentX;
+    _previousY = _currentY;
   }
 
   function onMouseLeave(){
-    if (this.isEditing) this.drawCroppedCanvas();
-    this.isEditing = false;
+    if (_isEditing) this.drawCroppedCanvas();
+    _isEditing = false;
+    _previousX = _currentX;
+    _previousY = _currentY;
   }
 
   function drawCroppedCanvas(){
@@ -250,10 +262,10 @@ function controller($document, $scope, $window) {
       const cropCtx = croppedCanvas.getContext('2d');
       cropCtx.drawImage(
         imageForDraw,
-        this.overlayOriginX * this.resizeRatio,
-        this.overlayOriginY * this.resizeRatio,
-        440 * this.resizeRatio,
-        440 * this.resizeRatio,
+        _overlayOriginX * _resizeRatio,
+        _overlayOriginY * _resizeRatio,
+        440 * _resizeRatio,
+        440 * _resizeRatio,
         0,
         0,
         440,

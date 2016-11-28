@@ -13,7 +13,7 @@ export default {
 function controller(ckassetService, $scope){
   // ------------------------------ Properties ------------------------------ //
   this.styles = styles;
-  this.boxtext = 'Drag and drop an image file';
+  this.boxtext = 'Drag and drop a JPEG or PNG image file';
   this.imagetype = '';
   this.imagedata = null;
   this.croppedImageData = null;
