@@ -14,8 +14,9 @@ export default function ckassetService($http, $cookies){
 
   return {
 
-    request: function request(){
-      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/assets/upload?' + apiToken + sessionToken;
+    request: function request(database){
+      if (database !== 'PUBLIC' && database !== 'PRIVATE') return null;
+      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/' + database.toLowerCase() + '/assets/upload?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         tokens:[{
           recordType:'Image440',
@@ -35,8 +36,8 @@ export default function ckassetService($http, $cookies){
       });
     },
 
-    modify: function modify(fileName, referenceObj, recordName, image, callback){
-      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/public/records/modify?' + apiToken + sessionToken;
+    modify: function modify(fileName, referenceObj, recordName, image, database, callback){
+      const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/' + database.toLowerCase() + '/records/modify?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         operations: [{
           operationType: 'create',
@@ -49,11 +50,11 @@ export default function ckassetService($http, $cookies){
               programRef: referenceObj,
               image: {
                 value: {
-                  // wrappingKey: image.wrappingKey,
                   fileChecksum: image.fileChecksum,
                   receipt: image.receipt,
-                  // referenceChecksum: image.referenceChecksum,
-                  size: image.size
+                  size: image.size,
+                  wrappingKey: image.wrappingKey,             // value will be null for PUBLIC db requests
+                  referenceChecksum: image.referenceChecksum  // value will be null for PUBLIC db requests
                 }
               }
             },
@@ -64,6 +65,9 @@ export default function ckassetService($http, $cookies){
       });
       $http.post(reqUrl, reqBody)
       .then( obj => {
+        // TODO: A bad request error will come back with status 200
+        // Check for serverErrorCode and throw as an error 
+        // obj will look like this: {"records":[{"recordName":"a4cd61f4-1852-4e6b-b471-17e344ab6e43","reason":"bad upload receipt (did_not_validate)","serverErrorCode":"BAD_REQUEST"}]}
         callback(obj);
       })
       .catch( err => {

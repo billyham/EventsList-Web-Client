@@ -5,7 +5,8 @@ export default {
   template,
   bindings: {
     record: '<',
-    edit: '&'
+    edit: '&',
+    dbType: '<'
   },
   controller: ['ckassetService', '$scope', controller]
 };
@@ -27,6 +28,7 @@ function controller(ckassetService, $scope){
   this.onDrop = onDrop;
   this.loadImage = loadImage;
   this.submitRequest = submitRequest;
+
   // ------------------------------- Init ----------------------------------- //
 
   // -------------------------- Function declarions ------------------------- //
@@ -102,7 +104,7 @@ function controller(ckassetService, $scope){
   // Call upon the ckasset service to upload the image to CloudKit,
   // a sequence of three distinct ckasset calls
   function _cloudKitUpload(cb){
-    ckassetService.request()
+    ckassetService.request(this.dbType)
     .then( tokenResponseDictionary => {
       var data = new Uint8Array(this.croppedImageData);
 
@@ -111,7 +113,7 @@ function controller(ckassetService, $scope){
         const name = this.fileName;
         const { singleFile } = assetDictionary.data;
         const referenceObj = { type: 'REFERENCE', value: { recordName: this.record, action: 'DELETE_SELF' } };
-        ckassetService.modify(name, referenceObj, this.recordName, singleFile, finalObj => {  //eslint-disable-line
+        ckassetService.modify(name, referenceObj, this.recordName, singleFile, this.dbType, finalObj => {  //eslint-disable-line
           if (cb) cb();
         });
       });

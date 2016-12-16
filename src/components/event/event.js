@@ -62,7 +62,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   function renderImage(){
     if (!this.imagesrc) {
 
-      ckrecordService.fetch('PUBLIC', this.record.fields.imageRef.value.recordName, '_defaultZone')
+      ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
       .then( result => {
         // if (result.records.length > 0){
           // this.imagesrc = result.records[result.records.length - 1].fields.image.value.downloadURL;
@@ -73,7 +73,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
         // };
       })
       .catch( error => {
-        console.log(error);
+        console.log('event > renderImage \nerror on: ', this.formtitle, error);
       });
     }
   };
@@ -92,7 +92,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   // Displays ngDialog for adding a new image
   function showAddImage(){
     const dialog = ngDialog.open({
-      template: '<image-picker record="ngDialogData.recordName" edit="pic(image)" close="close()"></image-picker>',
+      template: '<image-picker record="ngDialogData.recordName" edit="pic(image)" db-type="\'' + this.dbType + '\'" close="close()"></image-picker>',
       className: 'ngdialog-theme-default ngdialog-wide-content',
       plain: true,
       data: this.record,

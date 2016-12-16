@@ -4,7 +4,7 @@ _**This project is in-progress**_
 To see a current implementation, visit the [mock site](http://kitschplayer.com/events/)
 
 __A note about security and authentication on the mock site:__
-_Published events are viewable by anyone. Any authenticated user can create a new draft event (currently, you won't be able to edit the event or add an image). For authentication, sign in with your Apple account. Only the site's owner is allowed to publish, delete or edit events._  
+_For authentication, sign in with your Apple account. Any authenticated user can create a new draft event. Only the site's owner is allowed to publish a draft event. Published events are viewable to everyone, draft events are only visible to the authenticated user._  
 
 ---
 ### About EventsList Web Client

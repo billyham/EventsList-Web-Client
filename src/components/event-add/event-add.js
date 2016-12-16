@@ -37,17 +37,17 @@ function controller(ckrecordService, $scope){
     }
 
     ckrecordService.save(
-      'PRIVATE', //databaseScope, PUBLIC or PRIVATE
-      null, // recordName,
-      null, // recordChangeTag
-      'Program', //recordType
-      null, //zoneName,  null will be default _defaultZone, PUBLIC databases are limited to the one default zone
-      null, //forRecordName,
-      null, //forRecordChangeTag,
-      null, //publicPermission,
-      null, //ownerRecordName,
-      null, //participants,
-      null, //parentRecordName,
+      'PRIVATE',      //cdatabaseScope, PUBLIC or PRIVATE
+      null,           // recordName,
+      null,           // recordChangeTag
+      'Program',      //recordType
+      null,           //zoneName,  null is _defaultZone, PUBLIC databases can only be default
+      null,           //forRecordName,
+      null,           //forRecordChangeTag,
+      null,           //publicPermission,
+      null,           //ownerRecordName,
+      null,           //participants,
+      null,           //parentRecordName,
       obj.fields //fields
     ).then( record => {
       // Save new value

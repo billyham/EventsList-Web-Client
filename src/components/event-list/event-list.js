@@ -34,7 +34,7 @@ function controller(ckqueryService, ckconfigureService, $scope){
   // ------------------------ Function declarations ------------------------- //
   function loadMore(){
     ckqueryService.query(
-      'PUBLIC','_defaultZone',null,'Program',
+      this.dbType,'_defaultZone',null,'Program',
       ['title', 'imageRef', 'video'],'title',null,null,null,
       [], this.ckqueryResult.continuationMarker
     ).then(result => {
