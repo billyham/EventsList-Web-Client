@@ -4,7 +4,6 @@ import styles from './event-list.scss';
 export default {
   template,
   bindings: {
-    // userIdentity: '<',
     ckqueryResult: '=',
     dbType: '<',
     publish: '&',
@@ -14,24 +13,26 @@ export default {
 };
 
 function controller(ckqueryService, ckconfigureService, $scope){
-  // ------------------------------ Properties ------------------------------ //
+  // ============================== Properties ============================== //
   this.styles = styles;
 
-  // ------------------------------- Methods -------------------------------- //
+  // =============================== Methods ================================ //
   this.loadMore = loadMore;
   this.remove = remove;
 
-  // ---------------------------- Initialization ---------------------------- //
-  if (this.ckqueryResult.error) {
-    if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
-      //TODO: Show message that user needs to be logged in.
-      console.log('Unauthenticated, user not logged in');
-    }else{
-      //TODO: Show generic server error message
+  // ============================ Initialization ============================ //
+  this.$onInit = () => {
+    if (this.ckqueryResult.error) {
+      if (this.ckqueryResult.error.message === 'Cannot query against an unauthenticated user ID'){
+        //TODO: Show message that user needs to be logged in.
+        console.log('Unauthenticated, user not logged in');
+      }else{
+        //TODO: Show generic server error message
+      }
     }
-  }
+  };
 
-  // ------------------------ Function declarations ------------------------- //
+  // ======================== Function declarations ========================= //
   function loadMore(){
     ckqueryService.query(
       this.dbType,'_defaultZone',null,'Program',

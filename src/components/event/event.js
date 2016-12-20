@@ -13,12 +13,12 @@ export default {
 };
 
 function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
-  // ------------------------------ Properties ------------------------------ //
+  // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
   this.imageVisible = true;
 
-  // -------------------------------- Methods ------------------------------- //
+  // ================================ Methods =============================== //
   this.renderImage = renderImage;
   this.delete = deleteEvent;
   this.edit = edit;
@@ -27,31 +27,33 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.removeSelected = removeSelected;
   this.showAddImage = showAddImage;
 
-  // ---------------------------- Initialization ---------------------------- //
-  // Set values for UI elements
-  this.formtitle = this.record.fields.title.value;
-  if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
-  if (this.record.fields.fulldescription) this.formfulldescription = this.record.fields.fulldescription.value;
-  this.imagesrc = '';
+  // ============================ Initialization -=========================== //
+  this.$onInit = () => {
+    // Set values for UI elements
+    this.formtitle = this.record.fields.title.value;
+    if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
+    if (this.record.fields.fulldescription) this.formfulldescription = this.record.fields.fulldescription.value;
+    this.imagesrc = '';
 
-  // Save initial values in case editing fails
-  this.oldValue = '';
-  this.oldVideo = '';
-  this.oldRecord = {};
+    // Save initial values in case editing fails
+    this.oldValue = '';
+    this.oldVideo = '';
+    this.oldRecord = {};
 
-  // Load images on launch
-  if (this.record.fields.imageRef){
-    renderImage.call(this);
-  }
-
-  // Load image when event is published
-  $scope.$watch('$ctrl.dbType', () => {
+    // Load images on launch
     if (this.record.fields.imageRef){
       renderImage.call(this);
     }
-  });
 
-  // ------------------------- Function declarations ------------------------ //
+    // Load image when event is published
+    $scope.$watch('$ctrl.dbType', () => {
+      if (this.record.fields.imageRef){
+        renderImage.call(this);
+      }
+    });
+  };
+
+  // ========================= Function declarations ======================== //
   // Load new URL for video
   function play(clickEvent){
     if (clickEvent) clickEvent.cancelBubble = true;

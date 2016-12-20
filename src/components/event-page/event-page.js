@@ -12,35 +12,37 @@ export default {
 };
 
 function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ckqueryService) {
-  // ------------------------------ Properties ------------------------------ //
+  // ============================== Properties ============================== //
   this.styles = styles;
   this.typepublic = 'PUBLIC';
   this.typeprivate = 'PRIVATE';
 
-  // ------------------------------- Methods -------------------------------- //
+  // =============================== Methods ================================ //
   this.showadd = showadd;
 
-  // ---------------------------- Initialization ---------------------------- //
-  ckauthenticateService.fetchCurrentName()
-  .then(name => this.userName = name);
+  // ============================ Initialization ============================ //
+  this.$onInit = () => {
+    ckauthenticateService.fetchCurrentName()
+    .then(name => this.userName = name);
 
-  // Register to observer changes in authentication
-  ckauthenticateService.subscribe( userName => {
-    $scope.$apply( () => {
-      // Update display name
-      this.userName = userName || '';
-      // Update list of private events
-      ckqueryService.query('PRIVATE','_defaultZone',null,'Program',
-        ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
-        [], null)
-        .then(result => {
-          this.privateEvents = {records: result.records, continuationMarker: result.continuationMarker, error: result.error};
-          $scope.$apply();
-        });
+    // Register to observer changes in authentication
+    ckauthenticateService.subscribe( userName => {
+      $scope.$apply( () => {
+        // Update display name
+        this.userName = userName || '';
+        // Update list of private events
+        ckqueryService.query('PRIVATE','_defaultZone',null,'Program',
+          ['title', 'imageRef', 'video', 'fulldescription'],'title',null,null,null,
+          [], null)
+          .then(result => {
+            this.privateEvents = {records: result.records, continuationMarker: result.continuationMarker, error: result.error};
+            $scope.$apply();
+          });
+      });
     });
-  });
+  };
 
-  // ------------------------- Function declarations ------------------------ //
+  // ========================= Function declarations ======================== //
   function showadd(){
     const dialog = ngDialog.open({
       template:'<event-add close="close()" add="add(rec)">Enter</event-add>',

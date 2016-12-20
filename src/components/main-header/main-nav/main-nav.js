@@ -10,25 +10,26 @@ export default {
 };
 
 function controller($document, ckauthenticateService, $scope) {
-  // ------------------------------ Properties ------------------------------ //
+  // ============================== Properties ============================== //
   this.styles = styles;
   this.isopen = false;
   this.auth = 'Sign In with Apple ID';
 
-  // -------------------------------- Methods ------------------------------- //
+  // ================================ Methods =============================== //
   this.togglemenu = togglemenu;
   this.signInOut = signInOut;
 
-
-  // ---------------------------- Initialization ---------------------------- //
+  // ============================ Initialization ============================ //
+  this.$onInit = () => {
   // Observer changes to state of authentication
-  ckauthenticateService.subscribe( userIdentity => {
-    $scope.$apply( () => {
-      this.auth = userIdentity ? 'Logout' : 'Sign In with Apple ID';
+    ckauthenticateService.subscribe( userIdentity => {
+      $scope.$apply( () => {
+        this.auth = userIdentity ? 'Logout' : 'Sign In with Apple ID';
+      });
     });
-  });
+  };
 
-  // -------------------------- Function declarions ------------------------- //
+  // ========================== Function declarions ========================= //
   function togglemenu(){
     this.isopen = !this.isopen;
   };

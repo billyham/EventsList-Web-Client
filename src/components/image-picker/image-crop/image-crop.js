@@ -17,20 +17,26 @@ export default {
 function controller($document, $scope, $window) {
   // ============================== Properties ============================== //
   this.styles = styles;
-  var _isEditing = false;
-  var _canvasWidth = 0;
-  var _canvasHeight = 0;
-  var _overlayOriginX = 0;
-  var _overlayOriginY = 0;
-  var _resizeRatio = 1;
-  var _rawWidth = 0;
-  var _rawHeight = 0;
-  var _initialPointerX = 0;
-  var _initialPointerY = 0;
-  var _currentX = 0;
-  var _currentY = 0;
-  var _previousX = 0;
-  var _previousY = 0;
+
+  var _isEditing =          false;
+  var _canvasWidth =        0;
+  var _canvasHeight =       0;
+  var _overlayOriginX =     0;
+  var _overlayOriginY =     0;
+
+  var _resizeRatio =        1;
+  var _rawWidth =           0;
+  var _rawHeight =          0;
+  var _initialPointerX =    0;
+  var _initialPointerY =    0;
+
+  var _currentX =           0;
+  var _currentY =           0;
+  var _previousX =          0;
+  var _previousY =          0;
+
+  const initiaWidth = 220, initialHeight = 220;
+  _canvasWidth = initiaWidth, _canvasHeight = initialHeight;
 
   // ================================ Methods =============================== //
   this.setSize = setSize;
@@ -48,9 +54,6 @@ function controller($document, $scope, $window) {
   this.onTouchCancel = onMouseLeave;
 
   // ================================= Init ================================= //
-  const initiaWidth = 220, initialHeight = 220;
-  _canvasWidth = initiaWidth, _canvasHeight = initialHeight;
-
   // Wait for HTML to render, watch for changes to imageData
   $scope.$watch('$ctrl.imagedata', () => {
     this.setSize(initiaWidth, initialHeight);
@@ -220,7 +223,7 @@ function controller($document, $scope, $window) {
     _isEditing = true;
     _initialPointerX = event.pageX;
     _initialPointerY = event.pageY;
-    
+
     // Accommodate touch events
     if (event.touches && event.touches.length > 0){
       _initialPointerX = event.touches.item(0).pageX;
@@ -296,6 +299,7 @@ function controller($document, $scope, $window) {
         var fileReader = new FileReader();
         fileReader.onloadend = element => {
           this.croppedImageData = element.target.result;
+          $window.URL.revokeObjectURL(imageForDraw.src);
         };
         fileReader.readAsArrayBuffer(blob);
       }, 'image/png');

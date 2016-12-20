@@ -12,7 +12,7 @@ export default {
 };
 
 function controller(ckassetService, $scope){
-  // ------------------------------ Properties ------------------------------ //
+  // ============================== Properties ============================== //
   this.styles = styles;
   this.boxtext = 'Drag and drop a JPEG or PNG image file';
   this.imagetype = '';
@@ -22,16 +22,16 @@ function controller(ckassetService, $scope){
   this.showError = false;
   this.fileName = '';
 
-  // ------------------------------- Methods -------------------------------- //
+  // =============================== Methods ================================ //
   this.clearImage = clearImage;
   this.onChange = onChange;
   this.onDrop = onDrop;
   this.loadImage = loadImage;
   this.submitRequest = submitRequest;
 
-  // ------------------------------- Init ----------------------------------- //
+  // =============================== Init =================================== //
 
-  // -------------------------- Function declarions ------------------------- //
+  // ========================== Function declarions ========================= //
   function clearImage(){
     // Clear properties
     this.boxtext = 'Drag and drop an image file';
