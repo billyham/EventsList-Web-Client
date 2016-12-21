@@ -1,4 +1,4 @@
-<div class="{{$ctrl.styles.mainNav}} l-overflow-auto">
+<nav class="{{$ctrl.styles.mainNav}} l-overflow-auto">
   <div class="hamburger" ng-click="$ctrl.togglemenu()"><div class="menuicon"></div></div>
   <ul ng-class="{'nav-menu': true,
     'nav-menu__is-selected': $ctrl.isopen == true}">
@@ -7,4 +7,4 @@
     <li class="nav-item"><a class="clickable" ui-sref="settings" ui-sref-active="selected">Settings</a></li>
     <li class="nav-item"><a class="clickable" ng-click="$ctrl.signInOut($event)">{{$ctrl.auth}}</a></li>
   </ul>
-</div>
+</nav>

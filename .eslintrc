@@ -13,7 +13,10 @@
   "env": {
     "es6": true,
     "node": true,
-    "browser": true
+    "browser": true,
+    "mocha": true,
+    "protractor": true,
+    "jasmine": true
   },
   "rules": {
     "no-unused-vars": 1,

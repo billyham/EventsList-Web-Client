@@ -18,22 +18,22 @@ function controller($document, $scope, $window) {
   // ============================== Properties ============================== //
   this.styles = styles;
 
-  var _isEditing =          false;
-  var _canvasWidth =        0;
-  var _canvasHeight =       0;
-  var _overlayOriginX =     0;
-  var _overlayOriginY =     0;
+  var _isEditing        = false;
+  var _canvasWidth      = 0;
+  var _canvasHeight     = 0;
+  var _overlayOriginX   = 0;
+  var _overlayOriginY   = 0;
 
-  var _resizeRatio =        1;
-  var _rawWidth =           0;
-  var _rawHeight =          0;
-  var _initialPointerX =    0;
-  var _initialPointerY =    0;
+  var _resizeRatio      = 1;
+  var _rawWidth         = 0;
+  var _rawHeight        = 0;
+  var _initialPointerX  = 0;
+  var _initialPointerY  = 0;
 
-  var _currentX =           0;
-  var _currentY =           0;
-  var _previousX =          0;
-  var _previousY =          0;
+  var _currentX         = 0;
+  var _currentY         = 0;
+  var _previousX        = 0;
+  var _previousY        = 0;
 
   const initiaWidth = 220, initialHeight = 220;
   _canvasWidth = initiaWidth, _canvasHeight = initialHeight;

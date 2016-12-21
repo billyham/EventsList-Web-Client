@@ -60,8 +60,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     $window.location.href=this.record.fields.video.value;
   };
 
-  // Fetch image from the server only if necessary
+
   function renderImage(){
+    // Fetch image from the server only if necessary
     if (!this.imagesrc) {
 
       ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
