@@ -26,17 +26,11 @@ export default function ckassetService($http, $cookies){
       return $http.post(reqUrl, reqBody);
     },
 
-    upload: function upload(url, file, contentType, callback){
-      $http.post(url, file, { headers: { 'Content-Type': contentType }, transformRequest: [] })
-      .then( returnObj => {
-        callback(returnObj);
-      })
-      .catch( error => {
-        console.log('fail with error: ', error);
-      });
+    upload: function upload(url, file, contentType){
+      return $http.post(url, file, { headers: { 'Content-Type': contentType }, transformRequest: [] });
     },
 
-    modify: function modify(fileName, referenceObj, recordName, image, database, callback){
+    modify: function modify(fileName, referenceObj, recordName, image, database){
       const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/' + database.toLowerCase() + '/records/modify?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         operations: [{
@@ -63,18 +57,13 @@ export default function ckassetService($http, $cookies){
           }
         }]
       });
-      $http.post(reqUrl, reqBody)
+      return $http.post(reqUrl, reqBody)
       .then( obj => {
         // TODO: A bad request error will come back with status 200
-        // Check for serverErrorCode and throw as an error 
+        // Check for serverErrorCode and throw as an error
         // obj will look like this: {"records":[{"recordName":"a4cd61f4-1852-4e6b-b471-17e344ab6e43","reason":"bad upload receipt (did_not_validate)","serverErrorCode":"BAD_REQUEST"}]}
-        callback(obj);
-      })
-      .catch( err => {
-        console.log('ckassetService modify error: ', err);
+        return obj;
       });
-
-
     }
   };
 };

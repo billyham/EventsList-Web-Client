@@ -89,45 +89,36 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
     // imageRecord will be null if no image on event
     const { eventRecord, imageRecord, isPublished } = rec;
 
-    eventService.saveEvent(eventRecord, isPublished ? 'PUBLIC' : 'PRIVATE', imageRecord)
+    eventService.publish(eventRecord, imageRecord, !isPublished)
     .then( record => {
-      // "record" differs from "eventRecord" only by an updated "modified.timestamp" property
-
-      eventService.removeEvent(record, isPublished ? 'PRIVATE' : 'PUBLIC')
-      .then( () => {
-        // On success: an argument is available that is an object with two properties: { deleted: <boolean>, recordName: <string> }
-
-        // Add the published item to the publicEvents array and sort.
-        this.publicEvents.records.push(record);
-        this.publicEvents.records.sort( (a,b) => {
-          if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
-          if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
-          return 0;
-        });
-
-        // If a continuationMarker exists and the published object
-        // is at the end of the array, don't add it.
-        // Or an error occures when you load more.
-        if (this.publicEvents.continuationMarker){
-          if (this.publicEvents.records[this.publicEvents.records.length - 1] === record ){
-            this.publicEvents.records.pop();
-          }
-        }
-
-        // Remove the published event from the privateEvents array
-        let indexToDelete = this.privateEvents.records.findIndex( element => {
-          return element.recordName === eventRecord.recordName;
-        });
-        if (indexToDelete > -1) this.privateEvents.records.splice(indexToDelete, 1);
-        $scope.$apply();
-
-      }).catch( err => {
-        // TODO: Revert to previous value and alert user that delete failed
-        console.log('publish ERROR trying to delete from PRIVATE', err);
+      console.log('inside event-page publish.then with record: ', record);
+      // Add the published item to the publicEvents array and sort.
+      this.publicEvents.records.push(record);
+      this.publicEvents.records.sort( (a,b) => {
+        if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
+        if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
+        return 0;
       });
+
+      // If a continuationMarker exists and the published object
+      // is at the end of the array, don't add it.
+      // Or an error occures when you load more.
+      if (this.publicEvents.continuationMarker){
+        if (this.publicEvents.records[this.publicEvents.records.length - 1] === record ){
+          this.publicEvents.records.pop();
+        }
+      }
+
+      // Remove the published event from the privateEvents array
+      let indexToDelete = this.privateEvents.records.findIndex( element => {
+        return element.recordName === eventRecord.recordName;
+      });
+      if (indexToDelete > -1) this.privateEvents.records.splice(indexToDelete, 1);
+      $scope.$apply();
+
     }).catch( err => {
       // TODO: Revert to previous value and alert the user that save failed
-      console.log('publish ERROR trying to save in PUBLIC', err);
+      console.log('publish ERROR' , err);
     });
   };
 

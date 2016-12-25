@@ -8,10 +8,10 @@ export default {
     edit: '&',
     dbType: '<'
   },
-  controller: ['ckassetService', '$scope', controller]
+  controller: ['ckassetService', '$scope', 'imageService', controller]
 };
 
-function controller(ckassetService, $scope){
+function controller(ckassetService, $scope, imageService){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.boxtext = 'Drag and drop a JPEG or PNG image file';
@@ -96,32 +96,26 @@ function controller(ckassetService, $scope){
 
     // Helper function requires 'This' context
     _cloudKitUpload.call(this, imageObj => {
-      if (!this.recordName) return;
-      this.edit({ image: { field: 'imageRef', recordname: this.recordName, imageObj } });
+      if (!imageObj || !imageObj.recordName) throw new Error('imagePicker > submitRequest failed to execute _cloutKitUpload');
+      this.edit({ image: { field: 'imageRef', recordname: imageObj.recordName, imageObj } });
     });
   }
 
   // Call upon the ckasset service to upload the image to CloudKit,
   // a sequence of three distinct ckasset calls
   function _cloudKitUpload(cb){
-    ckassetService.request(this.dbType)
-    .then( tokenResponseDictionary => {
-      var data = new Uint8Array(this.croppedImageData);
 
-      ckassetService.upload(tokenResponseDictionary.data.tokens[0].url, data, 'image/png', assetDictionary => {
-        this.recordName = tokenResponseDictionary.data.tokens[0].recordName;
-        const name = this.fileName;
-        const { singleFile } = assetDictionary.data;
-        const referenceObj = { type: 'REFERENCE', value: { recordName: this.record, action: 'DELETE_SELF' } };
-        ckassetService.modify(name, referenceObj, this.recordName, singleFile, this.dbType, finalObj => {  //eslint-disable-line
-          // console.log('imagePicker final object: ', finalObj);
-          if (cb) cb(finalObj);
-        });
-      });
+    imageService.upload(this.dbType, this.croppedImageData, this.fileName, this.record)
+    .then( finalObj => {
+      if (
+        !finalObj ||
+        !finalObj.data ||
+        !finalObj.data.records ||
+        finalObj.data.records < 1
+      ) throw new Error('imagePicker > failed at imageService upload');
+      if (cb) cb(finalObj.data.records[0]);
     })
-    .catch( err => {
-      console.log('err trying to upload image', err);
-    });
+    .catch( err => {throw err;});
   }
 
 }

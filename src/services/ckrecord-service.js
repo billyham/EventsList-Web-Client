@@ -73,6 +73,7 @@ export default function ckrecordService(){
 
           // Render the deleted record.
           // return renderDeletedRecord(deletedRecord);
+          console.log('deleted record: ', deletedRecord);
           return deletedRecord;
         }
       });
