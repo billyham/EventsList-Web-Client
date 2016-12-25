@@ -8,10 +8,10 @@ export default {
     privateEvents: '=',
     userIdentity: '<',
   },
-  controller: ['ngDialog', 'ckrecordService', '$scope', 'ckauthenticateService', 'ckqueryService', controller]
+  controller: ['ngDialog', 'eventService', '$scope', 'ckauthenticateService', 'ckqueryService', controller]
 };
 
-function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ckqueryService) {
+function controller(ngDialog, eventService, $scope, ckauthenticateService, ckqueryService) {
   // ============================== Properties ============================== //
   this.styles = styles;
   this.typepublic = 'PUBLIC';
@@ -19,13 +19,14 @@ function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ck
 
   // =============================== Methods ================================ //
   this.showadd = showadd;
+  this.publish = publish;
 
   // ============================ Initialization ============================ //
   this.$onInit = () => {
     ckauthenticateService.fetchCurrentName()
     .then(name => this.userName = name);
 
-    // Register to observer changes in authentication
+    // Register to observe changes in authentication
     ckauthenticateService.subscribe( userName => {
       $scope.$apply( () => {
         // Update display name
@@ -43,6 +44,11 @@ function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ck
   };
 
   // ========================= Function declarations ======================== //
+  /**
+   * Presents a modal view for adding a new event. It will go to Draft events
+   * list by default. Modal adds a new event to the cloud store and updates the
+   * in memory array of draft events.
+   */
   function showadd(){
     const dialog = ngDialog.open({
       template:'<event-add close="close()" add="add(rec)">Enter</event-add>',
@@ -71,30 +77,27 @@ function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ck
     });
   };
 
-  this.publish = function publish(rec){
-    ckrecordService.save(
-      'PUBLIC',           // databaseScope, PUBLIC or PRIVATE
-      rec.recordName,     // recordName,
-      null,               // recordChangeTag
-      'Program',          // recordType
-      null,               // zoneName,  null is _defaultZone, PUBLIC databases have only the default zone
-      null,               // forRecordName,
-      null,               // forRecordChangeTag,
-      null,               // publicPermission,
-      null,               // ownerRecordName,
-      null,               // participants,
-      null,               // parentRecordName,
-      rec.fields          // fields
-    ).then( record => {
+  /**
+   * Changes the status of an event to Published or Draft.
+   *
+   * @param  {object}   rec           An event record object
+   * @param  {boolean}  isPublished   "true" if event is changed to the Published
+   *                                  state. "false" if event is changed to Draft.
+   */
+  function publish(rec){
 
-      ckrecordService.delete(
-        'PRIVATE',          // databaseScope
-        record.recordName,  // recordName
-        null,               // zoneName
-        null                // ownerRecordName
-      ).then( rec => {
+    // imageRecord will be null if no image on event
+    const { eventRecord, imageRecord, isPublished } = rec;
 
-        // Add the published item to the publicEvents, and sort.
+    eventService.saveEvent(eventRecord, isPublished ? 'PUBLIC' : 'PRIVATE', imageRecord)
+    .then( record => {
+      // "record" differs from "eventRecord" only by an updated "modified.timestamp" property
+
+      eventService.removeEvent(record, isPublished ? 'PRIVATE' : 'PUBLIC')
+      .then( () => {
+        // On success: an argument is available that is an object with two properties: { deleted: <boolean>, recordName: <string> }
+
+        // Add the published item to the publicEvents array and sort.
         this.publicEvents.records.push(record);
         this.publicEvents.records.sort( (a,b) => {
           if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
@@ -111,9 +114,9 @@ function controller(ngDialog, ckrecordService, $scope, ckauthenticateService, ck
           }
         }
 
-        // Remove the published event from privateEvents
+        // Remove the published event from the privateEvents array
         let indexToDelete = this.privateEvents.records.findIndex( element => {
-          return element.recordName === rec.recordName;
+          return element.recordName === eventRecord.recordName;
         });
         if (indexToDelete > -1) this.privateEvents.records.splice(indexToDelete, 1);
         $scope.$apply();

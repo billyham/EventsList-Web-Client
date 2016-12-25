@@ -17,6 +17,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.styles = styles;
   this.isSelected = false;
   this.imageVisible = true;
+  this.imageObject = null;
 
   // ================================ Methods =============================== //
   this.renderImage = renderImage;
@@ -67,8 +68,13 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
 
       ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
       .then( result => {
-        // if (result.records.length > 0){
-          // this.imagesrc = result.records[result.records.length - 1].fields.image.value.downloadURL;
+        if (!result ||
+          !result.fields ||
+          !result.fields.image ||
+          !result.fields.image.value ||
+          !result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
+          
+        this.imageObject = result;
         this.imagesrc = result.fields.image.value.downloadURL;
         $scope.$apply();
 
@@ -111,8 +117,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
 
   // A method used by ndDialog, but needs access to 'This'. Note the fat arrow function.
   $scope.pic = image => {
+    console.log('image: ', image);
+    if (!image || !image.field || !image.recordname || !image.imageObj) return console.log('Error in event > $scope.pic()');
     this.imagesrc = null;
-    this.edit(image.field, image.recordname);
+    this.edit(image.field, image.recordname, image.imageObj);
 
     // New CloudKit objects are not available to the query function for at least a
     // second. CloudKit needs time to index the new records. Image rendering is delayed
@@ -124,7 +132,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   };
 
   // Edit event
-  function edit(field, recordname){
+  function edit(field, recordname, imageObj){
 
     // Set form inputs back to pristine
     $scope.textform.$setPristine();
@@ -133,7 +141,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     this.oldRecord = JSON.parse(JSON.stringify(this.record));
 
     if (field === 'text'){
-      // It assured that the title field exists
+      // It is assured that the title field exists
       this.record.fields['title'].value = this.formtitle;
 
       // All other fields are optional
@@ -146,10 +154,13 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
         if (!this.record.fields['video']) this.record.fields['video'] = {type: 'STRING'};
         this.record.fields['video'].value = this.formvideo;
       }
+
     }else if(field === 'imageRef'){
 
       if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
       this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
+
+      if (imageObj) this.imageObject = imageObj;
     }
 
     // Save event

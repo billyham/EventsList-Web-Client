@@ -4,9 +4,9 @@ export default function ckrecordService(){
 
   return {
     fetch(
-      databaseScope,  //PUBLIC
+      databaseScope,
       recordName,
-      zoneName, //_defaultZone
+      zoneName,
       ownerRecordName
     ) {
       var container = CloudKit.getDefaultContainer();
@@ -41,9 +41,9 @@ export default function ckrecordService(){
         });
     },
     delete(
-      databaseScope, // PUBLIC
+      databaseScope,
       recordName,
-      zoneName,  // _defaultZone
+      zoneName,
       ownerRecordName
     ){
       var container = CloudKit.getDefaultContainer();
@@ -78,11 +78,11 @@ export default function ckrecordService(){
       });
     },
     save(
-      databaseScope,  // PUBLIC or PRIVATE
+      databaseScope,        // PUBLIC or PRIVATE
       recordName,
-      recordChangeTag,  // leave blank for new record, provide one when changing a record
-      recordType,  // Program
-      zoneName, // _defaultZone
+      recordChangeTag,      // Leave blank for new record, provide one when changing a record
+      recordType,           // Program
+      zoneName,             // _defaultZone
       forRecordName,
       forRecordChangeTag,
       publicPermission,

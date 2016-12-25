@@ -95,9 +95,9 @@ function controller(ckassetService, $scope){
     // TODO: Provide UI sprite to indicate progress
 
     // Helper function requires 'This' context
-    _cloudKitUpload.call(this, () => {
+    _cloudKitUpload.call(this, imageObj => {
       if (!this.recordName) return;
-      this.edit({ image: { field: 'imageRef', recordname: this.recordName } });
+      this.edit({ image: { field: 'imageRef', recordname: this.recordName, imageObj } });
     });
   }
 
@@ -114,7 +114,8 @@ function controller(ckassetService, $scope){
         const { singleFile } = assetDictionary.data;
         const referenceObj = { type: 'REFERENCE', value: { recordName: this.record, action: 'DELETE_SELF' } };
         ckassetService.modify(name, referenceObj, this.recordName, singleFile, this.dbType, finalObj => {  //eslint-disable-line
-          if (cb) cb();
+          // console.log('imagePicker final object: ', finalObj);
+          if (cb) cb(finalObj);
         });
       });
     })

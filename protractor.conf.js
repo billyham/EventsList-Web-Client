@@ -18,9 +18,10 @@ exports.config = {
   //To let protractor to start a server for us
   // seleniumAddress: 'http://localhost:4444/wd/hub',
 
-  // baseUrl: 'http://localhost:8080',
-  baseUrl: 'http://events.davehanagan.com',
-  // baseUrl: 'file://Users/raysmith/Documents/hunkydory/xcodeIOSProjects/EventsList/web/server/public',
+  // Testing webpack-dev-server
+  baseUrl: 'http://localhost:8080',
+  // Testing live mock site
+  // baseUrl: 'http://events.davehanagan.com',
 
   framework: 'jasmine',
 
