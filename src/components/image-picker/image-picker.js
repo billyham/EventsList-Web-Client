@@ -14,8 +14,8 @@ export default {
 function controller(ckassetService, $scope, imageService){
   // ============================== Properties ============================== //
   this.styles = styles;
-  this.boxtext = 'Drag and drop a JPEG or PNG image file';
   this.imagetype = '';
+  this.boxtext = 'Drag and drop a JPEG or PNG image file';
   this.imagedata = null;
   this.croppedImageData = null;
   this.recordName = '';
@@ -34,9 +34,9 @@ function controller(ckassetService, $scope, imageService){
   // ========================== Function declarions ========================= //
   function clearImage(){
     // Clear properties
-    this.boxtext = 'Drag and drop an image file';
-    this.imagedata = null;
     this.imagetype = '';
+    this.boxtext = 'Drag and drop a JPEG or PNG image file';
+    this.imagedata = null;
     this.recordName = '';
     this.showError = false;
 
@@ -55,13 +55,11 @@ function controller(ckassetService, $scope, imageService){
     evnt.preventDefault();
     if (evnt.dataTransfer.files.length < 1) return;
 
-    this.boxtext = evnt.dataTransfer.files[0].name;
-    this.imagetype = evnt.dataTransfer.files[0].type;
-
     this.loadImage(evnt.dataTransfer.files);
   };
 
   function loadImage(tryFiles){
+
     this.showError = false;
     this.fileName = '';
 
@@ -69,11 +67,12 @@ function controller(ckassetService, $scope, imageService){
 
     let file = tryFiles[0];
 
-    // Save file name, to be given to ckasset method
-    this.fileName = file.name;
-    // Save Content-Type, to be given to ckasset method
-    // TODO: guard against non-image Content-Types
+    // TODO: Guard against unrecognized image types
     this.imagetype = file.type;
+
+    // Save file name, to be given to imageService method
+    // TODO: Display the filename as a confirmation of the file choice
+    this.fileName = file.name;
 
     var fileReader = new FileReader();
     fileReader.onloadend = element => {
@@ -86,10 +85,6 @@ function controller(ckassetService, $scope, imageService){
   };
 
   function submitRequest(){
-    // TODO: Revoke ObjectURLs
-    // Is this necessary? Weird location dealing with createObjectURL in image-crop...
-    // $window.URL.revokeObjectURL();
-
     if (!this.croppedImageData) return;
 
     // TODO: Provide UI sprite to indicate progress
@@ -101,8 +96,7 @@ function controller(ckassetService, $scope, imageService){
     });
   }
 
-  // Call upon the ckasset service to upload the image to CloudKit,
-  // a sequence of three distinct ckasset calls
+  // Call upon the imageService to upload the image to cloud store,
   function _cloudKitUpload(cb){
 
     imageService.upload(this.dbType, this.croppedImageData, this.fileName, this.record)

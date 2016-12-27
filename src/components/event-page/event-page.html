@@ -19,7 +19,9 @@
 
 	<!-- |====================== Published Events ============================ -->
   <section>
-    <event-list ckquery-result="$ctrl.publicEvents" db-type="$ctrl.typepublic">
+    <event-list ckquery-result="$ctrl.publicEvents"
+      db-type="$ctrl.typepublic"
+      publish="$ctrl.publish(rec)">
     </event-list>
   </section>
 

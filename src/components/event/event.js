@@ -73,13 +73,12 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
           !result.fields.image ||
           !result.fields.image.value ||
           !result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
-          
+
         this.imageObject = result;
         this.imagesrc = result.fields.image.value.downloadURL;
         $scope.$apply();
 
-          // TODO: Need to delete any prior images associated with the program.
-        // };
+        // TODO: Need to delete any prior images associated with the program.
       })
       .catch( error => {
         console.log('event > renderImage \nerror on: ', this.formtitle, error);
@@ -107,7 +106,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
       data: this.record,
       scope: $scope,    // Note how $scope is passed to the ngDialog
       controller: [ () => {
-
         $scope.close = function close(){
           dialog.close();
         };
@@ -115,19 +113,11 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     });
   }
 
-  // A method used by ndDialog, but needs access to 'This'. Note the fat arrow function.
+  // A method used by ngDialog. Needs access to 'This'. Note the fat arrow function.
   $scope.pic = image => {
-    console.log('image: ', image);
     if (!image || !image.field || !image.recordname || !image.imageObj) return console.log('Error in event > $scope.pic()');
     this.imagesrc = null;
     this.edit(image.field, image.recordname, image.imageObj);
-
-    // New CloudKit objects are not available to the query function for at least a
-    // second. CloudKit needs time to index the new records. Image rendering is delayed
-    // to allow for that indexing time. Calling renderImage needs explicit context because
-    // $timeout overrides implicit context.
-    // var renderImageWithContext = this.renderImage.bind(this);
-    // $timeout(renderImageWithContext, 1000);
     $scope.close();
   };
 
@@ -212,8 +202,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     ).then( () => {
       let record = this.record;
       this.remove({ rec: record });
-    }).catch( () => {
+    }).catch( err => {
       // TODO: Alert user that delete failed
+      throw err;
     });
   }
 

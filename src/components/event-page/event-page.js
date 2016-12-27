@@ -8,10 +8,10 @@ export default {
     privateEvents: '=',
     userIdentity: '<',
   },
-  controller: ['ngDialog', 'eventService', '$scope', 'ckauthenticateService', 'ckqueryService', controller]
+  controller: ['ngDialog', 'eventService', '$scope', 'ckauthenticateService', 'ckqueryService', '$timeout', controller]
 };
 
-function controller(ngDialog, eventService, $scope, ckauthenticateService, ckqueryService) {
+function controller(ngDialog, eventService, $scope, ckauthenticateService, ckqueryService, $timeout) {
   // ============================== Properties ============================== //
   this.styles = styles;
   this.typepublic = 'PUBLIC';
@@ -80,41 +80,48 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
   /**
    * Changes the status of an event to Published or Draft.
    *
-   * @param  {object}   rec           An event record object
-   * @param  {boolean}  isPublished   "true" if event is changed to the Published
+   * @param  {object}   rec           An event record object with two or three properties:
+   *                                  eventRecord   {object}  Program model object
+   *                                  imageRecord   {object}  Image model object, value may be NULL
+   *                                  isPublished   {boolean} "true" if event is changed to the Published
    *                                  state. "false" if event is changed to Draft.
    */
   function publish(rec){
 
-    // imageRecord will be null if no image on event
     const { eventRecord, imageRecord, isPublished } = rec;
+
+    const toEventsArray = isPublished ? this.publicEvents : this.privateEvents;
+    const fromEventsArray = isPublished ? this.privateEvents : this.publicEvents;
 
     eventService.publish(eventRecord, imageRecord, !isPublished)
     .then( record => {
       console.log('inside event-page publish.then with record: ', record);
       // Add the published item to the publicEvents array and sort.
-      this.publicEvents.records.push(record);
-      this.publicEvents.records.sort( (a,b) => {
+      toEventsArray.records.push(record);
+      toEventsArray.records.sort( (a,b) => {
         if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
         if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
         return 0;
       });
 
-      // If a continuationMarker exists and the published object
+      // If a continuationMarker exists and the object
       // is at the end of the array, don't add it.
-      // Or an error occures when you load more.
-      if (this.publicEvents.continuationMarker){
-        if (this.publicEvents.records[this.publicEvents.records.length - 1] === record ){
-          this.publicEvents.records.pop();
+      // Or an error occurs when you load more.
+      if (toEventsArray.continuationMarker){
+        if (toEventsArray.records[toEventsArray.records.length - 1] === record ){
+          toEventsArray.records.pop();
         }
       }
 
-      // Remove the published event from the privateEvents array
-      let indexToDelete = this.privateEvents.records.findIndex( element => {
-        return element.recordName === eventRecord.recordName;
+      // Remove the published event from the original array.
+      // Can't use $apply as it throws an error when an event with an image is
+      // (un)published. $timeout tells Angular to safely start a new digest cycle.
+      $timeout( () => {
+        let indexToDelete = fromEventsArray.records.findIndex( element => {
+          return element.recordName === eventRecord.recordName;
+        });
+        if (indexToDelete > -1) fromEventsArray.records.splice(indexToDelete, 1);
       });
-      if (indexToDelete > -1) this.privateEvents.records.splice(indexToDelete, 1);
-      $scope.$apply();
 
     }).catch( err => {
       // TODO: Revert to previous value and alert the user that save failed
