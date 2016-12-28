@@ -64,26 +64,26 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
 
   function renderImage(){
     // Fetch image from the server only if necessary
-    if (!this.imagesrc) {
+    if (this.imagesrc) return null;
 
-      ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
-      .then( result => {
-        if (!result ||
-          !result.fields ||
-          !result.fields.image ||
-          !result.fields.image.value ||
-          !result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
+    ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
+    .then( result => {
+      if (!result ||
+        !result.fields ||
+        !result.fields.image ||
+        !result.fields.image.value ||
+        !result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
 
-        this.imageObject = result;
-        this.imagesrc = result.fields.image.value.downloadURL;
-        $scope.$apply();
+      this.imageObject = result;
+      this.imagesrc = result.fields.image.value.downloadURL;
+      $scope.$apply();
 
-        // TODO: Need to delete any prior images associated with the program.
-      })
-      .catch( error => {
-        console.log('event > renderImage \nerror on: ', this.formtitle, error);
-      });
-    }
+      // TODO: Need to delete any prior images associated with the program.
+    })
+    .catch( error => {
+      console.log('event > renderImage \nerror on: ', this.formtitle, error);
+    });
+
   };
 
   // Toggle selection

@@ -23,8 +23,12 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
 
   // ============================ Initialization ============================ //
   this.$onInit = () => {
-    ckauthenticateService.fetchCurrentName()
-    .then(name => this.userName = name);
+
+    if (this.userIdentity) {
+      ckauthenticateService.fetchCurrentName()
+      .then(name => this.userName = name)
+      .catch(err => console.log('eventPage > onInit failed to fetch current name: ', err));
+    }
 
     // Register to observe changes in authentication
     ckauthenticateService.subscribe( userName => {
@@ -95,7 +99,10 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
 
     eventService.publish(eventRecord, imageRecord, !isPublished)
     .then( record => {
-      console.log('inside event-page publish.then with record: ', record);
+
+      // TODO: Alert the user when publish fails
+      if (!record) return null;
+
       // Add the published item to the publicEvents array and sort.
       toEventsArray.records.push(record);
       toEventsArray.records.sort( (a,b) => {

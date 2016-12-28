@@ -30,12 +30,22 @@ export default function eventService(ckrecordService, $http, imageService){
           return imageService.upload(toDatabase, imageDataAsArrayBuffer, fileName, record.recordName)
           .then( imageObj => {
 
-            arrayOfPromises.push(_removeEvent(record, fromDatabase));
-            arrayOfPromises.push(_removeEvent(image, fromDatabase));
+            if (!imageObj || !imageObj.data || !imageObj.data.records || imageObj.data.records.length < 1) return null;
+
+            // Check for an error code. On a failed image upload, abort.
+            if (imageObj.data.records[0]['serverErrorCode']) return null;
+
+            console.log('eventService > publish inside imageServie.upload: ', imageObj);
+
+            // TODO: An authenticated but nonAdmin user will end up adding an event
+            // from the PRIVATE database but silently fail to remove it in the PUBIC
+            // database. Effectively copying instead of publishing.
+            arrayOfPromises.push(_removeRecord(record, fromDatabase));
+            arrayOfPromises.push(_removeRecord(image, fromDatabase));
 
             // Update Program record with new imageRef ID
             record.fields.imageRef.value.recordName = imageObj.data.records[0].recordName;
-            arrayOfPromises.push(_saveEvent(record, toDatabase));
+            arrayOfPromises.push(_saveRecord(record, toDatabase));
 
             return Promise.all(arrayOfPromises)
             .then( arrayOfResponses => {
@@ -50,14 +60,7 @@ export default function eventService(ckrecordService, $http, imageService){
         });
 
       } else {
-
-        arrayOfPromises.push(_saveEvent(record, toDatabase));
-        arrayOfPromises.push(_removeEvent(record, fromDatabase));
-
-        return Promise.all(arrayOfPromises)
-        .then( arrayOfResponses => {
-          if (arrayOfResponses.length > 0) return arrayOfResponses[0];
-        });
+        return _moveRecord(record, toDatabase, fromDatabase);
       }
     }
   };
@@ -73,7 +76,7 @@ export default function eventService(ckrecordService, $http, imageService){
    * @return {promise}          A promise the resolves with an object that is
    *                            the original record with an updated timestamp.
    */
-  function _saveEvent(record, database, recordType){
+  function _saveRecord(record, database, recordType){
 
     recordType = recordType || 'Program';
 
@@ -94,7 +97,7 @@ export default function eventService(ckrecordService, $http, imageService){
 
   };
 
-  function _removeEvent(record, database){
+  function _removeRecord(record, database){
 
     // On success an argument is returned with two properties:
     // { deleted: <boolean>, recordName: <string> }
@@ -104,6 +107,29 @@ export default function eventService(ckrecordService, $http, imageService){
       null,               // zoneName
       null                // ownerRecordName
     );
+  }
+
+  /**
+   * Chains _removeRecord and _saveRecord to ensure that a record in only removed
+   * after it is successfully save.
+   *
+   * @param  {object}   record        A single full event record
+   * @param  {string}   toDatabase    Database to save to: PUBLIC or PRIVATE
+   * @param  {string}   fromDatabase  Database to remove from: PUBLIC or PRIVATE
+   * @param  {string}   [recordType]  Used to first save an image assocated
+   *                                    with the record.
+   *
+   * @return {promise}  Promise that resolves with the new saved record.
+   */
+  function _moveRecord(record, toDatabase, fromDatabase, recordType){
+    return _saveRecord(record, toDatabase, recordType)
+    .then( newRecord => {
+      if (!newRecord) return null;
+      return _removeRecord(record, fromDataabase)
+      .then( () => {
+        return newRecord;
+      });
+    });
   }
 
 
