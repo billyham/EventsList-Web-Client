@@ -18,45 +18,19 @@ export default function eventService(ckrecordService, $http, imageService){
     publish(record, image, isUnPublish){
       const fromDatabase = isUnPublish ? 'PUBLIC' : 'PRIVATE';
       const toDatabase = isUnPublish ? 'PRIVATE' : 'PUBLIC';
-      const arrayOfPromises = [];
+      // const arrayOfPromises = [];
 
       // Check if the event has an associated image and move it too.
       if (record.fields.imageRef && record.fields.imageRef.value.recordName && image){
 
-        const fileName = image.fields.fileName.value;
-
-        return imageService.download(image.fields.image.value.downloadURL)
-        .then( imageDataAsArrayBuffer => {
-          return imageService.upload(toDatabase, imageDataAsArrayBuffer, fileName, record.recordName)
-          .then( imageObj => {
-
-            if (!imageObj || !imageObj.data || !imageObj.data.records || imageObj.data.records.length < 1) return null;
-
-            // Check for an error code. On a failed image upload, abort.
-            if (imageObj.data.records[0]['serverErrorCode']) return null;
-
-            console.log('eventService > publish inside imageServie.upload: ', imageObj);
-
-            // TODO: An authenticated but nonAdmin user will end up adding an event
-            // from the PRIVATE database but silently fail to remove it in the PUBIC
-            // database. Effectively copying instead of publishing.
-            arrayOfPromises.push(_removeRecord(record, fromDatabase));
-            arrayOfPromises.push(_removeRecord(image, fromDatabase));
-
-            // Update Program record with new imageRef ID
-            record.fields.imageRef.value.recordName = imageObj.data.records[0].recordName;
-            arrayOfPromises.push(_saveRecord(record, toDatabase));
-
-            return Promise.all(arrayOfPromises)
-            .then( arrayOfResponses => {
-              // Return Program object with lastest timestamp and change tag.
-              return arrayOfResponses[2];
-            });
-
-          })
-          .catch( err => {
-            console.log('inside catch with error: ', err);
-          });
+        // 1. Move the Image
+        // 2. On success, update the Program record with new imageRef ID &&
+        //    move the Program
+        // 3. On success, return Program object with lastest timestamp and
+        //    change tag.
+        return _moveImage(record, toDatabase, fromDatabase, image)
+        .then( updatedRecord => {
+          return _moveRecord(updatedRecord, toDatabase, fromDatabase);
         });
 
       } else {
@@ -64,6 +38,87 @@ export default function eventService(ckrecordService, $http, imageService){
       }
     }
   };
+
+  /**
+   * Chains _removeRecord and _saveRecord to ensure that a record is only removed
+   * after it is successfully saved. Returns a promise that resolves with the
+   * newly created record object.
+   *
+   * @param  {object}   record        A single full event record
+   * @param  {string}   toDatabase    Database to save to: PUBLIC or PRIVATE
+   * @param  {string}   fromDatabase  Database to remove from: PUBLIC or PRIVATE
+   * @param  {string}   [recordType]  Used to first save an image assocated
+   *                                    with the record.
+   *
+   * @return {promise}  Promise that resolves with the new saved record.
+   */
+  function _moveRecord(record, toDatabase, fromDatabase, recordType){
+
+    return _saveRecord(record, toDatabase, recordType)
+    .then( newRecord => {
+      if (!newRecord) return null;
+      return _removeRecord(record, fromDatabase)
+      .then( () => {
+        return newRecord;
+      })
+      .catch( err => {
+        // If _removeRecord on the fromDatabase fails, return to the original
+        // state by removing the saved record from the toDatabase.
+        _removeRecord(newRecord, toDatabase);
+        throw err;
+      });
+    });
+  }
+
+  /**
+   * Moves an Image object from PUBLIC to PRIVATE database or vice versa.
+   *
+   * @param  {object} record       Program model object
+   * @param  {string} toDatabase   PUBLIC or PRIVATE
+   * @param  {string} fromDatabase PUBLIC or PRIVATE
+   * @param  {object} image        Imagem model object
+   *
+   * @return {promise} Promise that resolves with an updated Program object
+   */
+  function _moveImage(record, toDatabase, fromDatabase, image){
+
+    const fileName = image.fields.fileName.value;
+
+    return imageService.download(image.fields.image.value.downloadURL)
+    .then( imageDataAsArrayBuffer => {
+
+      return imageService.upload(toDatabase, imageDataAsArrayBuffer, fileName, record.recordName)
+      .then( imageObj => {
+
+        if (!imageObj || !imageObj.data || !imageObj.data.records || imageObj.data.records.length < 1) {
+          throw new Error('Error saving Image record');
+        }
+
+        // Check for an error code. On a failed image upload, throw an error.
+        if (imageObj.data.records[0]['serverErrorCode']) throw new Error('Error saving Image record');
+
+        return _removeRecord(image, fromDatabase)
+        .then( () => {
+          // Copy the record object
+          const newRecord = JSON.parse(JSON.stringify(record));
+          // Update Program record with new imageRef ID
+          newRecord.fields.imageRef.value.recordName = imageObj.data.records[0].recordName;
+          return newRecord;
+        })
+        .catch( err => {
+          // If _removeRecord on the fromDatabase fails, return to the original
+          // state by removing the saved record from the toDatabase.
+          return _removeRecord(imageObj.data.records[0], toDatabase)
+          .then( () => {
+            // console.log('successfully removed image: ');
+            throw err;
+          });
+        });
+
+      });
+    });
+
+  }
 
   /**
    * Save an event or image resource. Default is a Program record.
@@ -108,29 +163,5 @@ export default function eventService(ckrecordService, $http, imageService){
       null                // ownerRecordName
     );
   }
-
-  /**
-   * Chains _removeRecord and _saveRecord to ensure that a record in only removed
-   * after it is successfully save.
-   *
-   * @param  {object}   record        A single full event record
-   * @param  {string}   toDatabase    Database to save to: PUBLIC or PRIVATE
-   * @param  {string}   fromDatabase  Database to remove from: PUBLIC or PRIVATE
-   * @param  {string}   [recordType]  Used to first save an image assocated
-   *                                    with the record.
-   *
-   * @return {promise}  Promise that resolves with the new saved record.
-   */
-  function _moveRecord(record, toDatabase, fromDatabase, recordType){
-    return _saveRecord(record, toDatabase, recordType)
-    .then( newRecord => {
-      if (!newRecord) return null;
-      return _removeRecord(record, fromDataabase)
-      .then( () => {
-        return newRecord;
-      });
-    });
-  }
-
 
 }

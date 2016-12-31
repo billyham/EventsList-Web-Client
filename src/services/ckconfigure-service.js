@@ -12,6 +12,9 @@ export default function ckconfigureService(){
           // Change this to a container identifier you own.
 
           //TODO: Using .env variables is pointless, the values are sent to the browser
+          //TODO: Also process.env.CLOUD_ID is replaced during the Build script with 
+          // the acutal values via the EnvironmentPlugin which under the hood
+          // searches for and replaces string values during the webpack build.
           containerIdentifier: process.env.CLOUD_ID,
 
           apiTokenAuth: {
