@@ -18,6 +18,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.isSelected = false;
   this.imageVisible = true;
   this.imageObject = null;
+  this.isLoading = false;
 
   // ================================ Methods =============================== //
   this.renderImage = renderImage;
@@ -27,6 +28,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.makeSelected = makeSelected;
   this.removeSelected = removeSelected;
   this.showAddImage = showAddImage;
+  this.startPublish = startPublish.bind(this);
 
   // ============================ Initialization -=========================== //
   this.$onInit = () => {
@@ -52,6 +54,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
         renderImage.call(this);
       }
     });
+
   };
 
   // ========================= Function declarations ======================== //
@@ -205,6 +208,21 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     }).catch( err => {
       // TODO: Alert user that delete failed
       throw err;
+    });
+  }
+
+  function startPublish(isPublish){
+    this.isLoading = true;
+    this.publish({
+      rec:
+      {
+        eventRecord: this.record,
+        imageRecord: this.imageObject,
+        isPublished: isPublish,
+        cb: () => {
+          this.isLoading = false;
+        }
+      }
     });
   }
 

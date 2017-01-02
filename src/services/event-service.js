@@ -121,7 +121,7 @@ export default function eventService(ckrecordService, $http, imageService){
   }
 
   /**
-   * Save an event or image resource. Default is a Program record.
+   * Save a Program or Image resource. Default is a Program record.
    *
    * @param  {object}   record        A single full event record
    * @param  {string}   database      PUBLIC or PRIVATE

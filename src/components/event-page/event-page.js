@@ -84,11 +84,11 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
   /**
    * Changes the status of an event to Published or Draft.
    *
-   * @param  {object}   rec           An event record object with two or three properties:
-   *                                  eventRecord   {object}  Program model object
-   *                                  imageRecord   {object}  Image model object, value may be NULL
-   *                                  isPublished   {boolean} "true" if event is changed to the Published
-   *                                  state. "false" if event is changed to Draft.
+   * @param  {object}   rec  An event record object with three properties:
+   *                         eventRecord   {object}  Program model object
+   *                         imageRecord   {object}  Image model object, value may be NULL
+   *                         isPublished   {boolean} "true" if event is changed to the Published
+   *                                                  state. "false" if event is changed to Draft.
    */
   function publish(rec){
 
@@ -129,10 +129,12 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
         });
         if (indexToDelete > -1) fromEventsArray.records.splice(indexToDelete, 1);
       });
+      if (rec.cb) rec.cb();
 
     }).catch( err => {
-      // TODO: Revert to previous value and alert the user that save failed
+      // TODO: Alert the user that (un)publish failed
       console.log('publish ERROR' , err);
+      if (rec.cb) rec.cb();
     });
   };
 

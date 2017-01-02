@@ -29,7 +29,8 @@ export default function imageService(ckassetService, $http){
         });
       })
       .catch(err => {
-        console.log('imageService > upload error from ckassetService.request: ', err);
+        // console.log('imageService > upload error from ckassetService.request: ', err);
+        throw err;
       });
     },
 

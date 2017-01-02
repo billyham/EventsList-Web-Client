@@ -1,8 +1,8 @@
-// =============================================================================
-// A wrapper for the CloudKit JS Library object --ckasset--
-// Use this for saving, deleting or modifying images or other
-// blob assets.
-// =============================================================================
+/* =============================================================================
+   A wrapper for the CloudKit JS Library object --ckasset--
+   Use this for saving, deleting or modifying images or other
+   blob assets.
+   ========================================================================== */
 
 ckassetService.$inject = ['$http', '$cookies'];
 
