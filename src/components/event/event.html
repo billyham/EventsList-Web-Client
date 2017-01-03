@@ -89,11 +89,8 @@
         <div class="loading--circle circle2"></div>
         <div class="loading--circle circle3"></div>
       </div>
+      <span class="text__warning" ng-show="$ctrl.hasPublishError">Error attempting to publish</span>
 			<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>
-
-      <!-- ng-click="$ctrl.publish({ rec: { eventRecord: $ctrl.record, imageRecord: $ctrl.imageObject, isPublished: false } })" -->
-      <!-- ng-click="$ctrl.publish({ rec: { eventRecord: $ctrl.record, imageRecord: $ctrl.imageObject, isPublished: true } })" -->
-
 
 		</div>
 

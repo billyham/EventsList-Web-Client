@@ -101,7 +101,9 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
     .then( record => {
 
       // TODO: Alert the user when publish fails
-      if (!record) return null;
+      if (!record) {
+        if (rec.cb) return rec.cb(new Error('eventPage > publish did not execute with a valid Record'));
+      }
 
       // Add the published item to the publicEvents array and sort.
       toEventsArray.records.push(record);
@@ -133,8 +135,7 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
 
     }).catch( err => {
       // TODO: Alert the user that (un)publish failed
-      console.log('publish ERROR' , err);
-      if (rec.cb) rec.cb();
+      if (rec.cb) rec.cb(err);
     });
   };
 

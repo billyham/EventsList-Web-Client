@@ -8,6 +8,8 @@ authService.$inject = ['$cookies'];
 
 export default function authService($cookies){
 
+  console.log('authService instatiation fires');
+
   return {
     isSignedIn(){
       return !!$cookies.get(process.env.CLOUD_ID);

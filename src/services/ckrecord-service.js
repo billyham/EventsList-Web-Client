@@ -40,6 +40,7 @@ export default function ckrecordService(){
           }
         });
     },
+
     delete(
       databaseScope,
       recordName,
@@ -77,6 +78,7 @@ export default function ckrecordService(){
         }
       });
     },
+    
     save(
       databaseScope,        // PUBLIC or PRIVATE
       recordName,

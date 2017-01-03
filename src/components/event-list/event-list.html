@@ -11,7 +11,7 @@
 
 	<!-- |========================== List of events ========================== -->
 	<section>
-		<article ng-repeat="record in $ctrl.ckqueryResult.records track by record.recordName">
+		<article ng-repeat="record in $ctrl.ckqueryResult.records track by record.recordName" class="list">
 	    <event
 			title={{record.fields.title.value}}
 			image-ref=record.fields.imageRef

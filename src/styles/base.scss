@@ -59,7 +59,7 @@ button{
 }
 
 button:focus, input:focus, textarea:focus{
-  outline-width: 0;
+  outline: none;
 }
 
 button:active{

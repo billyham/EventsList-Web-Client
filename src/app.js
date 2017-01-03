@@ -8,6 +8,7 @@ import 'angular-ui-router/release/stateEvents';
 import ngDialog from 'ng-dialog';
 import 'ng-dialog/css/ngDialog.css';
 import 'ng-dialog/css/ngDialog-theme-default.css';
+import ngAnimate from 'angular-animate';
 
 const app = angular.module('app', [
   router,
@@ -16,7 +17,8 @@ const app = angular.module('app', [
   ngDialog,
   components,
   services,
-  directives
+  directives,
+  ngAnimate
 ]);
 
 export default app;

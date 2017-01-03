@@ -9,16 +9,17 @@ export default {
     dbType: '<',
     publish: '&'
   },
-  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', controller]
+  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', '$timeout', controller]
 };
 
-function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
   this.imageVisible = true;
   this.imageObject = null;
   this.isLoading = false;
+  this.hasPublishError = false;
 
   // ================================ Methods =============================== //
   this.renderImage = renderImage;
@@ -28,7 +29,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
   this.makeSelected = makeSelected;
   this.removeSelected = removeSelected;
   this.showAddImage = showAddImage;
-  this.startPublish = startPublish.bind(this);
+  this.startPublish = startPublish;
 
   // ============================ Initialization -=========================== //
   this.$onInit = () => {
@@ -211,8 +212,17 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
     });
   }
 
+  /**
+   * Changes status of event from Draft to Published or vice-versa. Binding
+   * handled in eventPage. With either success or failure, callback fires to
+   * end transition animation.
+   *
+   * @param  {Boolean} isPublish true when moving to Published state, false when
+   *                             moving to Draft state.
+   */
   function startPublish(isPublish){
     this.isLoading = true;
+    this.hasPublishError = false;
     this.publish({
       rec:
       {
@@ -220,7 +230,11 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog){
         imageRecord: this.imageObject,
         isPublished: isPublish,
         cb: () => {
-          this.isLoading = false;
+          // On failure, $digest cycle may not get automatically created
+          $timeout( () => {
+            this.hasPublishError = true;
+            this.isLoading = false;
+          });
         }
       }
     });
