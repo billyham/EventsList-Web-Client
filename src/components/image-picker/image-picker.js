@@ -21,6 +21,8 @@ function controller(ckassetService, $scope, imageService){
   this.recordName = '';
   this.showError = false;
   this.fileName = '';
+  this.isLoading = false;
+  this.hasUploadError = false;
 
   // =============================== Methods ================================ //
   this.clearImage = clearImage;
@@ -31,6 +33,7 @@ function controller(ckassetService, $scope, imageService){
 
   // =============================== Init =================================== //
 
+
   // ========================== Function declarions ========================= //
   function clearImage(){
     // Clear properties
@@ -39,6 +42,8 @@ function controller(ckassetService, $scope, imageService){
     this.imagedata = null;
     this.recordName = '';
     this.showError = false;
+    this.hasUploadError = false;
+    this.isLoading = false;
 
     // Clear the value of the file input HTML element
     let filePath = document.getElementById(this.record);
@@ -87,11 +92,13 @@ function controller(ckassetService, $scope, imageService){
   function submitRequest(){
     if (!this.croppedImageData) return;
 
-    // TODO: Provide UI sprite to indicate progress
+    this.isLoading = true;
+    this.hasUploadError = false;
 
     // Helper function requires 'This' context
-    _cloudKitUpload.call(this, imageObj => {
-      if (!imageObj || !imageObj.recordName) throw new Error('imagePicker > submitRequest failed to execute _cloutKitUpload');
+    _cloudKitUpload.call(this, (error, imageObj) => {
+      this.isLoading = false;
+      if (error || !imageObj || !imageObj.recordName) return this.hasUploadError = true;
       this.edit({ image: { field: 'imageRef', recordname: imageObj.recordName, imageObj } });
     });
   }
@@ -105,11 +112,13 @@ function controller(ckassetService, $scope, imageService){
         !finalObj ||
         !finalObj.data ||
         !finalObj.data.records ||
-        finalObj.data.records < 1
+        finalObj.data.records.length < 1
       ) throw new Error('imagePicker > failed at imageService upload');
-      if (cb) cb(finalObj.data.records[0]);
+      if (cb) cb(null, finalObj.data.records[0]);
     })
-    .catch( err => {throw err;});
+    .catch( err => {
+      if (cb) cb(err);
+    });
   }
 
 }

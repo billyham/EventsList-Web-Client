@@ -9,6 +9,7 @@ import imageCrop from './image-picker/image-crop/image-crop';
 import mainHeader from './main-header/main-header';
 import mainNav from './main-header/main-nav/main-nav';
 import comingSoon from './coming-soon/coming-soon';
+import loading from './sprites/loading/loading';
 
 const components = angular.module('components', [])
 .component('eventPage', eventPage)
@@ -20,6 +21,7 @@ const components = angular.module('components', [])
 .component('imageCrop', imageCrop)
 .component('mainHeader', mainHeader)
 .component('mainNav', mainNav)
-.component('comingSoon', comingSoon);
+.component('comingSoon', comingSoon)
+.component('loading', loading);
 
 export default components.name;

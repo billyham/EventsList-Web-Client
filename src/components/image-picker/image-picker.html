@@ -34,4 +34,6 @@
     ng-click="$ctrl.submitRequest()"
     ng-class="{'button__inactive': !$ctrl.imagedata}">Submit
   </button>
+  <loading ng-if="$ctrl.isLoading"></loading>
+  <span ng-show="$ctrl.hasUploadError" class="text__warning">Failed to upload image</span>
 </div>

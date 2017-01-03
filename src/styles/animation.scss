@@ -2,48 +2,6 @@
    Animations
    ========================================================================== */
 
-/* Loading Animation
-  ======================================================================== */
-.loading {
-  display: inline-block;
-  width: 75px;
-  height: 35px;
-  vertical-align: bottom;
-  overflow: hidden;
-}
-
-.loading--circle {
-  display: inline-block;
-  position: absolute;
-  width: 35px;
-  height: 35px;
-  background-image: radial-gradient(circle, $loading 0, $loading 20%, hsla(1, 0%, 100%, 0) 21%);
-  animation-duration: 1s;
-  animation-name: slide;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-timing-function: ease-in-out;
-}
-
-.circle1 {
-  animation-delay: 0.15s;
-}
-.circle2 {
-  animation-delay: 0.35s;
-}
-.circle3 {
-  animation-delay: 0.7s;
-}
-
-@keyframes slide {
-  from {
-    margin-left: 135px;
-  }
-  to {
-    margin-left: 0%;
-  }
-}
-
 /* List Animation
   ======================================================================== */
 .list.ng-enter, .list.ng-move {
@@ -68,7 +26,7 @@
 @keyframes list-leave {
   from {
     opacity: 1;
-    height: 330px;
+    height: 380px;
   }
   to {
     opacity: 0;

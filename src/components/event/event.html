@@ -83,12 +83,7 @@
       <button type="button"
         ng-click="$ctrl.startPublish(false)"
         ng-show="$ctrl.dbType == 'PUBLIC'">Unpublish</button>
-      <div class="loading" ng-if="$ctrl.isLoading">
-        <div class="loading--circle"></div>
-        <div class="loading--circle circle1"></div>
-        <div class="loading--circle circle2"></div>
-        <div class="loading--circle circle3"></div>
-      </div>
+      <loading ng-if="$ctrl.isLoading"></loading>
       <span class="text__warning" ng-show="$ctrl.hasPublishError">Error attempting to publish</span>
 			<button type="button" ng-click="$ctrl.delete()" class="l-float-right">Delete Event</button>
 

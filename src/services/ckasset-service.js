@@ -59,10 +59,12 @@ export default function ckassetService($http, $cookies){
       });
       return $http.post(reqUrl, reqBody)
       .then( obj => {
-        // TODO: A bad request error will come back with status 200
-        // Check for serverErrorCode and throw as an error
-        // obj will look like this: {"records":[{"recordName":"a4cd61f4-1852-4e6b-b471-17e344ab6e43","reason":"bad upload receipt (did_not_validate)","serverErrorCode":"BAD_REQUEST"}]}
-        return obj;
+        // A bad request error will come back with status 200. Check for an error status.
+        if (obj && obj.data && obj.data.records && obj.data.records.length > 0 && obj.data.records[0]['serverErrorCode']) {
+          throw new Error('Did not validate');
+        } else{
+          return obj;
+        }
       });
     }
   };
