@@ -1,6 +1,5 @@
 import template from './image-crop.html';
 import styles from './image-crop.scss';
-import exif from 'exif-js';
 
 export default {
   template,
@@ -9,12 +8,13 @@ export default {
     croppedImageData: '=',
     imagetype: '<',
     clearImage: '&',
-    showError: '='
+    showSizeError: '=',
+    showFileError: '='
   },
-  controller: ['$document', '$scope', '$window', controller]
+  controller: ['$document', '$scope', '$window', 'imageFileService', controller]
 };
 
-function controller($document, $scope, $window) {
+function controller($document, $scope, $window, imageFileService) {
   // ============================== Properties ============================== //
   this.styles = styles;
 
@@ -64,62 +64,20 @@ function controller($document, $scope, $window) {
     const canvas = document.getElementById('canvas-image');
     var ctx = canvas.getContext('2d');
 
-    const dataV = new DataView(this.imagedata);
-    if (this.imagetype === 'image/png'){
-      _rawWidth = dataV.getUint32(16);
-      _rawHeight = dataV.getUint32(20);
+    const imageDimensions = imageFileService.getImageSize(this.imagedata, this.imagetype);
+
+    // Guard against unreadable image files
+    if (!imageDimensions || !imageDimensions.width || !imageDimensions.height) {
+      this.clearImage();
+      this.showFileError = true;
+      return;
     }
-    if (this.imagetype === 'image/jpeg'){
-
-      for(let x = 0; x < 40000; x++){
-        if (dataV.getUint8(x) === 255){
-
-          // APPO marker
-          if(dataV.getUint8(x+1) === 224){
-            // console.log('density units: ', dataV.getUint8(11));
-            // console.log('x density: ', dataV.getUint16(x + 12));
-            // console.log('y density: ', dataV.getUint16(x + 14));
-          }
-
-          // Start Of Frame marker
-          if (dataV.getUint8(x+1) === 192){
-            // console.log('found SOF0 marker at: ', x);
-            _rawHeight = dataV.getUint16(x + 5);
-            _rawWidth = dataV.getUint16(x + 7);
-            // console.log('height and width: ', dataV.getUint16(x + 5), dataV.getUint16(x + 7));
-          }
-
-          if(dataV.getUint8(x+1) === 193){
-            // console.log('found SOF1 marker at: ', x);
-            _rawHeight = dataV.getUint16(x + 5);
-            _rawWidth = dataV.getUint16(x + 7);
-          }
-
-          if(dataV.getUint8(x+1) === 194){
-            // console.log('found SOF2 marker at: ', x);
-            _rawHeight = dataV.getUint16(x + 5);
-            _rawWidth = dataV.getUint16(x + 7);
-          }
-
-          //Start Of Scan marker, stop looking for markers
-          if (dataV.getUint8(x+1) === 218) break;
-        }
-        // if (x === 39999) console.log('more than 40000 bytes');
-      }
-
-      // Override raw JPEG and PNG header info if exif data exists
-      const exifObj = exif.readFromBinaryFile(this.imagedata);
-      // console.log('exif: ', exifObj);
-      if (exifObj && exifObj.PixelXDimension && exifObj.PixelYDimension){
-        _rawWidth = exifObj.PixelXDimension;
-        _rawHeight = exifObj.PixelYDimension;
-      }
-    }
+    _rawWidth = imageDimensions.width;
+    _rawHeight = imageDimensions.height;
 
     // Guard against images that are too small
-    if (_rawWidth === 0 && _rawHeight === 0) console.log('failed to read image dimensions');
     if (_rawWidth < 440 || _rawHeight < 440){
-      this.showError = true;
+      this.showSizeError = true;
       this.clearImage();
       return;
     }

@@ -27,9 +27,6 @@ export default function imageService(ckassetService, $http){
           const referenceObj = { type: 'REFERENCE', value: { recordName: programRecordName, action: 'DELETE_SELF' } };
           return ckassetService.modify(fileName, referenceObj, recordName, singleFile, database);
         });
-      })
-      .catch(err => {
-        throw err;
       });
     },
 

@@ -59,7 +59,7 @@ export default function ckassetService($http, $cookies){
       });
       return $http.post(reqUrl, reqBody)
       .then( obj => {
-        // A bad request error will come back with status 200. Check for an error status.
+        // A bad request error will come back with status 200. Check for a serverErrorCode property.
         if (obj && obj.data && obj.data.records && obj.data.records.length > 0 && obj.data.records[0]['serverErrorCode']) {
           throw new Error('Did not validate');
         } else{

@@ -7,6 +7,7 @@ import ckassetService from './ckasset-service';
 import authService from './auth-service';
 import eventService from './event-service';
 import imageService from './image-service';
+import imageFileService from './image-file-service';
 
 const services = angular.module('services', [])
 .factory('ckconfigureService', ckconfigureService)
@@ -14,6 +15,7 @@ const services = angular.module('services', [])
 .factory('ckrecordService', ckrecordService)
 .factory('ckauthenticateService', ckauthenticateService)
 .factory('imageService', imageService)
+.factory('imageFileService', imageFileService)
 .factory('ckassetService', ckassetService)
 .factory('authService', authService)
 .factory('eventService', eventService);

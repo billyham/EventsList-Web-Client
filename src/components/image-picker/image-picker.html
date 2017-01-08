@@ -10,7 +10,8 @@
       cropped-image-data="$ctrl.croppedImageData"
       imagetype="$ctrl.imagetype"
       clear-image="$ctrl.clearImage()"
-      show-error="$ctrl.showError">
+      show-size-error="$ctrl.showSizeError"
+      show-file-error="$ctrl.showFileError">
     </image-crop>
 
     <!-- ==|========================== Image =============================== -->
@@ -26,7 +27,8 @@
   </div>
 
   <!-- |========================= Buttons & Warnings ======================= -->
-  <p ng-show="$ctrl.showError" class="text__warning">Image needs to be at least 440px by 440px</p>
+  <p ng-show="$ctrl.showSizeError" class="text__warning">Image needs to be at least 440px by 440px</p>
+  <p ng-show="$ctrl.showFileError" class="text__warning">File format not recognized as JPEG or PNG</p>
 
   <input type="file" name="file" id="{{$ctrl.record}}" class="file" ng-on-change></input><br>
   <button type="button" ng-click="$ctrl.clearImage()">Clear Image</button>

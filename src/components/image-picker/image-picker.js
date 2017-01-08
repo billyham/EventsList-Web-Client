@@ -19,7 +19,8 @@ function controller(ckassetService, $scope, imageService){
   this.imagedata = null;
   this.croppedImageData = null;
   this.recordName = '';
-  this.showError = false;
+  this.showSizeError = false;
+  this.showFileError = false;
   this.fileName = '';
   this.isLoading = false;
   this.hasUploadError = false;
@@ -41,7 +42,8 @@ function controller(ckassetService, $scope, imageService){
     this.boxtext = 'Drag and drop a JPEG or PNG image file';
     this.imagedata = null;
     this.recordName = '';
-    this.showError = false;
+    this.showSizeError = false;
+    this.showFileError = false;
     this.hasUploadError = false;
     this.isLoading = false;
 
@@ -65,7 +67,8 @@ function controller(ckassetService, $scope, imageService){
 
   function loadImage(tryFiles){
 
-    this.showError = false;
+    this.showSizeError = false;
+    this.showFileError = false;
     this.fileName = '';
 
     if (!tryFiles || tryFiles.length < 1) return;
@@ -113,7 +116,7 @@ function controller(ckassetService, $scope, imageService){
         !finalObj.data ||
         !finalObj.data.records ||
         finalObj.data.records.length < 1
-      ) throw new Error('imagePicker > failed at imageService upload');
+      ) throw new Error('Failed to upload image');
       if (cb) cb(null, finalObj.data.records[0]);
     })
     .catch( err => {
