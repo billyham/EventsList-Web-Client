@@ -50,7 +50,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
     // Load images on launch
     if (this.record.fields.imageRef){
-      console.log(this.record.fields.imageRef);
       renderImage.call(this);
     }
 
@@ -167,7 +166,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
     }else if(field === 'imageRef'){
       if (recordname){
-        debugger;
         if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
         this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
         if (imageObj) this.imageObject = imageObj;
@@ -176,6 +174,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         // Update the imageObject property in event.
         // Update the imagesrc property in event.
         delete this.record.fields.imageRef;
+        this.record.fields.imageRef = {value: null, type: 'REFERENCE'};
       }
     }
 
@@ -201,6 +200,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       if ((field === 'imageRef') && (!recordname)){
         this.imageObject = null;
         this.imagesrc = '';
+        $scope.$apply();
       }else{
         // Load image if necessary
         if (field === 'imageRef') this.renderImage();
@@ -284,11 +284,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     // Delete the record from Image440 Record Type cloud store
     ckrecordService.delete(
       this.dbType,                                    // database
-      this.record.fields.imageRef.value.recordName,   // recordName 
+      this.record.fields.imageRef.value.recordName,   // recordName
       null,                                           // zoneName
       null                                            // ownerRecordName
-    ).then( obj => {
-      console.log('event.js success with delete: ', obj);
+    ).then( () => {
 
       // delete the Program > imageRef field in cloud store
       this.edit('imageRef', false);
