@@ -15,7 +15,7 @@
 
 			<!-- ====|======================= Image ============================== -->
 			<span class="cell__image">
-				<img ng-src="{{$ctrl.imagesrc}}" class="thumbnail" ng-show="$ctrl.imageVisible"></img>
+				<img ng-src="{{$ctrl.imagesrc}}" class="thumbnail"></img>
 			</span>
 
 			<!-- ====|======================= Title ============================== -->
@@ -32,7 +32,7 @@
 		</div>
 
 		<!-- ==|======================= Below the Fold ========================= -->
-		<div ng-show="$ctrl.isSelected">
+		<div ng-show="$ctrl.isSelected" class="l-contain-floats">
 
 			<!-- ====|================ Image and Text Inputs ===================== -->
 			<div class="edit-container">

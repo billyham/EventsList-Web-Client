@@ -16,10 +16,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
-  this.imageVisible = true;
   this.imageObject = null;
   this.isLoading = false;
   this.hasPublishError = false;
+  this.imagesrc = '';
 
   // ================================ Methods =============================== //
   this.renderImage = renderImage;
@@ -31,6 +31,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   this.showAddImage = showAddImage;
   this.startPublish = startPublish;
 
+  // Methods passed to an ngDialog controller.
+  // this.pic = pic.bind(this);
+  this.deleteImg = deleteImg.bind(this);
+  this.pic = pic.bind(this);
   // ============================ Initialization -=========================== //
   this.$onInit = () => {
     // Set values for UI elements
@@ -46,6 +50,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
     // Load images on launch
     if (this.record.fields.imageRef){
+      console.log(this.record.fields.imageRef);
       renderImage.call(this);
     }
 
@@ -104,7 +109,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // Displays ngDialog for adding a new image
   function showAddImage(){
     const dialog = ngDialog.open({
-      template: '<image-picker record="ngDialogData.recordName" edit="pic(image)" db-type="\'' + this.dbType + '\'" close="close()"></image-picker>',
+      template: '<image-picker record="ngDialogData.recordName" edit="pic(image)" delete-img="deleteImg()" db-type="\'' + this.dbType + '\'" close="close()"></image-picker>',
       className: 'ngdialog-theme-default ngdialog-wide-content',
       plain: true,
       data: this.record,
@@ -113,19 +118,30 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         $scope.close = function close(){
           dialog.close();
         };
+        $scope.pic = this.pic;
+        $scope.deleteImg = this.deleteImg;
       }]
     });
   }
 
-  // A method used by ngDialog. Needs access to 'This'. Note the fat arrow function.
-  $scope.pic = image => {
+  function pic(image){
     if (!image || !image.field || !image.recordname || !image.imageObj) return console.log('Error in event > $scope.pic()');
     this.imagesrc = null;
     this.edit(image.field, image.recordname, image.imageObj);
     $scope.close();
   };
 
-  // Edit event
+  /**
+   * Attmepts to save new an edited Program model object to the cloud store.
+   *
+   * @param  {string} field      "text" or "imageRef"
+   * @param  {string} recordname Not used for text changes. Will contain a
+   *                             the recordName of the related Program Object
+   *                             for Image udpates. Will be null if the update
+   *                             is deletion of an image.
+   * @param  {Object} imageObj   Not usef ro text changes. For image udpates,
+   *                             will be an Image440 record object.
+   */
   function edit(field, recordname, imageObj){
 
     // Set form inputs back to pristine
@@ -150,11 +166,17 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       }
 
     }else if(field === 'imageRef'){
-
-      if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
-      this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
-
-      if (imageObj) this.imageObject = imageObj;
+      if (recordname){
+        debugger;
+        if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
+        this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
+        if (imageObj) this.imageObject = imageObj;
+      }else{
+        // Update the record property in event.
+        // Update the imageObject property in event.
+        // Update the imagesrc property in event.
+        delete this.record.fields.imageRef;
+      }
     }
 
     // Save event
@@ -175,8 +197,16 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       // Save new value
       this.record = obj;
 
-      // Load image if necessary
-      if (field === 'imageRef') this.renderImage();
+      // Remove image if deleted
+      if ((field === 'imageRef') && (!recordname)){
+        this.imageObject = null;
+        this.imagesrc = '';
+      }else{
+        // Load image if necessary
+        if (field === 'imageRef') this.renderImage();
+      }
+
+
 
       // TODO: Show confirmation that a change has been made
     }).catch( () => {
@@ -238,6 +268,43 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         }
       }
     });
+  }
+
+  function deleteImg(){
+
+    // Guard against a non-existent image
+    if (
+      !this.record ||
+      !this.record.fields ||
+      !this.record.fields.imageRef ||
+      !this.record.fields.imageRef.value ||
+      !this.record.fields.imageRef.value.recordName
+    ) return console.log('No image to delete');
+
+    // Delete the record from Image440 Record Type cloud store
+    ckrecordService.delete(
+      this.dbType,                                    // database
+      this.record.fields.imageRef.value.recordName,   // recordName 
+      null,                                           // zoneName
+      null                                            // ownerRecordName
+    ).then( obj => {
+      console.log('event.js success with delete: ', obj);
+
+      // delete the Program > imageRef field in cloud store
+      this.edit('imageRef', false);
+
+      $scope.close();
+      //
+      // Update the in-memory array in eventPage?
+      // Un-Render the image in event component?
+
+    }).catch( err => {
+      // TODO: Alert user if delete fails;
+      console.log('event.js > deleteImg error: ', err);
+    });
+
+
+
   }
 
 }

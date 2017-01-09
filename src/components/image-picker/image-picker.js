@@ -6,7 +6,8 @@ export default {
   bindings: {
     record: '<',
     edit: '&',
-    dbType: '<'
+    dbType: '<',
+    deleteImg: '&'
   },
   controller: ['ckassetService', '$scope', 'imageService', controller]
 };

@@ -17,6 +17,12 @@
   zoom: 1;
 }
 
+.l-contain-floats::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+
 .l-overflow-auto{
   overflow: auto;
   zoom: 1;
