@@ -32,9 +32,11 @@
     <p ng-show="$ctrl.showFileError" class="text__warning">File format not recognized as JPEG or PNG</p>
 
     <input type="file" name="file" id="{{$ctrl.record}}" class="file" ng-on-change></input><br>
-    <button type="button" ng-click="$ctrl.clearImage()">Clear Image</button>
+    <button type="button"
+      ng-click="$ctrl.clearImage(!!$ctrl.imagedata)"
+      ng-class="{'button__inactive': !$ctrl.imagedata}">Clear Image</button>
     <button type="submit"
-      ng-click="$ctrl.submitRequest()"
+      ng-click="$ctrl.submitRequest(!!$ctrl.imagedata)"
       ng-class="{'button__inactive': !$ctrl.imagedata}">Submit
     </button>
     <loading ng-if="$ctrl.isLoading"></loading>

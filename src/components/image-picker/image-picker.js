@@ -37,7 +37,8 @@ function controller(ckassetService, $scope, imageService){
 
 
   // ========================== Function declarions ========================= //
-  function clearImage(){
+  function clearImage(hasNoImage){
+    if (hasNoImage === false) return;
     // Clear properties
     this.imagetype = '';
     this.boxtext = 'Drag and drop a JPEG or PNG image file';
@@ -93,7 +94,8 @@ function controller(ckassetService, $scope, imageService){
     fileReader.readAsArrayBuffer(file);
   };
 
-  function submitRequest(){
+  function submitRequest(hasNoImage){
+    if (hasNoImage === false) return;
     if (!this.croppedImageData) return;
 
     this.isLoading = true;
