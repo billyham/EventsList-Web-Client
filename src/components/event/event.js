@@ -173,7 +173,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         // Update the record property in event.
         // Update the imageObject property in event.
         // Update the imagesrc property in event.
-        delete this.record.fields.imageRef;
         this.record.fields.imageRef = {value: null, type: 'REFERENCE'};
       }
     }
@@ -290,12 +289,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     ).then( () => {
 
       // delete the Program > imageRef field in cloud store
-      this.edit('imageRef', false);
+      this.edit('imageRef');
 
       $scope.close();
-      //
-      // Update the in-memory array in eventPage?
-      // Un-Render the image in event component?
 
     }).catch( err => {
       // TODO: Alert user if delete fails;
