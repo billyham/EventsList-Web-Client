@@ -54,61 +54,64 @@ function controller($document, $scope, $window, imageFileService) {
   this.onTouchCancel = onMouseLeave;
 
   // ================================= Init ================================= //
-  // Wait for HTML to render, watch for changes to imageData
-  $scope.$watch('$ctrl.imagedata', () => {
-    this.setSize(initiaWidth, initialHeight);
-    _rawWidth = _rawHeight = 0;
+  // Wait for HTML to render, watch for changes to imagedata
+  this.$onChanges = (changes) => {
+    if (changes.imagedata && !changes.imagedata.isFirstChange()) {
 
-    if (!this.imagedata) return;
+      this.setSize(initiaWidth, initialHeight);
+      _rawWidth = _rawHeight = 0;
 
-    const canvas = document.getElementById('canvas-image');
-    var ctx = canvas.getContext('2d');
+      if (!this.imagedata) return;
 
-    const imageDimensions = imageFileService.getImageSize(this.imagedata, this.imagetype);
+      const canvas = document.getElementById('canvas-image');
+      var ctx = canvas.getContext('2d');
 
-    // Guard against unreadable image files
-    if (!imageDimensions || !imageDimensions.width || !imageDimensions.height) {
-      this.clearImage();
-      this.showFileError = true;
-      return;
+      const imageDimensions = imageFileService.getImageSize(this.imagedata, this.imagetype);
+
+      // Guard against unreadable image files
+      if (!imageDimensions || !imageDimensions.width || !imageDimensions.height) {
+        this.clearImage();
+        this.showFileError = true;
+        return;
+      }
+      _rawWidth = imageDimensions.width;
+      _rawHeight = imageDimensions.height;
+
+      // Guard against images that are too small
+      if (_rawWidth < 440 || _rawHeight < 440){
+        this.showSizeError = true;
+        this.clearImage();
+        return;
+      }
+
+      // Identify the resize-ratio and aspect ratio
+      let aspectRatio = 1;
+      let landscape = _rawWidth >= _rawHeight;
+      const big = landscape ? _rawWidth : _rawHeight;
+      const small = landscape ? _rawHeight : _rawWidth;
+      aspectRatio = big / small;
+      _resizeRatio = landscape ? _rawHeight / 440 : _rawWidth / 440;
+
+      const finalWidth = landscape ? _canvasWidth * aspectRatio : _canvasWidth;
+      const finalHeight = landscape ? _canvasHeight : _canvasHeight * aspectRatio ;
+
+      // Adjust elements to new size
+      this.setSize(finalWidth, finalHeight);
+
+      const imageForDraw = new Image(finalWidth, finalHeight);
+      const blobForDraw = new Blob([this.imagedata], { type: this.imagetype });
+      imageForDraw.src = $window.URL.createObjectURL(blobForDraw);
+      imageForDraw.onload = function(){
+        // Draw the image canvas
+        ctx.drawImage(imageForDraw, 0, 0, finalWidth, finalHeight);
+      };
+
+      // Draw an initial overlay
+      this.drawOverlay();
+      // Create an initial cropped image
+      this.drawCroppedCanvas();
     }
-    _rawWidth = imageDimensions.width;
-    _rawHeight = imageDimensions.height;
-
-    // Guard against images that are too small
-    if (_rawWidth < 440 || _rawHeight < 440){
-      this.showSizeError = true;
-      this.clearImage();
-      return;
-    }
-
-    // Identify the resize-ratio and aspect ratio
-    let aspectRatio = 1;
-    let landscape = _rawWidth >= _rawHeight;
-    const big = landscape ? _rawWidth : _rawHeight;
-    const small = landscape ? _rawHeight : _rawWidth;
-    aspectRatio = big / small;
-    _resizeRatio = landscape ? _rawHeight / 440 : _rawWidth / 440;
-
-    const finalWidth = landscape ? _canvasWidth * aspectRatio : _canvasWidth;
-    const finalHeight = landscape ? _canvasHeight : _canvasHeight * aspectRatio ;
-
-    // Adjust elements to new size
-    this.setSize(finalWidth, finalHeight);
-
-    const imageForDraw = new Image(finalWidth, finalHeight);
-    const blobForDraw = new Blob([this.imagedata], { type: this.imagetype });
-    imageForDraw.src = $window.URL.createObjectURL(blobForDraw);
-    imageForDraw.onload = function(){
-      // Draw the image canvas
-      ctx.drawImage(imageForDraw, 0, 0, finalWidth, finalHeight);
-    };
-
-    // Draw an initial overlay
-    this.drawOverlay();
-    // Create an initial cropped image
-    this.drawCroppedCanvas();
-  });
+  };
 
   // ========================= Function declarations ======================== //
   // Set size of image canvas and container elements based on raw image size

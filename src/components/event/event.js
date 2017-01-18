@@ -52,14 +52,15 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     if (this.record.fields.imageRef){
       renderImage.call(this);
     }
+  };
 
-    // Load image when event is published
-    $scope.$watch('$ctrl.dbType', () => {
+  // Load image when event is published
+  this.$onChanges = (changes) => {
+    if (changes.dbType && !changes.dbType.isFirstChange()){
       if (this.record.fields.imageRef){
-        renderImage.call(this);
+        this.renderImage();
       }
-    });
-
+    }
   };
 
   // ========================= Function declarations ======================== //
