@@ -90,7 +90,7 @@ export default function eventService(ckrecordService, $http, imageService){
       return imageService.upload(toDatabase, imageDataAsArrayBuffer, fileName, record.recordName)
       .then( imageObj => {
 
-        if (!imageObj || !imageObj.data || !imageObj.data.records || imageObj.data.records.length < 1) {
+        if (!imageObj.data.records || imageObj.data.records.length < 1) {
           throw new Error('Error saving Image record');
         }
 

@@ -35,6 +35,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // this.pic = pic.bind(this);
   this.deleteImg = deleteImg.bind(this);
   this.pic = pic.bind(this);
+
   // ============================ Initialization -=========================== //
   this.$onInit = () => {
     // Set values for UI elements
@@ -77,11 +78,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
     ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
     .then( result => {
-      if (!result ||
-        !result.fields ||
-        !result.fields.image ||
-        !result.fields.image.value ||
-        !result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
+      if (!result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
 
       this.imageObject = result;
       this.imagesrc = result.fields.image.value.downloadURL;
@@ -113,7 +110,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       className: 'ngdialog-theme-default ngdialog-wide-content',
       plain: true,
       data: this.record,
-      scope: $scope,    // Note how $scope is passed to the ngDialog
+      scope: $scope,    // Note how the current scope is passed to the ngDialog
       controller: [ () => {
         $scope.close = function close(){
           dialog.close();
@@ -125,7 +122,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   }
 
   function pic(image){
-    if (!image || !image.field || !image.recordname || !image.imageObj) return console.log('Error in event > $scope.pic()');
+    if (!image.field || !image.recordname || !image.imageObj){
+      return console.log('Error in event > $scope.pic()');
+    }
+
     this.imagesrc = null;
     this.edit(image.field, image.recordname, image.imageObj);
     $scope.close();
@@ -139,7 +139,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
    *                             the recordName of the related Program Object
    *                             for Image udpates. Will be null if the update
    *                             is deletion of an image.
-   * @param  {Object} imageObj   Not usef ro text changes. For image udpates,
+   * @param  {Object} imageObj   Not used for text changes. For image udpates,
    *                             will be an Image440 record object.
    */
   function edit(field, recordname, imageObj){
@@ -206,8 +206,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         if (field === 'imageRef') this.renderImage();
       }
 
-
-
       // TODO: Show confirmation that a change has been made
     }).catch( () => {
 
@@ -271,15 +269,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   }
 
   function deleteImg(){
-
     // Guard against a non-existent image
-    if (
-      !this.record ||
-      !this.record.fields ||
-      !this.record.fields.imageRef ||
-      !this.record.fields.imageRef.value ||
-      !this.record.fields.imageRef.value.recordName
-    ) return console.log('No image to delete');
+    if (!this.record.fields.imageRef.value.recordName){
+      return console.log('Fang to delete');
+    }
 
     // Delete the record from Image440 Record Type cloud store
     ckrecordService.delete(
@@ -298,9 +291,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       // TODO: Alert user if delete fails;
       console.log('event.js > deleteImg error: ', err);
     });
-
-
-
   }
 
 }
