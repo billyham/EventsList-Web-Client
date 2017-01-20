@@ -9,10 +9,10 @@ export default {
     dbType: '<',
     deleteImg: '&'
   },
-  controller: ['ckassetService', '$scope', 'imageService', controller]
+  controller: ['ckassetService', '$scope', 'imageService', 'guardService', controller]
 };
 
-function controller(ckassetService, $scope, imageService){
+function controller(ckassetService, $scope, imageService, guard){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.imagetype = '';
@@ -104,7 +104,7 @@ function controller(ckassetService, $scope, imageService){
     // Helper function requires 'This' context
     _cloudKitUpload.call(this, (error, imageObj) => {
       this.isLoading = false;
-      if (error || !imageObj.recordName) return this.hasUploadError = true;
+      if (error || !imageObj || !imageObj.recordName) return this.hasUploadError = true;
       this.edit({ image: { field: 'imageRef', recordname: imageObj.recordName, imageObj } });
     });
   }
@@ -114,10 +114,11 @@ function controller(ckassetService, $scope, imageService){
 
     imageService.upload(this.dbType, this.croppedImageData, this.fileName, this.record)
     .then( finalObj => {
-      if (!finalObj.data.records || finalObj.data.records.length < 1) throw new Error('Failed to upload image');
+      if (guard.arrayWithMember(finalObj, 'data', 'records')) throw new Error('Failed to upload image');
       if (cb) cb(null, finalObj.data.records[0]);
     })
     .catch( err => {
+      // console.log('inside catch');
       if (cb) cb(err);
     });
   }

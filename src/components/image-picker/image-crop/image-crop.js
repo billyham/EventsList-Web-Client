@@ -69,7 +69,7 @@ function controller($document, $scope, $window, imageFileService) {
       const imageDimensions = imageFileService.getImageSize(this.imagedata, this.imagetype);
 
       // Guard against unreadable image files
-      if (!imageDimensions.width || !imageDimensions.height) {
+      if (!imageDimensions || !imageDimensions.width || !imageDimensions.height) {
         this.clearImage();
         this.showFileError = true;
         return;

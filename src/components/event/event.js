@@ -9,10 +9,10 @@ export default {
     dbType: '<',
     publish: '&'
   },
-  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', '$timeout', controller]
+  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', '$timeout', 'guardService', controller]
 };
 
-function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
@@ -78,7 +78,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
     ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
     .then( result => {
-      if (!result.fields.image.value.downloadURL) return console.log('Error at event > renderImage');
+      if (guard.check(result, 'fields', 'image', 'value', 'downloadURL')) return null;
 
       this.imageObject = result;
       this.imagesrc = result.fields.image.value.downloadURL;
@@ -122,7 +122,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   }
 
   function pic(image){
-    if (!image.field || !image.recordname || !image.imageObj){
+    if (!image || !image.field || !image.recordname || !image.imageObj){
       return console.log('Error in event > $scope.pic()');
     }
 
@@ -269,10 +269,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   }
 
   function deleteImg(){
+
     // Guard against a non-existent image
-    if (!this.record.fields.imageRef.value.recordName){
-      return console.log('Fang to delete');
-    }
+    if(guard.check(this, 'record', 'fields', 'imageRef', 'value', 'recordName')) return null;
 
     // Delete the record from Image440 Record Type cloud store
     ckrecordService.delete(

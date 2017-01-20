@@ -1,6 +1,6 @@
-eventService.$inject = ['ckrecordService', '$http', 'imageService'];
+eventService.$inject = ['ckrecordService', '$http', 'imageService', 'guardService'];
 
-export default function eventService(ckrecordService, $http, imageService){
+export default function eventService(ckrecordService, $http, imageService, guard){
 
   return {
 
@@ -90,7 +90,7 @@ export default function eventService(ckrecordService, $http, imageService){
       return imageService.upload(toDatabase, imageDataAsArrayBuffer, fileName, record.recordName)
       .then( imageObj => {
 
-        if (!imageObj.data.records || imageObj.data.records.length < 1) {
+        if (guard.arrayWithMember(imageObj, 'data', 'records')) {
           throw new Error('Error saving Image record');
         }
 
