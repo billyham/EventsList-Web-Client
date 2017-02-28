@@ -23,7 +23,7 @@ export default function guardService() {
     },
 
     /**
-     * Everything that check does, but also checks that the final chlid property
+     * Everything that check does, but also assures that the final child property
      * is an array with at least one member.
      */
     arrayWithMember(obj, ...args){

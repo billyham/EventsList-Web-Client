@@ -32,7 +32,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   this.startPublish = startPublish;
 
   // Methods passed to an ngDialog controller.
-  // this.pic = pic.bind(this);
   this.deleteImg = deleteImg.bind(this);
   this.pic = pic.bind(this);
 
@@ -65,13 +64,23 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   };
 
   // ========================= Function declarations ======================== //
-  // Load new URL for video
+  /**
+   * Button event for loading the URL of a video to the window location.
+   *
+   * @param  {event} clickEvent   Button click event
+   */
   function play(clickEvent){
     if (clickEvent) clickEvent.cancelBubble = true;
     $window.location.href=this.record.fields.video.value;
   };
 
-
+  /**
+   * Renders an image to Event component. Called in onInit() if the event
+   * Program record has a reference to an Image440 object. Uses ckrecordService
+   * to get the image source URL from CloudKit, then assigns that URL to the
+   * image HTML element.
+   *
+   */
   function renderImage(){
     // Fetch image from the server only if necessary
     if (this.imagesrc) return null;
@@ -92,18 +101,27 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
   };
 
-  // Toggle selection
+  /**
+   * Changes appearance of Event to the expanded state.
+   */
   function makeSelected(){
     this.isSelected = true;
   };
 
-  // Prevent the action on the parent div
+  /**
+   * Changes appearance of Event to the collapsed state.
+   *
+   * @param  {event} clickEvent   HTML button event
+   */
   function removeSelected(clickEvent){
     clickEvent.cancelBubble = true;
     this.isSelected = false;
   };
 
-  // Displays ngDialog for adding a new image
+  /**
+   * Displays an ngDialog for adding a new image, or deleting an existing image.
+   * The modal inherits the Event's $scope.
+   */
   function showAddImage(){
     const dialog = ngDialog.open({
       template: '<image-picker record="ngDialogData.recordName" edit="pic(image)" delete-img="deleteImg()" db-type="\'' + this.dbType + '\'" close="close()"></image-picker>',
@@ -121,6 +139,13 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     });
   }
 
+  /**
+   * Adds an image to Event. Updates the associated Program model object.
+   * This method is given to an ngDialog modal view. Accesses Event's edit()
+   * method to do the work of updating the datastore and UI.
+   *
+   * @param  {object} image   Image440 object, as implemented in CloudKit
+   */
   function pic(image){
     if (!image || !image.field || !image.recordname || !image.imageObj){
       return console.log('Error in event > $scope.pic()');
@@ -134,13 +159,13 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   /**
    * Attmepts to save new an edited Program model object to the cloud store.
    *
-   * @param  {string} field      "text" or "imageRef"
-   * @param  {string} recordname Not used for text changes. Will contain a
-   *                             the recordName of the related Program Object
-   *                             for Image udpates. Will be null if the update
-   *                             is deletion of an image.
-   * @param  {Object} imageObj   Not used for text changes. For image udpates,
-   *                             will be an Image440 record object.
+   * @param  {string} field         "text" or "imageRef"
+   * @param  {string} [recordname]  Not used for text changes. For Image update,
+   *                                will contain the recordName of the related
+   *                                Program Object. Will be null if the update
+   *                                is deletion of an image.
+   * @param  {Object} [imageObj]    Not used for text changes. For image updates,
+   *                                will be an Image440 record object.
    */
   function edit(field, recordname, imageObj){
 
@@ -224,7 +249,11 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     });
   };
 
-  // Delete event
+  /**
+   * Delete the associated Event (including all the related models, i.e., Program
+   * and Image440) in the cloud store. Update the UI using the remove()
+   * binding from EventList.
+   */
   function deleteEvent(){
     ckrecordService.delete(
       this.dbType,                // databaseScope
@@ -268,6 +297,11 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     });
   }
 
+  /**
+   * Removes the Image associated to the Program from cloud store.
+   * This method is given to an ngDialog modal view. The $scope of the Event
+   * controller is given to the ngDialog.
+   */
   function deleteImg(){
 
     // Guard against a non-existent image
