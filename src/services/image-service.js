@@ -12,7 +12,7 @@ export default function imageService(ckassetService, $http){
      * @param  {string}       fileName            Human readable file name
      * @param  {string}       programRecordName   ID of related program object
      *
-     * @return {promise}      Resolves the complete image object.
+     * @return {Promise}      Resolves the complete image object.
      */
     upload(database, croppedImageData, fileName, programRecordName){
 

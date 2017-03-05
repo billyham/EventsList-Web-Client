@@ -33,6 +33,9 @@ function controller(ckqueryService, ckconfigureService, $scope){
   };
 
   // ======================== Function declarations ========================= //
+  /**
+   * Loads next batch of events to the screen.
+   */
   function loadMore(){
     ckqueryService.query(
       this.dbType,'_defaultZone',null,'Program',
@@ -47,6 +50,12 @@ function controller(ckqueryService, ckconfigureService, $scope){
     });
   };
 
+  /**
+   * Update the list of events in the current UI. Note, it does NOT delete
+   * a record from cloud store.
+   *
+   * @param  {Object} rec  An event record.
+   */
   function remove(rec){
     let index = this.ckqueryResult.records.findIndex( element => element.recordName === rec.recordName );
     if (index > -1) {

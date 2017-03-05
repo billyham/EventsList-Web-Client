@@ -67,7 +67,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   /**
    * Button event for loading the URL of a video to the window location.
    *
-   * @param  {event} clickEvent   Button click event
+   * @param  {Event} clickEvent   Button click event
    */
   function play(clickEvent){
     if (clickEvent) clickEvent.cancelBubble = true;
@@ -144,7 +144,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
    * This method is given to an ngDialog modal view. Accesses Event's edit()
    * method to do the work of updating the datastore and UI.
    *
-   * @param  {object} image   Image440 object, as implemented in CloudKit
+   * @param  {Object} image   Image440 object, as implemented in CloudKit
    */
   function pic(image){
     if (!image || !image.field || !image.recordname || !image.imageObj){
@@ -274,7 +274,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
    * handled in eventPage. With either success or failure, callback fires to
    * end transition animation.
    *
-   * @param  {Boolean} isPublish true when moving to Published state, false when
+   * @param  {boolean} isPublish true when moving to Published state, false when
    *                             moving to Draft state.
    */
   function startPublish(isPublish){

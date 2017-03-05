@@ -20,6 +20,10 @@ function controller(ckrecordService, $scope){
   this.submit = submit;
 
   // ========================= Function declarations ======================== //
+  /**
+   * Creates Program model object using form data and saves as a new cloud store
+   * record.
+   */
   function submit(){
     if (!this.formtitle) return;
 

@@ -84,9 +84,9 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
   /**
    * Changes the status of an event to Published or Draft.
    *
-   * @param  {object}   rec  An event record object with three properties:
-   *                         eventRecord   {object}  Program model object
-   *                         imageRecord   {object}  Image model object, value may be NULL
+   * @param  {Object}   rec  An event record object with three properties:
+   *                         eventRecord   {Object}  Program model object
+   *                         imageRecord   {Object}  Image model object, value may be NULL
    *                         isPublished   {boolean} "true" if event is changed to the Published
    *                                                  state. "false" if event is changed to Draft.
    */

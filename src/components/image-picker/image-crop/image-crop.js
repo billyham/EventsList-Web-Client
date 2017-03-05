@@ -114,7 +114,12 @@ function controller($document, $scope, $window, imageFileService) {
   };
 
   // ========================= Function declarations ======================== //
-  // Set size of image canvas and container elements based on raw image size
+  /**
+   * Set size of image canvas and container elements based on raw image size
+   *
+   * @param {number} setWidth
+   * @param {number} setHeight
+   */
   function setSize(setWidth, setHeight){
 
     const collectionOfElements = document.getElementsByClassName('image-initial-size');
@@ -133,7 +138,14 @@ function controller($document, $scope, $window, imageFileService) {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
   }
 
-  // Crop overlay canvas
+  /**
+   * Draw a canvas overlay, showing the user a box over the picked image, with
+   * an aspect ratio based on the desired final rendered image from the config
+   * settings. Canvas overlay is updated with the movement of the user's mouse
+   * or touch.
+   *
+   * @param  {Object} event Mouse or touch events inside the drop zone container.
+   */
   function drawOverlay(event){
     // The crop box size
     const cropSize = 220;
@@ -180,6 +192,12 @@ function controller($document, $scope, $window, imageFileService) {
     _overlayOriginY = (_currentY - cropHalf) * 2;
   }
 
+  /**
+   * Handler for both mouse and touch actions that initiate an interaction:
+   * onMouseDown and onTouchStart.
+   *
+   * @param  {Event} event
+   */
   function onMouseDown(event){
     _isEditing = true;
     _initialPointerX = event.pageX;
@@ -194,11 +212,21 @@ function controller($document, $scope, $window, imageFileService) {
     this.drawOverlay(event);
   }
 
+  /**
+   * Handler for both mouse the touch events that move a pointer across the
+   * screen: onMouseMove and onTouchMove
+   *
+   * @param  {Event} event
+   */
   function onMouseMove(event){
     if (!_isEditing) return;
     this.drawOverlay(event);
   }
 
+  /**
+   * Handler for both mouse and touch events that end an interaction: onMouseUp
+   * and onTouchEnd.
+   */
   function onMouseUp(){
     if (_isEditing) this.drawCroppedCanvas();
     _isEditing = false;
@@ -206,6 +234,10 @@ function controller($document, $scope, $window, imageFileService) {
     _previousY = _currentY;
   }
 
+  /**
+   * Handler for both mouse and touch events that cancel an interaction:
+   * onMouseLeave and onTouchCancel
+   */
   function onMouseLeave(){
     if (_isEditing) this.drawCroppedCanvas();
     _isEditing = false;
@@ -213,6 +245,10 @@ function controller($document, $scope, $window, imageFileService) {
     _previousY = _currentY;
   }
 
+  /**
+     * Render the final image, with cropping based on the user input from the
+     * overlay selection. Save final image data to this.croppedImageData.
+     */
   function drawCroppedCanvas(){
     const croppedCanvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas');
     croppedCanvas.width = 440;

@@ -4,11 +4,11 @@ export default function guardService() {
     /**
      * A helper function to test the validity of nested properties on an object.
      *
-     * @param {object}  obj   Any javascript object, can be null
+     * @param {Object}  obj   Any javascript object, can be null
      * @param {string}  args  Any number of strings, identifying the property names
      *                        in sequence from parent to child.
      *
-     * @return {Boolean}      Returns false if the chain of all properties exists
+     * @return {boolean}      Returns false if the chain of all properties exists
      *                        with truthy values. Returns true if the guard is
      *                        triggered by the presence of a false or null value.
      */

@@ -8,9 +8,9 @@ export default function eventService(ckrecordService, $http, imageService, guard
      * Service method for publishing or unpublishing an event (Program with all
      * related resources) to cloud store.
      *
-     * @param  {object}  record      Program model object
-     * @param  {object}  [image]     Image440 model object
-     * @param  {Boolean} isUnPublish true if the method is used to unpublish an
+     * @param  {Object}  record      Program model object
+     * @param  {Object}  [image]     Image440 model object
+     * @param  {boolean} isUnPublish true if the method is used to unpublish an
      *                               event.
      *
      * @return {promise}  Resolves with the Program object.
@@ -44,13 +44,13 @@ export default function eventService(ckrecordService, $http, imageService, guard
    * after it is successfully saved. Returns a promise that resolves with the
    * newly created record object.
    *
-   * @param  {object}   record        A single full event record
+   * @param  {Object}   record        A single full event record
    * @param  {string}   toDatabase    Database to save to: PUBLIC or PRIVATE
    * @param  {string}   fromDatabase  Database to remove from: PUBLIC or PRIVATE
    * @param  {string}   [recordType]  Used to first save an image assocated
    *                                    with the record.
    *
-   * @return {promise}  Promise that resolves with the new saved record.
+   * @return {Promise}  Promise that resolves with the new saved record.
    */
   function _moveRecord(record, toDatabase, fromDatabase, recordType){
 
@@ -78,7 +78,7 @@ export default function eventService(ckrecordService, $http, imageService, guard
    * @param  {string} fromDatabase PUBLIC or PRIVATE
    * @param  {object} image        Imagem model object
    *
-   * @return {promise} Promise that resolves with an updated Program object
+   * @return {Promise} Promise that resolves with an updated Program object
    */
   function _moveImage(record, toDatabase, fromDatabase, image){
 
@@ -128,7 +128,7 @@ export default function eventService(ckrecordService, $http, imageService, guard
    * @param  {string}   [recordType]  Used to first save an image assocated
    *                                    with the record.
    *
-   * @return {promise}          A promise the resolves with an object that is
+   * @return {Promise}          A promise the resolves with an object that is
    *                            the original record with an updated timestamp.
    */
   function _saveRecord(record, database, recordType){

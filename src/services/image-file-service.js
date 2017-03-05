@@ -6,10 +6,10 @@ export default function imageFileService(){
      * Evaluates the pixel size of an image and returns an object. Currently works
      * for JPEG and PNG file types.
      *
-     * @param  {arrayBuffer} arrayBuffer  Raw image data.
+     * @param  {ArrayBuffer} arrayBuffer  Raw image data.
      * @param  {string} imageType         File type, expects "image/png" or "image/jpeg"
      *
-     * @return {object}  An object with properties for pixel dimensions of the image:
+     * @return {Object}  An object with properties for pixel dimensions of the image:
      *                        width: {number}
      *                        height: {number}
      *                   Will return null if the evaluation fails.

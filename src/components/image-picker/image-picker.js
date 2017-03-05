@@ -37,6 +37,13 @@ function controller(ckassetService, $scope, imageService, guard){
 
 
   // ========================== Function declarions ========================= //
+  /**
+   * Resets the component by removing an existing image selection. Also removes
+   * any current error messages.
+   *
+   * @param  {boolean} hasNoImage Flag to indicate that the component has no
+   *                              image selection.
+   */
   function clearImage(hasNoImage){
     if (hasNoImage === false) return;
     // Clear properties
@@ -54,11 +61,22 @@ function controller(ckassetService, $scope, imageService, guard){
     angular.element(filePath).val('');
   }
 
-  // Watch for changes in the input-file element
+  /**
+   * Watch for changes in the input-file element
+   *
+   * @param  {Array} tryFiles  Array of selected files.
+   */
   function onChange(tryFiles){
     this.loadImage(tryFiles);
   }
 
+  /**
+   * Event handler for receiving drop events. Invokes the onChange event
+   * associated with the <input> form item for selecting files, passing along
+   * the dragged & dropped files.
+   *
+   * @param  {Event} evnt   HTML5 Drop event
+   */
   function onDrop(evnt) {
     evnt.stopPropagation();
     evnt.preventDefault();
@@ -67,6 +85,13 @@ function controller(ckassetService, $scope, imageService, guard){
     this.loadImage(evnt.dataTransfer.files);
   };
 
+  /**
+   * Upon receiving an array of images as raw data, creates a FileReader and
+   * attempts to read the first item in the array as an ArrayBuffer. Invokes a
+   * digest cycle to update the UI by rendering the image as a selection.
+   *
+   * @param  {Array} tryFiles  Array of image files.
+   */
   function loadImage(tryFiles){
 
     this.showSizeError = false;
@@ -94,6 +119,13 @@ function controller(ckassetService, $scope, imageService, guard){
     fileReader.readAsArrayBuffer(file);
   };
 
+  /**
+   * Attempts to upload the image data to the cloud store and if successful,
+   * invokes the edit() function passed to the modal window with the Image440
+   * model object returned from the cloud store.
+   *
+   * @param  {boolean} hasNoImage   Flag to indicate to image selected.
+   */
   function submitRequest(hasNoImage){
     if (hasNoImage === false) return;
     if (!this.croppedImageData) return;
@@ -109,7 +141,15 @@ function controller(ckassetService, $scope, imageService, guard){
     });
   }
 
-  // Call upon the imageService to upload the image to cloud store,
+  //
+  /**
+   * Calls upon the imageService to upload the image to cloud store.
+   *
+   * @param  {Function} cb  Error first callback function to indicate completion.
+   *                        First arg is truthy only if the upload fails. Second
+   *                        arg is provided on success as an Image440 model
+   *                        object.
+   */
   function _cloudKitUpload(cb){
 
     imageService.upload(this.dbType, this.croppedImageData, this.fileName, this.record)
