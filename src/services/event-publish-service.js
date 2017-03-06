@@ -1,6 +1,6 @@
-eventService.$inject = ['ckrecordService', '$http', 'imageService', 'guardService'];
+eventPublishService.$inject = ['ckrecordService', '$http', 'imageService', 'guardService'];
 
-export default function eventService(ckrecordService, $http, imageService, guard){
+export default function eventPublishService(ckrecordService, $http, imageService, guard){
 
   return {
 

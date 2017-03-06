@@ -8,10 +8,10 @@ export default {
     privateEvents: '=',
     userIdentity: '<',
   },
-  controller: ['ngDialog', 'eventService', '$scope', 'ckauthenticateService', 'ckqueryService', '$timeout', controller]
+  controller: ['ngDialog', 'eventPublishService', '$scope', 'ckauthenticateService', 'ckqueryService', '$timeout', controller]
 };
 
-function controller(ngDialog, eventService, $scope, ckauthenticateService, ckqueryService, $timeout) {
+function controller(ngDialog, eventPublishService, $scope, ckauthenticateService, ckqueryService, $timeout) {
   // ============================== Properties ============================== //
   this.styles = styles;
   this.typepublic = 'PUBLIC';
@@ -97,7 +97,7 @@ function controller(ngDialog, eventService, $scope, ckauthenticateService, ckque
     const toEventsArray = isPublished ? this.publicEvents : this.privateEvents;
     const fromEventsArray = isPublished ? this.privateEvents : this.publicEvents;
 
-    eventService.publish(eventRecord, imageRecord, !isPublished)
+    eventPublishService.publish(eventRecord, imageRecord, !isPublished)
     .then( record => {
 
       // TODO: Alert the user when publish fails

@@ -64,7 +64,7 @@ function controller(ckassetService, $scope, imageService, guard){
   /**
    * Watch for changes in the input-file element
    *
-   * @param  {Array} tryFiles  Array of selected files.
+   * @param  {Blob[]} tryFiles  Array of selected files.
    */
   function onChange(tryFiles){
     this.loadImage(tryFiles);
@@ -86,11 +86,11 @@ function controller(ckassetService, $scope, imageService, guard){
   };
 
   /**
-   * Upon receiving an array of images as raw data, creates a FileReader and
+   * Upon receiving an array of images as raw data Blobs, creates a FileReader and
    * attempts to read the first item in the array as an ArrayBuffer. Invokes a
    * digest cycle to update the UI by rendering the image as a selection.
    *
-   * @param  {Array} tryFiles  Array of image files.
+   * @param  {Blob[]} tryFiles  Array of image files.
    */
   function loadImage(tryFiles){
 
@@ -141,14 +141,20 @@ function controller(ckassetService, $scope, imageService, guard){
     });
   }
 
-  //
+  /**
+   * Error first callback function to indicate completion. First arg is truthy
+   * only if the upload fails. Second arg is provided on success as an Image440
+   * model object.
+   *
+   * @callback requestCallback
+   * @param {Error}     error
+   * @param {Image440}  [imageObj]
+   */
+
   /**
    * Calls upon the imageService to upload the image to cloud store.
    *
-   * @param  {Function} cb  Error first callback function to indicate completion.
-   *                        First arg is truthy only if the upload fails. Second
-   *                        arg is provided on success as an Image440 model
-   *                        object.
+   * @param  {requestCallback} cb
    */
   function _cloudKitUpload(cb){
 

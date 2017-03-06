@@ -9,10 +9,20 @@ export default {
     dbType: '<',
     publish: '&'
   },
-  controller: ['ckrecordService', 'ckqueryService', '$scope', '$window', 'ngDialog', '$timeout', 'guardService', controller]
+  controller: [
+    'ckrecordService',
+    'ckqueryService',
+    '$scope',
+    '$window',
+    'ngDialog',
+    '$timeout',
+    'guardService',
+    'Program',
+    controller
+  ]
 };
 
-function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard, Program){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
@@ -65,7 +75,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
   // ========================= Function declarations ======================== //
   /**
-   * Button event for loading the URL of a video to the window location.
+   * Button event handler for loading the URL of a video to the window location.
    *
    * @param  {Event} clickEvent   Button click event
    */
@@ -111,7 +121,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   /**
    * Changes appearance of Event to the collapsed state.
    *
-   * @param  {event} clickEvent   HTML button event
+   * @param  {Event} clickEvent   HTML button event
    */
   function removeSelected(clickEvent){
     clickEvent.cancelBubble = true;
@@ -202,6 +212,10 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
         this.record.fields.imageRef = {value: null, type: 'REFERENCE'};
       }
     }
+
+    const programItem = new Program(JSON.stringify(this.record));
+    console.log(programItem);
+    console.log(programItem.toJson());
 
     // Save event
     ckrecordService.save(
