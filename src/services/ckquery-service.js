@@ -1,6 +1,6 @@
-ckqueryService.$inject = [];
+ckqueryService.$inject = ['Program'];
 
-export default function ckqueryService(){
+export default function ckqueryService(Program){
 
   return {
     query(
@@ -31,14 +31,6 @@ export default function ckqueryService(){
           fieldName: sortByField,
           ascending: ascending
         };
-
-        // if(!isNaN(latitude) && !isNaN(longitude)) {
-        //   sortDescriptor.relativeLocation = {
-        //     latitude: latitude,
-        //     longitude: longitude
-        //   };
-        // }
-
         query.sortBy = [sortDescriptor];
       }
 
@@ -75,12 +67,21 @@ export default function ckqueryService(){
             throw response.errors[0];
 
           } else {
-            var records = response.records;
+            // var records = response.records;
+
+            const programRecords = response.records.map( element => {
+              console.log(element);
+              return new Program(element);
+            });
+            // for (let rec in programRecords){
+            //   console.log(programRecords[rec]);
+            // }
+
 
             // Save the continuation marker so we can fetch more results.
             var {continuationMarker} = response;
             // return renderRecords(records);
-            return {records, continuationMarker};
+            return {records: programRecords, continuationMarker};
           }
         })
         .catch(function (err){

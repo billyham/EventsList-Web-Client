@@ -7,22 +7,16 @@ export default function ProgramFactory(){
      * Constructor function for Program class model.
      *
      * @param {string}  programJson Serialized JSON representation of a Program
-     *                              object as structured by CloudKit. Title
-     *                              is the only required property, all others
-     *                              are optional.
+     *                              object as structured by CloudKit. Title and
+     *                              recordName are the only required properties,
+     *                              all others are optional.
      */
-    constructor(programJson){
-      let jsonObj;
-
-      try {
-        jsonObj = JSON.parse(programJson);
-      }catch(err){
-        return null;
-      }
-
-      if (!jsonObj.fields.title) return null;
+    constructor(jsonObj){
+      if (!jsonObj || !jsonObj.fields || !jsonObj.fields.title) return null;
 
       this.title = jsonObj.fields.title.value;
+      this.recordName = jsonObj.recordName;
+
       this.video = '';
       this.fulldescription = '';
       this.imageRef = '';
@@ -47,24 +41,41 @@ export default function ProgramFactory(){
      *
      * @return  {string}  Serialized JSON object
      */
-    toJson(){
-      const output = { fields: {} };
-      output.fields.title = {value: this.title};
+    toObject(){
+      const output = Object.create(null);
+      output.fields = Object.create(null);
+
+      output.recordName = this.recordName;
+      output.fields.title = Object.create(null);
+      output.fields.title.value = this.title;
+      output.fields.title.type = 'STRING';
 
       if (this.video){
-        output.fields.video = {value: this.video};
+        output.fields.video = Object.create(null);
+        output.fields.video.value = this.video;
+        output.fields.video.type = 'STRING';
       }
 
       if (this.fulldescription){
-        output.fields.fulldescription = {value: this.fulldescription};
+        output.fields.fulldescription = Object.create(null);
+
+        output.fields.fulldescription.value = this.fulldescription;
+        output.fields.fulldescription.type = 'STRING';
       }
 
       if (this.imageRef){
-        output.fields.imageRef = { type: 'REFERENCE', value: {} };
+        output.fields.imageRef = Object.create(null);
+        output.fields.imageRef.type = 'REFERENCE';
+        output.fields.imageRef.value = Object.create(null);
         output.fields.imageRef.value.recordName = this.imageRef;
         output.fields.imageRef.value.action = 'NONE';
       }
 
+      return output;
+    }
+
+    toJson(){
+      const output = this.toObject;
       return JSON.stringify(output);
     }
   }

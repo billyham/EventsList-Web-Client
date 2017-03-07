@@ -17,12 +17,11 @@ export default {
     'ngDialog',
     '$timeout',
     'guardService',
-    'Program',
     controller
   ]
 };
 
-function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard, Program){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
@@ -48,9 +47,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // ============================ Initialization -=========================== //
   this.$onInit = () => {
     // Set values for UI elements
-    this.formtitle = this.record.fields.title.value;
-    if (this.record.fields.video) this.formvideo = this.record.fields.video.value;
-    if (this.record.fields.fulldescription) this.formfulldescription = this.record.fields.fulldescription.value;
+    this.formtitle = this.record.title;
+    if (this.record.video) this.formvideo = this.record.video;
+    if (this.record.fulldescription) this.formfulldescription = this.record.fulldescription;
     this.imagesrc = '';
 
     // Save initial values in case editing fails
@@ -59,7 +58,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     this.oldRecord = {};
 
     // Load images on launch
-    if (this.record.fields.imageRef){
+    if (this.record.imageRef){
       renderImage.call(this);
     }
   };
@@ -67,7 +66,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   // Load image when event is published
   this.$onChanges = (changes) => {
     if (changes.dbType && !changes.dbType.isFirstChange()){
-      if (this.record.fields.imageRef){
+      if (this.record.imageRef){
         this.renderImage();
       }
     }
@@ -81,7 +80,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
    */
   function play(clickEvent){
     if (clickEvent) clickEvent.cancelBubble = true;
-    $window.location.href=this.record.fields.video.value;
+    $window.location.href=this.record.video;
   };
 
   /**
@@ -95,7 +94,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     // Fetch image from the server only if necessary
     if (this.imagesrc) return null;
 
-    ckrecordService.fetch(this.dbType, this.record.fields.imageRef.value.recordName, '_defaultZone')
+    ckrecordService.fetch(this.dbType, this.record.imageRef, '_defaultZone')
     .then( result => {
       if (guard.check(result, 'fields', 'image', 'value', 'downloadURL')) return null;
 
@@ -187,35 +186,32 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
     if (field === 'text'){
       // It is assured that the title field exists
-      this.record.fields['title'].value = this.formtitle;
+      this.record.title = this.formtitle;
 
       // All other fields are optional
       if (this.formfulldescription){
-        if (!this.record.fields['fulldescription']) this.record.fields['fulldescription'] = {type: 'STRING'};
-        this.record.fields['fulldescription'].value = this.formfulldescription;
+        this.record.fulldescription = this.formfulldescription;
       }
 
       if (this.formvideo){
-        if (!this.record.fields['video']) this.record.fields['video'] = {type: 'STRING'};
-        this.record.fields['video'].value = this.formvideo;
+        this.record.video = this.formvideo;
       }
 
     }else if(field === 'imageRef'){
       if (recordname){
-        if (!this.record.fields[field]) this.record.fields[field] = { type: 'REFERENCE' };
-        this.record.fields[field].value = { recordName: recordname, action: 'NONE' };
+        this.record.imageRef = recordname;
         if (imageObj) this.imageObject = imageObj;
       }else{
         // Update the record property in event.
         // Update the imageObject property in event.
         // Update the imagesrc property in event.
-        this.record.fields.imageRef = {value: null, type: 'REFERENCE'};
+        this.record.imageRef = '';
       }
     }
 
-    const programItem = new Program(JSON.stringify(this.record));
-    console.log(programItem);
-    console.log(programItem.toJson());
+    const recordAsObject = this.record.toObject();
+    console.log(recordAsObject);
+    if (!recordAsObject || !recordAsObject.fields) return null;
 
     // Save event
     ckrecordService.save(
@@ -230,7 +226,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       null,                           // ownerRecordName,
       null,                           // participants,
       null,                           // parentRecordName,
-      this.record.fields
+      recordAsObject.fields
     ).then( obj => {
       // Save new value
       this.record = obj;
@@ -250,9 +246,9 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
       // Update UI fields
       if (field === 'text') {
-        this.formtitle = this.oldRecord.fields['title'].value;
-        this.formvideo = this.oldRecord.fields['video'] ? this.oldRecord.fields['video'].value : '';
-        this.formfulldescription = this.oldRecord.fields['fulldescription'] ? this.oldRecord.fields['fulldescription'].value : '';
+        this.formtitle = this.oldRecord.title;
+        this.formvideo = this.oldRecord.video;
+        this.formfulldescription = this.oldRecord.fulldescription;
       }
 
       // Revert record
@@ -319,12 +315,12 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
   function deleteImg(){
 
     // Guard against a non-existent image
-    if(guard.check(this, 'record', 'fields', 'imageRef', 'value', 'recordName')) return null;
+    if(!this.record.imageRef) return null;
 
     // Delete the record from Image440 Record Type cloud store
     ckrecordService.delete(
       this.dbType,                                    // database
-      this.record.fields.imageRef.value.recordName,   // recordName
+      this.record.imageRef,                           // recordName
       null,                                           // zoneName
       null                                            // ownerRecordName
     ).then( () => {
