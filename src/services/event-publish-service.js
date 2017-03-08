@@ -1,6 +1,6 @@
-eventPublishService.$inject = ['ckrecordService', '$http', 'imageService', 'guardService'];
+eventPublishService.$inject = ['ckrecordService', '$http', 'imageService', 'guardService', 'Program'];
 
-export default function eventPublishService(ckrecordService, $http, imageService, guard){
+export default function eventPublishService(ckrecordService, $http, imageService, guard, Program){
 
   return {
 
@@ -8,7 +8,7 @@ export default function eventPublishService(ckrecordService, $http, imageService
      * Service method for publishing or unpublishing an event (Program with all
      * related resources) to cloud store.
      *
-     * @param  {Object}  record      Program model object
+     * @param  {Program} record      Program model object
      * @param  {Object}  [image]     Image440 model object
      * @param  {boolean} isUnPublish true if the method is used to unpublish an
      *                               event.
@@ -21,7 +21,7 @@ export default function eventPublishService(ckrecordService, $http, imageService
       // const arrayOfPromises = [];
 
       // Check if the event has an associated image and move it too.
-      if (record.fields.imageRef && record.fields.imageRef.value.recordName && image){
+      if (record.imageRef && image){
 
         // 1. Move the Image
         // 2. On success, update the Program record with new imageRef ID &&
@@ -44,7 +44,7 @@ export default function eventPublishService(ckrecordService, $http, imageService
    * after it is successfully saved. Returns a promise that resolves with the
    * newly created record object.
    *
-   * @param  {Object}   record        A single full event record
+   * @param  {Program}  record        A single full event record
    * @param  {string}   toDatabase    Database to save to: PUBLIC or PRIVATE
    * @param  {string}   fromDatabase  Database to remove from: PUBLIC or PRIVATE
    * @param  {string}   [recordType]  Used to first save an image assocated
@@ -59,7 +59,7 @@ export default function eventPublishService(ckrecordService, $http, imageService
       if (!newRecord) return null;
       return _removeRecord(record, fromDatabase)
       .then( () => {
-        return newRecord;
+        return new Program(newRecord);
       })
       .catch( err => {
         // If _removeRecord on the fromDatabase fails, return to the original
@@ -73,10 +73,10 @@ export default function eventPublishService(ckrecordService, $http, imageService
   /**
    * Moves an Image object from PUBLIC to PRIVATE database or vice versa.
    *
-   * @param  {object} record       Program model object
-   * @param  {string} toDatabase   PUBLIC or PRIVATE
-   * @param  {string} fromDatabase PUBLIC or PRIVATE
-   * @param  {object} image        Imagem model object
+   * @param  {Program}  record       Program model object
+   * @param  {string}   toDatabase   PUBLIC or PRIVATE
+   * @param  {string}   fromDatabase PUBLIC or PRIVATE
+   * @param  {object}   image        Image model object
    *
    * @return {Promise} Promise that resolves with an updated Program object
    */
@@ -100,9 +100,10 @@ export default function eventPublishService(ckrecordService, $http, imageService
         return _removeRecord(image, fromDatabase)
         .then( () => {
           // Copy the record object
-          const newRecord = JSON.parse(JSON.stringify(record));
+          // const newRecord = JSON.parse(JSON.stringify(record));
+          const newRecord = new Program(record.toObject());
           // Update Program record with new imageRef ID
-          newRecord.fields.imageRef.value.recordName = imageObj.data.records[0].recordName;
+          newRecord.imageRef = imageObj.data.records[0].recordName;
           return newRecord;
         })
         .catch( err => {
@@ -135,19 +136,22 @@ export default function eventPublishService(ckrecordService, $http, imageService
 
     recordType = recordType || 'Program';
 
+    const recordAsObject = record.toObject();
+    if (!recordAsObject || !recordAsObject.fields) return console.log('Failure to eventPublishService > _saveRecord');
+
     return ckrecordService.save(
-      database,           // databaseScope, PUBLIC or PRIVATE
-      record.recordName,  // recordName,
-      null,               // recordChangeTag
-      recordType,         // recordType
-      null,               // zoneName,  null is _defaultZone, PUBLIC databases have only the default zone
-      null,               // forRecordName,
-      null,               // forRecordChangeTag,
-      null,               // publicPermission,
-      null,               // ownerRecordName,
-      null,               // participants,
-      null,               // parentRecordName,
-      record.fields       // fields
+      database,               // databaseScope, PUBLIC or PRIVATE
+      record.recordName,      // recordName,
+      null,                   // recordChangeTag
+      recordType,             // recordType
+      null,                   // zoneName,  null is _defaultZone, PUBLIC databases have only the default zone
+      null,                   // forRecordName,
+      null,                   // forRecordChangeTag,
+      null,                   // publicPermission,
+      null,                   // ownerRecordName,
+      null,                   // participants,
+      null,                   // parentRecordName,
+      recordAsObject.fields   // fields
     );
 
   };

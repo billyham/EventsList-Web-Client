@@ -160,11 +160,14 @@ function controller(ckassetService, $scope, imageService, guard){
 
     imageService.upload(this.dbType, this.croppedImageData, this.fileName, this.record)
     .then( finalObj => {
-      if (guard.arrayWithMember(finalObj, 'data', 'records')) throw new Error('Failed to upload image');
-      if (cb) cb(null, finalObj.data.records[0]);
+
+      if (guard.arrayWithMember(finalObj, 'data', 'records')) {
+        throw new Error('Failed to upload image');
+      }else{
+        if (cb) cb(null, finalObj.data.records[0]);
+      }
     })
     .catch( err => {
-      // console.log('inside catch');
       if (cb) cb(err);
     });
   }

@@ -7,10 +7,10 @@ export default {
     add: '&',
     close: '&'
   },
-  controller: ['ckrecordService', '$scope', controller]
+  controller: ['ckrecordService', '$scope', 'Program', controller]
 };
 
-function controller(ckrecordService, $scope){
+function controller(ckrecordService, $scope, Program){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.formtitle = '';
@@ -58,7 +58,7 @@ function controller(ckrecordService, $scope){
       this.formtitle = '';
       this.formvideo = '';
       $scope.$apply();
-      this.add( {rec: record} );
+      this.add( {rec: new Program(record)} );
       this.close();
     }).catch((error) => {
       // Revert to previous value

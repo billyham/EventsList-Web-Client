@@ -78,7 +78,7 @@ export default function ckrecordService(){
         }
       });
     },
-    
+
     save(
       databaseScope,        // PUBLIC or PRIVATE
       recordName,

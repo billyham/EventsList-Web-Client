@@ -17,11 +17,12 @@ export default {
     'ngDialog',
     '$timeout',
     'guardService',
+    'Program',
     controller
   ]
 };
 
-function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard){
+function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, $timeout, guard, Program){
   // ============================== Properties ============================== //
   this.styles = styles;
   this.isSelected = false;
@@ -177,12 +178,11 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
    *                                will be an Image440 record object.
    */
   function edit(field, recordname, imageObj){
-
     // Set form inputs back to pristine
     $scope.textform.$setPristine();
 
     // Clone the original record
-    this.oldRecord = JSON.parse(JSON.stringify(this.record));
+    this.oldRecord = new Program(this.record.toObject());
 
     if (field === 'text'){
       // It is assured that the title field exists
@@ -210,8 +210,8 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
     }
 
     const recordAsObject = this.record.toObject();
-    console.log(recordAsObject);
     if (!recordAsObject || !recordAsObject.fields) return null;
+
 
     // Save event
     ckrecordService.save(
@@ -229,7 +229,7 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
       recordAsObject.fields
     ).then( obj => {
       // Save new value
-      this.record = obj;
+      this.record = new Program(obj);
 
       // Remove image if deleted
       if ((field === 'imageRef') && (!recordname)){
@@ -243,7 +243,6 @@ function controller(ckrecordService, ckqueryService, $scope, $window, ngDialog, 
 
       // TODO: Show confirmation that a change has been made
     }).catch( () => {
-
       // Update UI fields
       if (field === 'text') {
         this.formtitle = this.oldRecord.title;

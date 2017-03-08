@@ -71,8 +71,8 @@ function controller(ngDialog, eventPublishService, $scope, ckauthenticateService
           if (!rec) return;
           $scope.ngDialogData.records.push(rec);
           $scope.ngDialogData.records.sort( (a,b) => {
-            if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
-            if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
+            if (a.title.toUpperCase() > b.title.toUpperCase()) return 1;
+            if (a.title.toUpperCase() < b.title.toUpperCase()) return -1;
             return 0;
           });
           $scope.$apply();
@@ -85,7 +85,7 @@ function controller(ngDialog, eventPublishService, $scope, ckauthenticateService
    * Changes the status of an event to Published or Draft.
    *
    * @param  {Object}   rec  An event record object with three properties:
-   *                         eventRecord   {Object}  Program model object
+   *                         eventRecord   {Program} Program model object
    *                         imageRecord   {Object}  Image model object, value may be NULL
    *                         isPublished   {boolean} "true" if event is changed to the Published
    *                                                  state. "false" if event is changed to Draft.
@@ -108,8 +108,8 @@ function controller(ngDialog, eventPublishService, $scope, ckauthenticateService
       // Add the published item to the publicEvents array and sort.
       toEventsArray.records.push(record);
       toEventsArray.records.sort( (a,b) => {
-        if (a.fields.title.value.toUpperCase() > b.fields.title.value.toUpperCase()) return 1;
-        if (a.fields.title.value.toUpperCase() < b.fields.title.value.toUpperCase()) return -1;
+        if (a.title.toUpperCase() > b.title.toUpperCase()) return 1;
+        if (a.title.toUpperCase() < b.title.toUpperCase()) return -1;
         return 0;
       });
 

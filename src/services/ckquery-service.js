@@ -70,13 +70,8 @@ export default function ckqueryService(Program){
             // var records = response.records;
 
             const programRecords = response.records.map( element => {
-              console.log(element);
               return new Program(element);
             });
-            // for (let rec in programRecords){
-            //   console.log(programRecords[rec]);
-            // }
-
 
             // Save the continuation marker so we can fetch more results.
             var {continuationMarker} = response;
