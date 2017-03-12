@@ -8,13 +8,18 @@ ckassetService.$inject = ['$http', '$cookies'];
 
 export default function ckassetService($http, $cookies){
 
-  const cloudID = process.env.CLOUD_ID;
-  const apiToken = 'ckAPIToken=' + process.env.API_TOKEN;
-  const sessionToken = '&ckWebAuthToken=' + encodeURIComponent($cookies.get(cloudID));
+  function _credentials(){
+    const cloudID = process.env.CLOUD_ID;
+    return {
+      cloudID,
+      apiToken: 'ckAPIToken=' + process.env.API_TOKEN,
+      sessionToken: '&ckWebAuthToken=' + encodeURIComponent($cookies.get(cloudID))
+    };
+  }
 
   return {
-
     request: function request(database){
+      const { cloudID, apiToken, sessionToken } = _credentials();
       if (database !== 'PUBLIC' && database !== 'PRIVATE') return null;
       const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/' + database.toLowerCase() + '/assets/upload?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
@@ -31,6 +36,7 @@ export default function ckassetService($http, $cookies){
     },
 
     modify: function modify(fileName, referenceObj, recordName, image, database){
+      const { cloudID, apiToken, sessionToken } = _credentials();
       const reqUrl = 'https://api.apple-cloudkit.com/database/1/' + cloudID + '/development/' + database.toLowerCase() + '/records/modify?' + apiToken + sessionToken;
       const reqBody = JSON.stringify({
         operations: [{
@@ -66,6 +72,7 @@ export default function ckassetService($http, $cookies){
           return obj;
         }
       });
-    }
+    },
+
   };
 };
