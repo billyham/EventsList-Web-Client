@@ -25,16 +25,9 @@ function controller(ckrecordService, $scope, Program){
    * record.
    */
   function submit(){
-    if (!this.formtitle) return;
 
-    var obj = {
-      fields: {
-        title: {
-          value: this.formtitle,
-          type: 'STRING'
-        }
-      }
-    };
+    if (!this.formtitle) return;
+    const obj = Program.createWithTitle(this.formtitle).toObject();
 
     if (this.formvideo){
       obj.fields.video = {value: this.formvideo, type: 'STRING'};

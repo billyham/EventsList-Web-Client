@@ -9,7 +9,8 @@ import eventPublishService from './event-publish-service';
 import imageService from './image-service';
 import imageFileService from './image-file-service';
 import guardService from './guard-service';
-import Program from './Program';
+import Program from './models/Program';
+import Image440 from './models/Image440';
 
 const services = angular.module('services', [])
 .factory('ckconfigureService', ckconfigureService)
@@ -22,6 +23,7 @@ const services = angular.module('services', [])
 .factory('authService', authService)
 .factory('eventPublishService', eventPublishService)
 .factory('guardService', guardService)
-.factory('Program', Program);
+.factory('Program', Program)
+.factory('Image440', Image440);
 
 export default services.name;

@@ -15,10 +15,10 @@ export default function ProgramFactory(){
       if (!jsonObj || !jsonObj.fields || !jsonObj.fields.title) return null;
 
       this.title = jsonObj.fields.title.value;
-      this.recordName = jsonObj.recordName;
-      this.recordChangeTag = jsonObj.recordChangeTag;
 
       // Optional properties
+      // this.recordName = '';
+      // this.recordChangeTag = '';
       this.ownerRecordName = '';
       this.zoneName = '';
       this.deviceID = '';
@@ -28,6 +28,9 @@ export default function ProgramFactory(){
       this.video = '';
       this.fulldescription = '';
       this.imageRef = '';
+
+      if (jsonObj.recordName) this.recordName = jsonObj.recordName;
+      if (jsonObj.recordChangeTag) this.recordChangeTag = jsonObj.recordChangeTag;
 
       if (jsonObj.zoneID){
         this.ownerRecordName = jsonObj.zoneID.ownerRecordName;
@@ -40,19 +43,32 @@ export default function ProgramFactory(){
         this.userRecordName = jsonObj.created.userRecordName;
       }
 
-
-      if (jsonObj.fields.video){
-        this.video = jsonObj.fields.video.value;
-      }
-
-      if (jsonObj.fields.fulldescription){
-        this.fulldescription = jsonObj.fields.fulldescription.value;
-      }
+      if (jsonObj.fields.video) this.video = jsonObj.fields.video.value;
+      if (jsonObj.fields.fulldescription) this.fulldescription = jsonObj.fields.fulldescription.value;
 
       if (jsonObj.fields.imageRef && jsonObj.fields.imageRef.value){
         this.imageRef = jsonObj.fields.imageRef.value.recordName;
       }
 
+    }
+
+    /**
+     * Convenience factory method to create a new Program instance with just
+     * the title property.
+     *
+     * @param  {string}   title   Title property for a new Program
+     * @return {Program}          New Program object instance with the title
+     */
+    static createWithTitle(title){
+      var obj = {
+        fields: {
+          title: {
+            value: title,
+            type: 'STRING'
+          }
+        }
+      };
+      return new Program(obj);
     }
 
     /**
@@ -64,8 +80,9 @@ export default function ProgramFactory(){
     toObject(){
       const output = Object.create(null);
 
-      output.recordName = this.recordName;
-      output.recordChangeTag = this.recordChangeTag;
+      if (this.recordName) output.recordName = this.recordName;
+      if (this.recordChangeTag) output.recordChangeTag = this.recordChangeTag;
+
       output.recordType = 'Program';
 
       output.zoneID = Object.create(null);
